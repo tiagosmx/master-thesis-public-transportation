@@ -1,0 +1,3659 @@
+[
+    {
+        "id": "20a66dc.5ecb392",
+        "type": "tab",
+        "label": "URBS Analysis",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "6d6c8fc8.4b906",
+        "type": "tab",
+        "label": "Plotly",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "d5ad8b85.f5ba18",
+        "type": "ui_tab",
+        "name": "Plotly",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "792b50f2.24852",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#e4a111",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "reset": false
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#e4a111",
+                    "edited": true
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#e4a111",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#f2be50",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#e4a111",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "ab0a1952.be8488",
+        "type": "ui_group",
+        "name": "examples",
+        "tab": "d5ad8b85.f5ba18",
+        "order": 1,
+        "disp": true,
+        "width": 20,
+        "collapse": false
+    },
+    {
+        "id": "ac5037a9.142d68",
+        "type": "file in",
+        "z": "20a66dc.5ecb392",
+        "name": "read pontosLinha",
+        "filename": "",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 610,
+        "y": 680,
+        "wires": [
+            [
+                "ee8f6f41.9306a"
+            ]
+        ]
+    },
+    {
+        "id": "ee8f6f41.9306a",
+        "type": "json",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 770,
+        "y": 680,
+        "wires": [
+            [
+                "590fd5b2.6e659c"
+            ]
+        ]
+    },
+    {
+        "id": "9d343c11.53c34",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "read reverse",
+        "func": "var reverseLineReader = global.get('reverseLineReader');\nreverseLineReader.eachLine(\n    flow.get(\"path\").veiculos, \n    function(line, last) {\n        msg.payload = line;\n        node.send(msg);\n    }\n);\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 550,
+        "y": 1100,
+        "wires": [
+            [
+                "87e0f429.b35b28"
+            ]
+        ]
+    },
+    {
+        "id": "e1fc2249.b76b8",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 2330,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "3de314d2.75bb1c",
+        "type": "json",
+        "z": "20a66dc.5ecb392",
+        "name": "veiculos parse json",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 890,
+        "y": 1060,
+        "wires": [
+            [
+                "16634342.0c590d",
+                "be547769.ecbbb8"
+            ]
+        ]
+    },
+    {
+        "id": "16634342.0c590d",
+        "type": "switch",
+        "z": "20a66dc.5ecb392",
+        "d": true,
+        "name": "filter busLine",
+        "property": "payload.COD_LINHA",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "busLine",
+                "vt": "flow"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1530,
+        "y": 900,
+        "wires": [
+            [
+                "5603e775.859588"
+            ]
+        ]
+    },
+    {
+        "id": "5603e775.859588",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "d": true,
+        "name": "set topic",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "VEIC",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1520,
+        "y": 947,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f35ef60.be7b508",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "Transform string based Latitude & Longitude into Turf geo points",
+        "func": "var turf = global.get('turf');\nmsg.payload.LATLON = turf.point([Number(msg.payload.LON), Number(msg.payload.LAT)]);\nmsg.payload.LAT = undefined;\ndelete(msg.payload.LAT);\nmsg.payload.LON = undefined;\ndelete(msg.payload.LON);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 250,
+        "y": 1220,
+        "wires": [
+            [
+                "557d7c7e.92c4f4"
+            ]
+        ]
+    },
+    {
+        "id": "557d7c7e.92c4f4",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "Transform dd/MM/yyyy HH:mm:ss into luxon DateTime",
+        "func": "var luxon = global.get('luxon');\nvar dt = luxon.DateTime.fromFormat(\n    msg.payload.DTHR, \n    'dd/MM/yyyy HH:mm:ss'\n    );\nmsg.payload.TIME = dt;\nmsg.payload.DTHR = undefined;\ndelete(msg.payload.DTHR);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 700,
+        "y": 1220,
+        "wires": [
+            [
+                "92a8b48.cf96f48"
+            ]
+        ]
+    },
+    {
+        "id": "ec298899.1bd728",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "move window",
+        "func": "let contextName = 'window'+msg.topic;\nlet halfWindowSize = flow.get('halfWindowSize');\nlet currentWindow = context.get(contextName);\nlet currentPosition = msg.payload;\n\nif (typeof currentWindow === 'undefined'){\n    currentWindow = new Array(halfWindowSize*2 + 1);\n}\n\n// ESSA PARTE � MUITO IMPORTANTE\ncurrentWindow = currentWindow.map(x => x);\n\n// 0 is oldest and 5 is newest\nfor (let i = 0; i < currentWindow.length - 1; i++){\n    currentWindow[i] = currentWindow[i+1];\n}\ncurrentWindow[currentWindow.length - 1] = currentPosition;\ncontext.set(contextName, currentWindow);\nmsg.payload = currentWindow;\nif(typeof currentWindow[halfWindowSize] !== 'undefined'){\n    return msg;\n}\nreturn null;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1123,
+        "y": 1260,
+        "wires": [
+            [
+                "c4b1efb9.5523e",
+                "ae7e3d9b.03b57"
+            ]
+        ]
+    },
+    {
+        "id": "a2e50d5f.1fbf4",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "measure time and space distance between window",
+        "func": "var current = msg.payload[flow.get('halfWindowSize')];\n\nif (typeof current === 'undefined'){\n    // Current payload is not in the middle of the\n    // array yet\n} else {\n    msg.payload.map(x => {\n        // get distance between latlon\n        x.DISTANCE = turf.distance(\n            x.LATLON,\n            current.LATLON,\n            'meters'\n            );\n        // get time between\n        x.TIMEDIFF = x.TIME.diff(current.TIME);\n        return x;\n    });\n    return msg;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 470,
+        "y": 1780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5898469c.49a2a8",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "Pontos de ônibus Agrupados por ID",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "54d2ca17.dbda14",
+        "type": "comment",
+        "z": "20a66dc.5ecb392",
+        "name": "All flow variables:",
+        "info": "",
+        "x": 320,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "3fc0cc7e.c20d84",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "busLine",
+                "pt": "flow",
+                "to": "216",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 200,
+        "wires": [
+            [
+                "2d3f4b05.ad0144"
+            ]
+        ]
+    },
+    {
+        "id": "afe9c24c.7c907",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "group by [COD, NUM]",
+        "func": "var _ = global.get('lodash');\nvar gb = _(msg.payload)\n    .groupBy(x => [x.COD, x.NUM])\n    .mapValues((value, key) => ({\n        NOME: value[0].NOME,\n        NUM: value[0].NUM,\n        COD: value[0].COD,\n        LATLON: value[0].LATLON,\n        GRUPO: value[0].GRUPO,\n        TIPO: value[0].TIPO,\n        VALUES: value\n    }))\n    /*\n    .map((value, key) => ({\n        KEY: key,\n        NOME: value[0].NOME,\n        NUM: value[0].NUM,\n        COD: value[0].COD,\n        LATLON: value[0].LATLON,\n        GRUPO: value[0].GRUPO,\n        TIPO: value[0].TIPO,\n        VALUES: value\n    }))\n    */\n    .value();\nmsg.payload = gb;\n//for(var key in )\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 940,
+        "wires": [
+            [
+                "3be29298.c6ac0e",
+                "5898469c.49a2a8",
+                "aaf90314.d973e",
+                "7f211d24.235da4"
+            ]
+        ]
+    },
+    {
+        "id": "7dbc18aa.9759f8",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "create geographic objects",
+        "func": "var turf = global.get('turf');\nmsg.payload = msg.payload.map(x => {\n    x.LATLON = turf.point([x.LON, x.LAT]);\n    x.LAT = undefined;\n    x.LON = undefined;\n    return x;\n});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 150,
+        "y": 940,
+        "wires": [
+            [
+                "afe9c24c.7c907"
+            ]
+        ]
+    },
+    {
+        "id": "3be29298.c6ac0e",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "busStops",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 650,
+        "y": 1020,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2d3f4b05.ad0144",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "minimumDistanceFromBusToStop",
+                "pt": "flow",
+                "to": "9",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 240,
+        "wires": [
+            [
+                "f9efd4a0.5841d8"
+            ]
+        ]
+    },
+    {
+        "id": "f9efd4a0.5841d8",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "minimumTimeBetweenBusStops",
+                "pt": "flow",
+                "to": "PT2M",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 280,
+        "wires": [
+            [
+                "9fc190c1.aa031"
+            ]
+        ]
+    },
+    {
+        "id": "82a74ea5.31ec7",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "d": true,
+        "name": "measure distance from bus stops",
+        "func": "var turf = global.get('turf');\nvar busStops = flow.get(\"busStops\");\nvar distances = {};\nfor (var key in busStops){\n    distances[key] = turf.distance(busStops[key].LATLON, msg.payload.LATLON, 'meters');\n}\nmsg.payload.distances = distances;\n//msg.payload.nearestStops = [];\n//msg.payload.nearestStopsDistances = {};\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 880,
+        "y": 1260,
+        "wires": [
+            [
+                "ec298899.1bd728"
+            ]
+        ]
+    },
+    {
+        "id": "9fc190c1.aa031",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "halfWindowSize",
+                "pt": "flow",
+                "to": "3",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 320,
+        "wires": [
+            [
+                "474cc7a2.1dc668"
+            ]
+        ]
+    },
+    {
+        "id": "f86cb9eb.2ff9a8",
+        "type": "switch",
+        "z": "20a66dc.5ecb392",
+        "name": "filter busLine",
+        "property": "payload.COD_LINHA",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "busLine",
+                "vt": "flow"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1290,
+        "y": 1060,
+        "wires": [
+            [
+                "3c86e556.0353aa"
+            ]
+        ]
+    },
+    {
+        "id": "80e08c6d.7e1b1",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "show nearest stops",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1310,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "be547769.ecbbb8",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "filename",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1100,
+        "y": 1060,
+        "wires": [
+            [
+                "f86cb9eb.2ff9a8"
+            ]
+        ]
+    },
+    {
+        "id": "c4b1efb9.5523e",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "detectar pontos de onibus mais próximos da posição atual e filtrar",
+        "func": "// Loading reference variables\nlet idxCurrent = flow.get('halfWindowSize');\nlet minimumDistance = flow.get('minimumDistanceFromBusToStop');\n//var timeLimit = flow.get('minimumTimeBetweenBusStops');\n\n/********************\n * currentPosition est� se repetindo em todas as mensagens.\n * Por consequencia, nearestBusStopsDistances tamb�m.\n * \n*/\n// This is the returning object.\n// We will be populating it.\nlet distanceReport = {\n    TIME: msg.payload[idxCurrent].TIME,\n    COD_LINHA: msg.payload[idxCurrent].COD_LINHA,\n    VEIC: msg.payload[idxCurrent].VEIC,\n    LATLON: msg.payload[idxCurrent].LATLON,\n    // distances: msg.payload[idxCurrent].distances,\n    nearestBusStopsDistances: {},\n    allPositions: msg.payload,\n    currentPosition: msg.payload[idxCurrent],\n\n}\n\n/*\n{\n    VEIC: \"DR405\",\n    COD_LINHA: \"216\",\n    LATLON: \"...\",\n    TIME: \"2017-09-30T...\",\n    distances:{\n        216,12345: 250.0,\n        216,32145: 20.0,\n        ...\n    }\n}\n*/\n\nfor (let lineBusStop in distanceReport.currentPosition.distances) {\n\n    let isDistanceValid = true;\n    let currentDistance = distanceReport.currentPosition.distances[lineBusStop];\n    if (currentDistance < minimumDistance) {\n        try {\n            distanceReport.currentPosition.distances.length;\n        } catch (err) {\n            console.log(\"error while reading current.distances.length\");\n        }\n        for (let i = 0; i < distanceReport.currentPosition.distances.length; i++) {\n            if (i != idxCurrent) {\n                let toBeComparedPosition = distanceReport.allPositions[i];\n                //console.log(\"toBeComparedPosition\")\n                //console.log(toBeComparedPosition)\n                if (currentDistance > toBeComparedPosition.distances[lineBusStop]) {\n                    isDistanceValid = false;\n                    break;\n                } else {\n                    if (currentDistance === toBeComparedPosition.distances[lineBusStop] && i < idxCurrent) {\n                        isDistanceValid = false;\n                        break;\n                    }\n                }\n            }\n        }\n    } else {\n        isDistanceValid = false;\n    }\n    if (isDistanceValid) {\n        distanceReport.nearestBusStopsDistances[lineBusStop] = currentDistance;\n    }\n}\n// Reaching here after all positions were analised.\nif (Object.keys(distanceReport.nearestBusStopsDistances).length > 0) {\n    \n    \n    // Cleaning the object because these properties are not needed\n    \n    delete distanceReport.allPositions;\n    delete distanceReport.currentPosition;\n    \n    \n    msg.payload = distanceReport;\n    return msg;\n}\n\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 960,
+        "y": 1300,
+        "wires": [
+            [
+                "80e08c6d.7e1b1"
+            ]
+        ]
+    },
+    {
+        "id": "ae7e3d9b.03b57",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "show windows",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1320,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "967e036a.4033d",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "window by 2 group by topic",
+        "func": "let contextName = 'window'+msg.topic;\nlet currentWindow = context.get(contextName);\nlet currentPosition = msg.payload;\n\nif (typeof currentWindow === 'undefined'){\n    currentWindow = new Array(2);\n}\n\n// ESSA PARTE é MUITO IMPORTANTE\ncurrentWindow = currentWindow.map(x => x);\n\n// 0 is oldest and 1 is newest\n\ncurrentWindow[0] = currentWindow[1];\ncurrentWindow[1] = msg.payload;\ncontext.set(contextName, currentWindow);\nmsg.payload = currentWindow;\n\nif(typeof currentWindow[0] !== 'undefined'){\n    return msg;\n}\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 140,
+        "y": 1340,
+        "wires": [
+            [
+                "ad2e1ef.ff906e"
+            ]
+        ]
+    },
+    {
+        "id": "22756b31.5ba084",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 890,
+        "y": 1600,
+        "wires": []
+    },
+    {
+        "id": "ad2e1ef.ff906e",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "point to line",
+        "func": "let turf = global.get('turf');\n\nlet line = turf.lineString([\n        msg.payload[0].LATLON.geometry.coordinates, \n        msg.payload[1].LATLON.geometry.coordinates\n        ]);\n        \nline.properties.distance = turf.distance(\n    msg.payload[0].LATLON,\n    msg.payload[1].LATLON\n) * 1000;\n\nline.properties.bearing = turf.bearing(\n    msg.payload[0].LATLON,\n    msg.payload[1].LATLON\n);\n\nline.properties.timeDif = msg.payload[0].TIME.diff(msg.payload[1].TIME);\n\nmsg.payload = {\n    VEIC: msg.payload[0].VEIC,\n    COD_LINHA: msg.payload[0].COD_LINHA,\n    timestamps: [msg.payload[0].TIME,msg.payload[1].TIME],\n    line: line\n}\n\nif (line.properties.distance < 3000){\n    return msg;\n}\n\nreturn;\n\n/* EXEMPLO DE MENSAGEM\n{\n    \"payload\": {\n        \"VEIC\": \"DR405\",\n        \"COD_LINHA\": \"216\",\n        \"timestamps\": [\n            \"2017-09-30T08:59:59.000-03:00\",\n            \"2017-09-30T09:00:42.000-03:00\"\n        ],\n        \"line\": {\n            \"type\": \"Feature\",\n            \"properties\": {\n                \"distance\": 15.521267002243576\n            },\n            \"geometry\": {\n                \"type\": \"LineString\",\n                \"coordinates\": [\n                    [\n                        \"-25.406841\",\n                        \"-49.252681\"\n                    ],\n                    [\n                        \"-25.406675\",\n                        \"-49.252593\"\n                    ]\n                ]\n            }\n        }\n    },\n    \"topic\": \"216_DR405\",\n    \"parts\": {\n        \"index\": 1276,\n        \"ch\": \"\\n\",\n        \"type\": \"string\",\n        \"id\": \"8c2fd76.076d228\"\n    },\n    \"_msgid\": \"28d07502.c644fa\"\n}\n\n*/",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 90,
+        "y": 1380,
+        "wires": [
+            [
+                "bcabe6a9.1eacc8",
+                "92e586d2.b10c48"
+            ]
+        ]
+    },
+    {
+        "id": "bcabe6a9.1eacc8",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "measure line distance to bus stops",
+        "func": "let turf = global.get('turf');\nlet busStops = flow.get(\"busStops\");\nlet distancesToBusStops = {};\nfor (let key in busStops){\n    let nearestPointOnPath = turf.nearestPointOnLine(\n        msg.payload.line,\n        busStops[key].LATLON\n    );\n    // Distance from kilometers to meters\n    nearestPointOnPath.properties.dist = nearestPointOnPath.properties.dist * 1000;\n    nearestPointOnPath.properties.location = nearestPointOnPath.properties.location * 1000;\n    //nearestPointOnPath.properties.bearing = msg.payload.line.properties.bearing;\n    nearestPointOnPath.properties.time ;\n    distancesToBusStops[key] = nearestPointOnPath;\n}\nmsg.payload.distancesToBusStops = distancesToBusStops;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 160,
+        "y": 1420,
+        "wires": [
+            [
+                "4d0a37b2.2b4fc8"
+            ]
+        ]
+    },
+    {
+        "id": "4d0a37b2.2b4fc8",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "window based on windowCenter, publish on windowCenter",
+        "func": "let windowCenter = flow.get('halfWindowSize');\nlet windowSize = windowCenter * 2 + 1;\nlet currentWindow = context.get(msg.topic);\nlet currentPosition = msg.payload;\n\nif (typeof currentWindow === 'undefined'){\n    currentWindow = new Array(windowSize);\n}\n\n// Cria uma cópia da Window para evitar problemas de concorrência\ncurrentWindow = currentWindow.map(x => x);\n\n// 0 is oldest and 5 is newest\nfor (let i = 0; i < currentWindow.length - 1; i++){\n    currentWindow[i] = currentWindow[i+1];\n}\ncurrentWindow[currentWindow.length - 1] = currentPosition;\ncontext.set(msg.topic, currentWindow);\n\nif(typeof currentWindow[windowCenter] !== 'undefined'){\n    msg.payload = currentWindow;\n    return msg;\n}\nreturn null;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 240,
+        "y": 1460,
+        "wires": [
+            [
+                "31cfefe8.8e2ef"
+            ]
+        ]
+    },
+    {
+        "id": "31cfefe8.8e2ef",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "detectar pontos de onibus mais próximos da posição atual e filtrar",
+        "func": "/*\nmsg.payload = [\namostra1,\namostra2,\namostraAtual,\namostra4,\namostra5\n]\n*/\n\n// Loading reference variables\nlet idxCurrent = flow.get('halfWindowSize');\nlet maxDistance = flow.get('minimumDistanceFromBusToStop');\n//var timeLimit = flow.get('minimumTimeBetweenBusStops');\n\n/*\nPega uma lista com todos os pontos de ônibus e filtra-as onde  \n*/\n\n// Posição do ônibus na leitura atual\nlet currentPosition = msg.payload[idxCurrent];\n// Posição do ônibus atrás e na frente.\nlet allPositions = msg.payload;\n// Um objeto para guardar os pontos de ônibus mais próximos\nlet distancesToNearestBusStops = {};\n\nif(!(currentPosition && currentPosition.hasOwnProperty('distancesToBusStops'))){\n    // A posição do ponto de ônibus atual é nula, não há o que processar.\n    return [null, msg, null];\n}\n\n/*\nPega-se a posição do ônibus no centro da janela móvel\nPercorre-se em um for loop por todas as distâncias já \ncalculadas do onibus para seus pontos de ônibus mais próximos\nIgnora-se no loop todos as distâncias que forem maiores\nque maxDistance\nCompara-se as distâncias não ignoradas com as distâncias\ndas posições nos outros pedaços da janela móvel\nSe a distância da posição do ônibus no centro da janela\n*/\n// Iterating each key from the object.\nfor (let lineBusStop in currentPosition.distancesToBusStops) {\n    let isDistanceValid = true;\n    let currentNearestBusStopPoint = currentPosition.distancesToBusStops[lineBusStop];\n    let currentDistance = currentNearestBusStopPoint.properties.dist;\n    // Only iterating through bus stops which distance from the bus is lower than maxDistance.\n    if (currentDistance < maxDistance) {\n        /* Verifica se há dentro da janela algum momento onde\n        o ônibus esteve mais próximo do ponto de ônibus\n        */\n        for (let i = 0; i < allPositions.length; i++) {\n            if (i != idxCurrent) {\n                let toBeComparedPosition = allPositions[i];\n                if(toBeComparedPosition && toBeComparedPosition.hasOwnProperty('distancesToBusStops')){\n                    let toBeComparedNearestBusStopPoint = toBeComparedPosition.distancesToBusStops[lineBusStop];\n                    let toBeComparedDistance = toBeComparedNearestBusStopPoint.properties.dist;\n                    if (currentDistance > toBeComparedDistance) {\n                        isDistanceValid = false;\n                        // Exiting the for loop\n                        break;\n                    } else if (currentDistance === toBeComparedDistance && i < idxCurrent) {\n                        // This means the lowest timestamp will be the first\n                        isDistanceValid = false;\n                        // Exiting the for loop\n                        break;\n                    }\n                }\n            }\n        }\n    } else {\n        isDistanceValid = false;\n    }\n    if (isDistanceValid) {\n        distancesToNearestBusStops[lineBusStop] = currentNearestBusStopPoint;\n    }\n}\n// Reaching here after all positions were analised.\nif (Object.keys(distancesToNearestBusStops).length > 0) {\n    // Cleaning the object because these properties are not needed\n    // This is the returning object.\n    // We will be populating it.\n    let distanceReport = {\n        timestamps: currentPosition.timestamps,\n        COD_LINHA: currentPosition.COD_LINHA,\n        VEIC: currentPosition.VEIC,\n        line: currentPosition.line,\n        distancesToNearestBusStops: distancesToNearestBusStops,\n        allPositions: allPositions,\n        currentPosition: currentPosition\n    }\n    \n    currentPosition.distancesToNearestBusStops = distancesToNearestBusStops;\n    \n    //delete distanceReport.allPositions;\n    //delete distanceReport.currentPosition;\n    //msg.payload = distanceReport;\n    msg.payload = currentPosition;\n    if (Object.keys(distancesToNearestBusStops).length === 1){ \n        // Há apenas um ponto de ônibus mais próximo da posição central da janela\n        return [msg, null, null];\n    } else if (Object.keys(distancesToNearestBusStops).length > 1){\n        // Há mais de um ponto de ônibus mais próximo da posição central da janela\n        return [msg, null, msg];    \n    }\n}\nreturn [null, null, null];",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 260,
+        "y": 1500,
+        "wires": [
+            [
+                "d09453a9.af17e",
+                "e96cd80b.d43738"
+            ],
+            [
+                "caf1dd9a.877eb"
+            ],
+            [
+                "717ffca.d16ea04"
+            ]
+        ]
+    },
+    {
+        "id": "d09453a9.af17e",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "descobrindo timestamp dos pontos mais próximos dentro da window",
+        "func": "// Nos calculos anteriores só temos a distância do ponto no mapa.\n// Agora temos que calcular o tempo estimado em que o onibus passou pelo ponto.\n\nconst start = msg.payload.timestamps[0];\nconst end = msg.payload.timestamps[1];\nconst duration = end.diff(start);\nconst lineDistance = msg.payload.line.properties.distance;\n\nfor(let lineBusStopKey in msg.payload.distancesToNearestBusStops){\n    let lineBusStop = msg.payload.distancesToNearestBusStops[lineBusStopKey];\n    let startToBusStop = lineBusStop.properties.location;\n    let ratio = startToBusStop/lineDistance;\n    let durationToBusStop = duration * ratio;\n    let busStopTimestamp = start.plus(durationToBusStop);\n    lineBusStop.properties.timestamp = busStopTimestamp;\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 270,
+        "y": 1560,
+        "wires": [
+            [
+                "4572fcfc.0e7ef4",
+                "568adb7c.d0d8c4",
+                "2d89715d.f302ce",
+                "c2fe5c93.cfe88"
+            ]
+        ]
+    },
+    {
+        "id": "aaf90314.d973e",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "values array size > 1",
+        "func": "let busStopsWithMoreThanOneSeq = {};\n\nfor(let busStop in msg.payload){\n    if (msg.payload[busStop].VALUES.length > 1){\n        busStopsWithMoreThanOneSeq[busStop] = msg.payload[busStop];\n    }\n}\nmsg.payload = busStopsWithMoreThanOneSeq;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 660,
+        "y": 980,
+        "wires": [
+            [
+                "19823bac.f13d94"
+            ]
+        ]
+    },
+    {
+        "id": "19823bac.f13d94",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "Pontos de ônibus com mais de um SEQ",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "4572fcfc.0e7ef4",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "window based on windowCenter, publish on windowCenter and tendency analysis",
+        "func": "let contextName = 'window'+msg.topic;\nlet windowCenter = flow.get('halfWindowSize');\nlet windowSize = windowCenter * 2 + 1;\nlet currentWindow = context.get(contextName);\nlet currentPosition = msg.payload;\n\nif (typeof currentWindow === 'undefined'){\n    currentWindow = new Array(windowSize);\n}\n\n// Cria uma cópia da Window para evitar problemas de concorrência\ncurrentWindow = currentWindow.map(x => x);\n\n// 0 is oldest and 5 is newest\nfor (let i = 0; i < currentWindow.length - 1; i++){\n    currentWindow[i] = currentWindow[i+1];\n}\ncurrentWindow[currentWindow.length - 1] = currentPosition;\ncontext.set(contextName, currentWindow);\nmsg.payload = currentWindow;\n\nif(typeof currentWindow[windowCenter] !== 'undefined'){\n    // Inserir função aqui!!!\n    // Começar vendo se tem algo a esquerda que indique a tendencia.\n    // Se a esquerda for tudo undefined, significa que é a primeira mensagem.\n    // Olha pra direita e tenta descobrir a tendencia nos caras da direita.\n    // Com isso seta o atual.\n    return msg;\n}\nreturn null;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 307,
+        "y": 1604,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "568adb7c.d0d8c4",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "bus code, bus stop & time",
+        "func": "let busStops = flow.get('busStops');\n\nlet start = msg.payload.timestamps[0];\n\nlet messages = [];\nfor(let lineBusStop in msg.payload.distancesToNearestBusStops){\n    let message = Object.assign({}, msg);\n    let busLocation = msg.payload.distancesToNearestBusStops[lineBusStop];\n    busLocation.properties.vehicle = msg.payload.VEIC;\n    busLocation.properties.busLine = msg.payload.COD_LINHA;\n    busLocation.properties.originalTimestamp = start;\n    busLocation.properties.lineBusStop = lineBusStop;\n    busLocation.properties.lineString = msg.payload.line;\n    busLocation.properties.bearing = msg.payload.line.properties.bearing;\n    message.payload = {\n        busStop: busStops[lineBusStop],\n        busLocation: busLocation\n    };\n    messages.push(message);\n}\nreturn [messages];",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 690,
+        "y": 1560,
+        "wires": [
+            [
+                "c390e474.129b58",
+                "22756b31.5ba084"
+            ]
+        ]
+    },
+    {
+        "id": "c390e474.129b58",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "prepare to map",
+        "func": "/*\ndeleted : set to true to remove the named marker. (default false)\ndraggable : set to true to allow marker to be moved. (default false)\nlayer : specify a layer on the map to add marker to. (default \"unknown\")\nspeed : when combined with bearing, draws a vector.\nbearing : when combined with speed, draws a vector.\naccuracy : when combined with bearing, draws a polygon of possible direction.\ncolor : CSS color name or #rrggbb value for bearing line or accuracy polygon\nicon : font awesome icon name, weather-lite icon, :emoji name:, or https://\niconColor : Standard CSS colour name or #rrggbb hex value.\nSIDC : NATO symbology code (can be used instead of icon). See below.\nbuilding : OSMbulding GeoJSON feature set to add 2.5D buildings to buildings layer. See below.\nttl : time to live, how long an individual marker stays on map in seconds (overrides general maxage setting, minimum 20 seconds)\nphotoUrl : adds an image pointed at by the url to the popup box.\nvideoUrl : adds an mp4 video pointed at by the url to the popup box. Ideally 320x240 in size.\nweblink : adds a link to an external page for more information. Either set a url as a string, or an object like {\"name\":\"BBC News\", \"url\":\"http://news.bbc.co.uk\", \"target\":\"_new\"}\naddtoheatmap : set to false to exclude point from contributing to the heatmap layer. (default true)\nintensity : set to a value of 0.1 - 1.0 to set the intensity of the point on the heatmap layer. (default 1.0)\npopped : set to true to automatically open the popup info box, set to false to close it.\npopup : html to fill the popup if you don't want the automatic default of the properties list. Using this overrides photourl, videourl and weblink options.\nlabel : displays the contents as a permanent label next to the marker, or\ntooltip : displays the contents when you hover over the marker. (Mutually exclusive with label. Label has priority)\ncontextmenu : an html fragment to display on right click of marker - defaults to delete marker. You can specify $name to pass in the name of the marker. Set to \"\" to disable just this instance.\n*/\nlet colors = flow.get('colors');\nlet colorsMapping = context.get('colorsMapping');\n\nif(typeof colorsMapping === 'undefined'){\n    colorsMapping = {};\n}\nlet vehicleId = msg.payload.busLocation.properties.vehicle\n\nlet vehicleIdColor = colorsMapping[vehicleId];\nif(typeof vehicleIdColor === 'undefined'){\n    vehicleIdColor = colors[Object.keys(colorsMapping).length];\n    colorsMapping[vehicleId] = vehicleIdColor;\n}\n\ncontext.set('colorsMapping', colorsMapping);\n\nlet payload = {\n    name: msg.payload.busLocation.properties.timestamp + msg.payload.busLocation.properties.vehicle,\n    layer: `Bus ${vehicleId} bus stops matches`,\n    icon: 'arrow',\n    color: 'black',\n    bearing: msg.payload.busLocation.properties.bearing,\n    iconColor: vehicleIdColor,\n    vehicleId: vehicleId,\n    lineId: msg.payload.busLocation.properties.lineId,\n    lineBusStop: msg.payload.busLocation.properties.lineBusStop,\n    //tooltip: msg.payload.busLocation.properties,\n    lat: msg.payload.busLocation.geometry.coordinates[1],\n    lon: msg.payload.busLocation.geometry.coordinates[0],\n    distanceFromBusStop: msg.payload.busLocation.properties.dist,\n    estimatedTimestamp: msg.payload.busLocation.properties.timestamp,\n    originalTimestamp: msg.payload.busLocation.properties.originalTimestamp,\n    lineString: msg.payload.busLocation.properties.lineString,\n    draggable: true\n};\n\nmsg.payload = payload;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 940,
+        "y": 1560,
+        "wires": [
+            [
+                "c19053e1.294da",
+                "1d64745d.dbc03c"
+            ]
+        ]
+    },
+    {
+        "id": "92e586d2.b10c48",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "get line (GEOJSON)",
+        "func": "let lonLatGeom = msg.payload.line.geometry.coordinates;\nlet latLonGeom = lonLatGeom.map(x => {\n   let aux = x[0];\n   x[0] = x[1];\n   x[1] = aux;\n   return x;\n});\n\n\n\nmsg.payload = {\n    layer: `Bus ${msg.topic} trajectory`,\n    line: latLonGeom,\n    name: msg.topic + msg.payload.timestamps[0],\n    color: 'black',\n    //fillColor : 'purple',\n    //fillOpacity: 0.2,\n    opacity: 0.4,\n    weight: 10,\n    draggable: true,\n    title: msg.topic\n    // iconColor: vehicleIdColor,\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 660,
+        "y": 1380,
+        "wires": [
+            [
+                "1d64745d.dbc03c"
+            ]
+        ]
+    },
+    {
+        "id": "8e8aa624.d060b8",
+        "type": "comment",
+        "z": "20a66dc.5ecb392",
+        "name": "implementar left window right window",
+        "info": "Implementar conceito de left window e right window\n\nnumero de elementos a esquerda da janela e numero de elementos a direita da janela\n\ntalvez seja util na hora de detectar apenas coisas no passado (�til para o )",
+        "x": 490,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "1d64745d.dbc03c",
+        "type": "worldmap",
+        "z": "20a66dc.5ecb392",
+        "name": "Mapa dos ônibus",
+        "lat": "-25.424052",
+        "lon": "-49.258661",
+        "zoom": "13",
+        "layer": "OSM grey",
+        "cluster": "",
+        "maxage": "",
+        "usermenu": "show",
+        "layers": "show",
+        "panit": "true",
+        "panlock": "false",
+        "zoomlock": "false",
+        "hiderightclick": "false",
+        "coords": "deg",
+        "showgrid": "true",
+        "path": "/busmap",
+        "x": 1130,
+        "y": 1380,
+        "wires": []
+    },
+    {
+        "id": "b56c924e.d3fb5",
+        "type": "switch",
+        "z": "20a66dc.5ecb392",
+        "name": "is not empty",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 710,
+        "y": 1060,
+        "wires": [
+            [
+                "3de314d2.75bb1c"
+            ]
+        ]
+    },
+    {
+        "id": "d829a4e3.8e3d5",
+        "type": "catch",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "scope": null,
+        "uncaught": true,
+        "x": 100,
+        "y": 1680,
+        "wires": [
+            [
+                "257fd717.b7121"
+            ]
+        ]
+    },
+    {
+        "id": "257fd717.b7121",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "Exceptions",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 270,
+        "y": 1680,
+        "wires": []
+    },
+    {
+        "id": "474cc7a2.1dc668",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "set flow.colors (to be used on map icons)",
+        "rules": [
+            {
+                "t": "set",
+                "p": "colors",
+                "pt": "flow",
+                "to": "[\"indigo\",\"bisque\",\"blueviolet\",\"coral\",\"cornflowerblue\",\"crimson\",\"darkgoldenrod\",\"darkseagreen\",\"tomato\",\"yellowgreen\",\"thistle\",\"teal\",\"snow\",\"sandybrown\",\"lightgreen\",\"lightgrey\",\"khaki\",\"darkseagreen\",\"aquamarine\"]",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 360,
+        "wires": [
+            [
+                "1e5a4003.84289"
+            ]
+        ]
+    },
+    {
+        "id": "1e5a4003.84289",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "leftWindowSize",
+                "pt": "flow",
+                "to": "5",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 440,
+        "wires": [
+            [
+                "28a9913e.3d60fe"
+            ]
+        ]
+    },
+    {
+        "id": "28a9913e.3d60fe",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "rightWindowSize",
+                "pt": "flow",
+                "to": "5",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "473586c0.a32d98",
+        "type": "comment",
+        "z": "20a66dc.5ecb392",
+        "name": "Read veiculos file backwards (from oldest to newest reading)",
+        "info": "",
+        "x": 260,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "58e3f439.4ae04c",
+        "type": "comment",
+        "z": "20a66dc.5ecb392",
+        "name": "Baixar o Dataset!",
+        "info": "Baixe o dataset aqui:\n\nhttp://dadosabertos.c3sl.ufpr.br/curitibaurbs/\n\nExemplo do nome:\n2019_05_02_veiculos.json.xz\n2019_05_02_pontosLinha.json.xz\n\nCaminho inteiro:\nhttp://dadosabertos.c3sl.ufpr.br/curitibaurbs/2019_05_02_veiculos.json.xz\n\nhttp://dadosabertos.c3sl.ufpr.br/curitibaurbs/2019_05_02_pontosLinha.json.xz\n\n\n\n\n",
+        "x": 1120,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "9012696d.33e658",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "set filename to path.pontosLinha",
+        "rules": [
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "msg",
+                "to": "path.pontosLinha",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 350,
+        "y": 680,
+        "wires": [
+            [
+                "ac5037a9.142d68"
+            ]
+        ]
+    },
+    {
+        "id": "c393b64e.6ea068",
+        "type": "inject",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.5",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 680,
+        "wires": [
+            [
+                "9012696d.33e658",
+                "257f5910.57cd26",
+                "f8f457e7.9b0bf8"
+            ]
+        ]
+    },
+    {
+        "id": "590fd5b2.6e659c",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "filter by busLine",
+        "func": "msg.payload = msg.payload.filter(\n    x => x.COD === flow.get('busLine')\n    );\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 680,
+        "wires": [
+            [
+                "7dbc18aa.9759f8",
+                "ad2c7531.4bd218",
+                "98877671.9f4018"
+            ]
+        ]
+    },
+    {
+        "id": "c12e1364.019ab",
+        "type": "comment",
+        "z": "20a66dc.5ecb392",
+        "name": "Carrega a lista de todos os pontos de ônibus agrupados por linha e salva em memória para futuro processamento.",
+        "info": "",
+        "x": 430,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "f2e58eb6.94bc",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "move window",
+        "func": "/* Half window size\n*/\nif (typeof flow.get('halfWindowSize') === 'undefined'){\n    flow.set('halfWindowSize', 3);\n}\n\n/* Creating object with desired array size\n*/\nif (typeof context.get('window'+msg.topic) === 'undefined'){\n    context.set('window'+msg.topic, new Array(flow.get('halfWindowSize')*2 + 1));\n}\n\nlet w = context.get('window'+msg.topic);\n\n// 0 is oldest and 5 is newest\nfor (i = 0; i < w.length - 1; i++){\n    w[i] = w[i+1];\n}\nw[w.length - 1] = msg.payload;\n\ncontext.set('window'+msg.topic, w);\nmsg.payload = w;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2160,
+        "y": 940,
+        "wires": [
+            [
+                "e1fc2249.b76b8"
+            ]
+        ]
+    },
+    {
+        "id": "7f0c2a0f.33eea4",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "create geographic objects",
+        "func": "var turf = global.get('turf');\nmsg.latlon = turf.point([msg.LAT, msg.LON]);\nmsg.LAT = undefined;\nmsg.LON = undefined;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1750,
+        "y": 940,
+        "wires": [
+            [
+                "8997d7cc.403648"
+            ]
+        ]
+    },
+    {
+        "id": "8997d7cc.403648",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "format date time",
+        "func": "var luxon = global.get('luxon');\nvar dt = luxon.DateTime.fromFormat(\n    msg.DTHR, \n    'dd/MM/yyyy HH:mm:ss'\n    );\nmsg.time = dt;\nmsg.DTHR = undefined;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1970,
+        "y": 940,
+        "wires": [
+            [
+                "f2e58eb6.94bc"
+            ]
+        ]
+    },
+    {
+        "id": "14037370.d21bbd",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "printing bus time on bus stops",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1190,
+        "y": 1500,
+        "wires": []
+    },
+    {
+        "id": "92a8b48.cf96f48",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "set topic (linha_veiculo)",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{payload.COD_LINHA}}_{{payload.VEIC}}",
+        "output": "str",
+        "x": 130,
+        "y": 1260,
+        "wires": [
+            [
+                "967e036a.4033d",
+                "82a74ea5.31ec7",
+                "4f02c09d.114bc"
+            ]
+        ]
+    },
+    {
+        "id": "caf1dd9a.877eb",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "nulls!",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "8a34573d.15fd48",
+        "type": "file in",
+        "z": "20a66dc.5ecb392",
+        "name": "try read veiculosCache (cache)",
+        "filename": "",
+        "format": "lines",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 490,
+        "y": 1060,
+        "wires": [
+            [
+                "b56c924e.d3fb5"
+            ]
+        ]
+    },
+    {
+        "id": "4d384cd7.6c3544",
+        "type": "catch",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "scope": [
+            "8a34573d.15fd48"
+        ],
+        "uncaught": false,
+        "x": 390,
+        "y": 1100,
+        "wires": [
+            [
+                "9d343c11.53c34"
+            ]
+        ]
+    },
+    {
+        "id": "c89fbc07.ddf1d",
+        "type": "inject",
+        "z": "20a66dc.5ecb392",
+        "name": "start",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 90,
+        "y": 1060,
+        "wires": [
+            [
+                "94862574.761fb8"
+            ]
+        ]
+    },
+    {
+        "id": "94862574.761fb8",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "msg",
+                "to": "veiculosCache",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 250,
+        "y": 1060,
+        "wires": [
+            [
+                "8a34573d.15fd48"
+            ]
+        ]
+    },
+    {
+        "id": "cd697b96.2911e8",
+        "type": "file",
+        "z": "20a66dc.5ecb392",
+        "name": "save reversed file",
+        "filename": "",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1710,
+        "y": 1000,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1fdd9f.4356e262",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "msg",
+                "to": "veiculosCache",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1510,
+        "y": 1000,
+        "wires": [
+            [
+                "cd697b96.2911e8"
+            ]
+        ]
+    },
+    {
+        "id": "e0b9eeb5.c09db",
+        "type": "switch",
+        "z": "20a66dc.5ecb392",
+        "name": "filter busLine",
+        "property": "payload.COD_LINHA",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "busLine",
+                "vt": "flow"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1290,
+        "y": 1100,
+        "wires": [
+            [
+                "1fdd9f.4356e262",
+                "3c86e556.0353aa"
+            ]
+        ]
+    },
+    {
+        "id": "87e0f429.b35b28",
+        "type": "switch",
+        "z": "20a66dc.5ecb392",
+        "name": "is not empty",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 710,
+        "y": 1100,
+        "wires": [
+            [
+                "c84e3424.328c48"
+            ]
+        ]
+    },
+    {
+        "id": "c84e3424.328c48",
+        "type": "json",
+        "z": "20a66dc.5ecb392",
+        "name": "veiculos parse json",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 890,
+        "y": 1100,
+        "wires": [
+            [
+                "d2b8d447.917728"
+            ]
+        ]
+    },
+    {
+        "id": "d2b8d447.917728",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "filename",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1100,
+        "y": 1100,
+        "wires": [
+            [
+                "e0b9eeb5.c09db"
+            ]
+        ]
+    },
+    {
+        "id": "e96cd80b.d43738",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "single or more bus stops",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "76798d96.2dae94",
+        "type": "inject",
+        "z": "20a66dc.5ecb392",
+        "name": "start",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0",
+        "topic": "",
+        "x": 90,
+        "y": 60,
+        "wires": [
+            [
+                "5b21e2d6.40e30c",
+                "cf6478b5.2d8fc8"
+            ]
+        ]
+    },
+    {
+        "id": "54d1685e.88f6e8",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "currentDirectory",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1110,
+        "y": 60,
+        "wires": [
+            [
+                "a2b4e526.0e1318"
+            ]
+        ]
+    },
+    {
+        "id": "db294bf3.2855a8",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "adjustDirectory",
+        "func": "let directorySeparator = global.get(\"directorySeparator\");\nlet path = msg.payload\npath = path.replace(\"\\n\", \"\").replace(\"\\r\", \"\");\npath = path + directorySeparator;\nmsg.payload = path;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 900,
+        "y": 60,
+        "wires": [
+            [
+                "54d1685e.88f6e8"
+            ]
+        ]
+    },
+    {
+        "id": "5b21e2d6.40e30c",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "route payload based on operational system",
+        "func": "let os = global.get('os');\nlet platform = os.platform();\n\nswitch(platform) {\n    case 'win32':\n        return [msg,null,null];\n    case 'linux':\n        return [null,msg,null];\n    default:\n        return [null,null,msg];\n}",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 330,
+        "y": 80,
+        "wires": [
+            [
+                "b17ce28b.c1d57"
+            ],
+            [
+                "bb5cffe5.eb169"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "bb5cffe5.eb169",
+        "type": "exec",
+        "z": "20a66dc.5ecb392",
+        "command": "pwd",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Get current directory (Linux)",
+        "x": 640,
+        "y": 100,
+        "wires": [
+            [
+                "db294bf3.2855a8"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "b17ce28b.c1d57",
+        "type": "exec",
+        "z": "20a66dc.5ecb392",
+        "command": "cd",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Get current directory (Windows)",
+        "x": 650,
+        "y": 40,
+        "wires": [
+            [
+                "db294bf3.2855a8"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "1b836cdc.425803",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "URL dos dados abertos",
+        "field": "url",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "http://dadosabertos.c3sl.ufpr.br/curitibaurbs/{{file}}",
+        "output": "str",
+        "x": 930,
+        "y": 460,
+        "wires": [
+            [
+                "7e41cb3b.922fa4"
+            ]
+        ]
+    },
+    {
+        "id": "8835bb0b.e6f558",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "Set msg.file to veiculos.json.xz",
+        "field": "file",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{flow.file.veiculos}}.xz",
+        "output": "str",
+        "x": 890,
+        "y": 240,
+        "wires": [
+            [
+                "78f98509.d9444c"
+            ]
+        ]
+    },
+    {
+        "id": "4c157d6d.974fa4",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "Set msg.file to tabelaVeiculo.json.xz",
+        "field": "file",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{flow.file.tabelaVeiculo}}.xz",
+        "output": "str",
+        "x": 900,
+        "y": 280,
+        "wires": [
+            [
+                "78f98509.d9444c"
+            ]
+        ]
+    },
+    {
+        "id": "7a88ae8a.1f016",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "Set msg.file pontosLinha.json.xz",
+        "field": "file",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{flow.file.pontosLinha}}.xz",
+        "output": "str",
+        "x": 890,
+        "y": 320,
+        "wires": [
+            [
+                "78f98509.d9444c"
+            ]
+        ]
+    },
+    {
+        "id": "9097c90.66d5e38",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "date",
+                "pt": "flow",
+                "to": "2019_05_03",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 110,
+        "y": 160,
+        "wires": [
+            [
+                "6946c043.eb26b"
+            ]
+        ]
+    },
+    {
+        "id": "433f3411.956abc",
+        "type": "inject",
+        "z": "20a66dc.5ecb392",
+        "name": "Iniciar download",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 840,
+        "y": 180,
+        "wires": [
+            [
+                "8835bb0b.e6f558",
+                "4c157d6d.974fa4",
+                "7a88ae8a.1f016",
+                "353fee07.983032",
+                "3fea7a65.185aa6"
+            ]
+        ]
+    },
+    {
+        "id": "2eebf562.6afdfa",
+        "type": "file in",
+        "z": "20a66dc.5ecb392",
+        "name": "file read buffer",
+        "filename": "",
+        "format": "",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 880,
+        "y": 520,
+        "wires": [
+            [
+                "346e40be.2b4f8"
+            ]
+        ]
+    },
+    {
+        "id": "296f0731.8052b8",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "decompress xz",
+        "func": "let lzma = global.get('lzma');\n\nfunction onDecompress(decompressedResult){\n    if(!decompressedResult){\n        throw new Exception(msg.payload);\n    }\n    msg.payload = decompressedResult.toString();\n    // false makes message non clonable, increasing performance.\n    node.send(msg, false);\n    node.done();\n}\n\nlzma.decompress(msg.payload, onDecompress);\n\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1260,
+        "y": 520,
+        "wires": [
+            [
+                "cacb9c25.9710b"
+            ]
+        ]
+    },
+    {
+        "id": "cacb9c25.9710b",
+        "type": "file",
+        "z": "20a66dc.5ecb392",
+        "name": "Write decompressed file",
+        "filename": "",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1470,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "346e40be.2b4f8",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "set msg.filename",
+        "func": "// setting \n// blabla.json.xz to \n// blabla.json\nmsg.filename = msg.filename.slice(0, -3)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 520,
+        "wires": [
+            [
+                "296f0731.8052b8"
+            ]
+        ]
+    },
+    {
+        "id": "a2b4e526.0e1318",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "set flow.dataDirectory",
+        "field": "dataDirectory",
+        "fieldType": "global",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{payload}}data{{global.directorySeparator}}",
+        "output": "str",
+        "x": 1350,
+        "y": 60,
+        "wires": [
+            [
+                "9097c90.66d5e38"
+            ]
+        ]
+    },
+    {
+        "id": "cf6478b5.2d8fc8",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "set global.directorySeparator",
+        "func": "let os = global.get('os');\nlet platform = os.platform();\n\nvar directorySeparator;\nswitch(platform) {\n    case 'win32':\n        directorySeparator = \"\\\\\";\n        break;\n    case 'linux':\n        directorySeparator = \"/\"\n        break;\n    default:\n        directorySeparator = \"/\"\n        break;\n}\nglobal.set(\"directorySeparator\", directorySeparator)\nreturn",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 280,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6946c043.eb26b",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "set flow.file.veiculos",
+        "field": "file.veiculos",
+        "fieldType": "flow",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{flow.date}}_veiculos.json",
+        "output": "str",
+        "x": 130,
+        "y": 200,
+        "wires": [
+            [
+                "cf92304e.5e9c4"
+            ]
+        ]
+    },
+    {
+        "id": "4c5fbbe9.6efd44",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "set flow.file.pontosLinha",
+        "field": "file.pontosLinha",
+        "fieldType": "flow",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{flow.date}}_pontosLinha.json",
+        "output": "str",
+        "x": 150,
+        "y": 280,
+        "wires": [
+            [
+                "7813a212.11ef0c"
+            ]
+        ]
+    },
+    {
+        "id": "7813a212.11ef0c",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "set flow.file.tabelaVeiculo",
+        "field": "file.tabelaVeiculo",
+        "fieldType": "flow",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{flow.date}}_tabelaVeiculo.json",
+        "output": "str",
+        "x": 150,
+        "y": 320,
+        "wires": [
+            [
+                "1e2b5e61.d6b512"
+            ]
+        ]
+    },
+    {
+        "id": "c2569a43.d2e418",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "set flow.path.veiculos",
+        "field": "path.veiculos",
+        "fieldType": "flow",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{global.dataDirectory}}{{flow.file.veiculos}}",
+        "output": "str",
+        "x": 140,
+        "y": 400,
+        "wires": [
+            [
+                "4e5a85a5.02326c"
+            ]
+        ]
+    },
+    {
+        "id": "4e5a85a5.02326c",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "set flow.path.pontosLinha",
+        "field": "path.pontosLinha",
+        "fieldType": "flow",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{global.dataDirectory}}{{flow.file.pontosLinha}}",
+        "output": "str",
+        "x": 150,
+        "y": 440,
+        "wires": [
+            [
+                "f27aaefc.fb736"
+            ]
+        ]
+    },
+    {
+        "id": "f27aaefc.fb736",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "set flow.path.tabelaVeiculo",
+        "field": "path.tabelaVeiculo",
+        "fieldType": "flow",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{global.dataDirectory}}{{flow.file.tabelaVeiculo}}",
+        "output": "str",
+        "x": 160,
+        "y": 480,
+        "wires": [
+            [
+                "6ef29096.9f76b"
+            ]
+        ]
+    },
+    {
+        "id": "78f98509.d9444c",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "set filename",
+        "field": "filename",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{global.currentDirectory}}data{{global.directorySeparator}}{{file}}",
+        "output": "str",
+        "x": 1170,
+        "y": 400,
+        "wires": [
+            [
+                "1b836cdc.425803"
+            ]
+        ]
+    },
+    {
+        "id": "7e41cb3b.922fa4",
+        "type": "http request",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "method": "GET",
+        "ret": "bin",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 1130,
+        "y": 460,
+        "wires": [
+            [
+                "35128e76.c07b82"
+            ]
+        ]
+    },
+    {
+        "id": "35128e76.c07b82",
+        "type": "file",
+        "z": "20a66dc.5ecb392",
+        "name": "Download file",
+        "filename": "",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1300,
+        "y": 460,
+        "wires": [
+            [
+                "2eebf562.6afdfa"
+            ]
+        ]
+    },
+    {
+        "id": "c9855d7.6515ea",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "set flow.veiculosCache",
+        "field": "veiculosCache",
+        "fieldType": "flow",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{global.dataDirectory}}{{flow.date}}_veiculos_{{flow.busLine}}.json",
+        "output": "str",
+        "x": 140,
+        "y": 560,
+        "wires": [
+            [
+                "ae8f60af.d5833"
+            ]
+        ]
+    },
+    {
+        "id": "717ffca.d16ea04",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "more than one bus stop!",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 1520,
+        "wires": []
+    },
+    {
+        "id": "2d89715d.f302ce",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "msg with ts",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 1600,
+        "wires": []
+    },
+    {
+        "id": "3c86e556.0353aa",
+        "type": "switch",
+        "z": "20a66dc.5ecb392",
+        "name": "filter vehicle",
+        "property": "payload.VEIC",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "veiculo",
+                "vt": "flow"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 590,
+        "y": 1160,
+        "wires": [
+            [
+                "f35ef60.be7b508",
+                "61485ba9.eac0a4"
+            ]
+        ]
+    },
+    {
+        "id": "61485ba9.eac0a4",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "c19053e1.294da",
+        "type": "delay",
+        "z": "20a66dc.5ecb392",
+        "d": true,
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "0.5",
+        "timeoutUnits": "seconds",
+        "rate": "3",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 910,
+        "y": 1480,
+        "wires": [
+            [
+                "1d64745d.dbc03c"
+            ]
+        ]
+    },
+    {
+        "id": "9fca7f9d.b6487",
+        "type": "comment",
+        "z": "20a66dc.5ecb392",
+        "name": "minimumDistanceFromBusToStop comment",
+        "info": "Uma distância de 9~10 parece ser suficiente para eliminar pontos de ônibus do outro lado da rua",
+        "x": 830,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "47010005.4111d",
+        "type": "comment",
+        "z": "20a66dc.5ecb392",
+        "name": "SOLUÇÃO PARA O PROBLEMA DOS 2 LADOS DA RUA",
+        "info": "Para cada ponto de ônibus:\n\n* Com amostras > 2 (modo histórico apenas)\npegar uma lista com todas as passagens de ônibus nele.\n\nCriar 2 clusters e aplicar algoritmo kmeans (usando bearing ou menor distância como parametro)\n\nFazer a média das distância até o ponto de ônibus em cada cluster.\nO cluster com menor distância é o vencedor.\nO bearing do cluster é a média do bearing de todas as amostras.\n\n* Com amostras = 2 bearings:\n\nPara termos 2 clusters, a diferença de um bearing para outro precisa:\n\nser mais de 135 graus \ne menor que 225 graus\n\nSe não for, só há um cluster, e ele é o vencedor.",
+        "x": 270,
+        "y": 1640,
+        "wires": []
+    },
+    {
+        "id": "7f211d24.235da4",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "prepare bus stops to map",
+        "func": "/*\n  \"216,130139\": {\n    \"NOME\": \"Rua Padre Germano Maier, 712 - Cristo Rei\",\n    \"NUM\": \"130139\",\n    \"COD\": \"216\",\n    \"LATLON\": {\n      \"type\": \"Feature\",\n      \"properties\": {},\n      \"geometry\": { \"type\": \"Point\", \"coordinates\": [\"-49.2492\", \"-25.42897\"] }\n    },\n    \"GRUPO\": \"\",\n    \"TIPO\": \"Novo mobiliario\",\n    \"VALUES\": [\n      {\n        \"NOME\": \"Rua Padre Germano Maier, 712 - Cristo Rei\",\n        \"NUM\": \"130139\",\n        \"SEQ\": \"10\",\n        \"GRUPO\": \"\",\n        \"SENTIDO\": \"Terminal Port?o\",\n        \"TIPO\": \"Novo mobiliario\",\n        \"ITINERARY_ID\": \"558\",\n        \"COD\": \"216\",\n        \"LATLON\": {\n          \"type\": \"Feature\",\n          \"properties\": {},\n          \"geometry\": {\n            \"type\": \"Point\",\n            \"coordinates\": [\"-49.2492\", \"-25.42897\"]\n          }\n        }\n      }\n    ]\n  }\n*/\n\nconst a = Object.values(msg.payload).map(val => {\n    return {\n        layer: `Line ${val.COD} bus stops`,\n        name: `Line: ${val.COD} Stop: ${val.NUM}`,\n        busStopCode: val.NUM,\n        icon: 'fa-dot-circle-o',\n        lat: val.LATLON.geometry.coordinates[1],\n        lon: val.LATLON.geometry.coordinates[0]\n    }\n});\n\nmsg.payload = a;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 910,
+        "y": 1020,
+        "wires": [
+            [
+                "79671fd4.567fd"
+            ]
+        ]
+    },
+    {
+        "id": "79671fd4.567fd",
+        "type": "split",
+        "z": "20a66dc.5ecb392",
+        "name": "split array",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1120,
+        "y": 1020,
+        "wires": [
+            [
+                "1d64745d.dbc03c"
+            ]
+        ]
+    },
+    {
+        "id": "cea4fd0e.721d2",
+        "type": "comment",
+        "z": "20a66dc.5ecb392",
+        "name": "Map",
+        "info": "http://localhost:1880/busmap/",
+        "x": 870,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "121c232c.10068d",
+        "type": "file",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "filename": "filtered-pontos-linha.json",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1330,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ad2c7531.4bd218",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "SEQ to int",
+        "func": "msg.payload = msg.payload.map(\n    x => {\n        x.SEQ = parseInt(x.SEQ, 10);\n        return x;\n    }\n);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 770,
+        "y": 560,
+        "wires": [
+            [
+                "687d0b40.11eb54"
+            ]
+        ]
+    },
+    {
+        "id": "687d0b40.11eb54",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "order by (SENTIDO, SEQ)",
+        "func": "const _ = global.get(\"lodash\");\nmsg.payload = _.sortBy(msg.payload, ['SENTIDO','SEQ']);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 560,
+        "wires": [
+            [
+                "121c232c.10068d",
+                "d0faf56a.4c5238"
+            ]
+        ]
+    },
+    {
+        "id": "d0faf56a.4c5238",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1290,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "cf92304e.5e9c4",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "set flow.file.linhas",
+        "field": "file.linhas",
+        "fieldType": "flow",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{flow.date}}_linhas.json",
+        "output": "str",
+        "x": 130,
+        "y": 240,
+        "wires": [
+            [
+                "4c5fbbe9.6efd44"
+            ]
+        ]
+    },
+    {
+        "id": "353fee07.983032",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "Set msg.file to linhas.json.xz",
+        "field": "file",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{flow.file.linhas}}.xz",
+        "output": "str",
+        "x": 880,
+        "y": 360,
+        "wires": [
+            [
+                "78f98509.d9444c"
+            ]
+        ]
+    },
+    {
+        "id": "257f5910.57cd26",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "set filename to path.tabelaVeiculo",
+        "rules": [
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "msg",
+                "to": "path.tabelaVeiculo",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 720,
+        "wires": [
+            [
+                "b9cbad96.42d53"
+            ]
+        ]
+    },
+    {
+        "id": "b9cbad96.42d53",
+        "type": "file in",
+        "z": "20a66dc.5ecb392",
+        "name": "read tabelaVeiculo",
+        "filename": "",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 610,
+        "y": 720,
+        "wires": [
+            [
+                "36b132a1.2a115e"
+            ]
+        ]
+    },
+    {
+        "id": "36b132a1.2a115e",
+        "type": "json",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 770,
+        "y": 720,
+        "wires": [
+            [
+                "f7edb48.329f548"
+            ]
+        ]
+    },
+    {
+        "id": "f7edb48.329f548",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "filter by busLine",
+        "func": "msg.payload = msg.payload.filter(x => x.COD_LINHA === flow.get('busLine'));\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 720,
+        "wires": [
+            [
+                "bf397b09.2af618",
+                "2ff8e902.dae3a6"
+            ]
+        ]
+    },
+    {
+        "id": "2ff8e902.dae3a6",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "adjust tabelaVeiculo object",
+        "func": "var luxon = global.get('luxon');\nmsg.payload = msg.payload.map(x => {\n    x.time = luxon.Duration.fromISOTime(x.HORARIO);\n    return x;\n});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 180,
+        "y": 840,
+        "wires": [
+            [
+                "8a5a956c.2029a8",
+                "da02a558.fee5c8"
+            ]
+        ]
+    },
+    {
+        "id": "bf397b09.2af618",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "tabelaVeiculo",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1150,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "b01cc7e0.698a38",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "tabelaVeiculo ordered",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "8a5a956c.2029a8",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "order by (VEICULO, HORARIO)",
+        "func": "const _ = global.get(\"lodash\");\nmsg.payload = _.sortBy(msg.payload, ['VEICULO','HORARIO']);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 840,
+        "wires": [
+            [
+                "b01cc7e0.698a38"
+            ]
+        ]
+    },
+    {
+        "id": "9e2dafdd.cda19",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "group by (TABELA)",
+        "func": "const _ = global.get(\"lodash\");\n\n msg.payload = _(msg.payload)\n    // Group the elements of Array based on `color` property\n    .groupBy(\"TABELA\")\n    // `key` is group's name (), `value` is the array of objects\n    .map((value, key) => ({ TABELA: key, VALOR: value }))\n    .value()\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 880,
+        "wires": [
+            [
+                "cb6f07ed.daf468"
+            ]
+        ]
+    },
+    {
+        "id": "cb6f07ed.daf468",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "groupBy",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "da02a558.fee5c8",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "filter busId",
+        "func": "msg.payload = msg.payload.filter(x => {\n    return x.VEICULO === flow.get(\"veiculo\")\n})\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 880,
+        "wires": [
+            [
+                "9e2dafdd.cda19",
+                "cb6f07ed.daf468"
+            ]
+        ]
+    },
+    {
+        "id": "ae8f60af.d5833",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "veiculo",
+                "pt": "flow",
+                "to": "BA125",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 160,
+        "wires": [
+            [
+                "3fc0cc7e.c20d84"
+            ]
+        ]
+    },
+    {
+        "id": "4f02c09d.114bc",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "raw",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 390,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "1e2b5e61.d6b512",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "set flow.file.tabelaLinha",
+        "field": "file.tabelaLinha",
+        "fieldType": "flow",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{flow.date}}_tabelaLinha.json",
+        "output": "str",
+        "x": 150,
+        "y": 360,
+        "wires": [
+            [
+                "c2569a43.d2e418"
+            ]
+        ]
+    },
+    {
+        "id": "6ef29096.9f76b",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "set flow.path.tabelaLinha",
+        "field": "path.tabelaLinha",
+        "fieldType": "flow",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{global.dataDirectory}}{{flow.file.tabelaLinha}}",
+        "output": "str",
+        "x": 150,
+        "y": 520,
+        "wires": [
+            [
+                "c9855d7.6515ea"
+            ]
+        ]
+    },
+    {
+        "id": "3fea7a65.185aa6",
+        "type": "template",
+        "z": "20a66dc.5ecb392",
+        "name": "Set msg.file to linhas.json.xz",
+        "field": "file",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{flow.file.tabelaLinha}}.xz",
+        "output": "str",
+        "x": 880,
+        "y": 400,
+        "wires": [
+            [
+                "78f98509.d9444c"
+            ]
+        ]
+    },
+    {
+        "id": "f8f457e7.9b0bf8",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "set filename to path.tabelaLinha",
+        "rules": [
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "msg",
+                "to": "path.tabelaLinha",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 350,
+        "y": 760,
+        "wires": [
+            [
+                "dbc5c8d8.454be8"
+            ]
+        ]
+    },
+    {
+        "id": "dbc5c8d8.454be8",
+        "type": "file in",
+        "z": "20a66dc.5ecb392",
+        "name": "read tabelaLinha",
+        "filename": "",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 610,
+        "y": 760,
+        "wires": [
+            [
+                "ae7adb1a.e83038"
+            ]
+        ]
+    },
+    {
+        "id": "ae7adb1a.e83038",
+        "type": "json",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 770,
+        "y": 760,
+        "wires": [
+            [
+                "22eca2af.842a8e"
+            ]
+        ]
+    },
+    {
+        "id": "22eca2af.842a8e",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "filter by busLine",
+        "func": "msg.payload = msg.payload.filter(x => x.COD === flow.get('busLine'));\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 760,
+        "wires": [
+            [
+                "2703cb8c.2ae5d4"
+            ]
+        ]
+    },
+    {
+        "id": "70d3e14e.f4e8e",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "tabelaLinha",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1410,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "2703cb8c.2ae5d4",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "order by (COD,TABELA,DIA,HORA)",
+        "func": "const _ = global.get(\"lodash\");\nmsg.payload = _.sortBy(msg.payload, ['COD','TABELA','DIA','HORA']);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 760,
+        "wires": [
+            [
+                "70d3e14e.f4e8e",
+                "cd8ae57b.1aa5c8"
+            ]
+        ]
+    },
+    {
+        "id": "c2fe5c93.cfe88",
+        "type": "file",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "filename": "output.json",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 690,
+        "y": 1640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "75e7733a.31422c",
+        "type": "file in",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "filename": "output.json",
+        "format": "lines",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 530,
+        "y": 1980,
+        "wires": [
+            [
+                "40077196.73607"
+            ]
+        ]
+    },
+    {
+        "id": "b3ff21cd.d88be",
+        "type": "json",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 810,
+        "y": 1980,
+        "wires": [
+            [
+                "e5397b43.eaf1e8"
+            ]
+        ]
+    },
+    {
+        "id": "174f2f50.3eea01",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 1980,
+        "wires": []
+    },
+    {
+        "id": "ffb7492b.e06058",
+        "type": "inject",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 380,
+        "y": 1980,
+        "wires": [
+            [
+                "75e7733a.31422c"
+            ]
+        ]
+    },
+    {
+        "id": "40077196.73607",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "func": "if(msg.payload === \"\"){\n    return null;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 1980,
+        "wires": [
+            [
+                "b3ff21cd.d88be"
+            ]
+        ]
+    },
+    {
+        "id": "e5397b43.eaf1e8",
+        "type": "join",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "mode": "custom",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "3",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 930,
+        "y": 1980,
+        "wires": [
+            [
+                "174f2f50.3eea01"
+            ]
+        ]
+    },
+    {
+        "id": "13aa4fd.8d9dbb",
+        "type": "inject",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[1,2,3,4,5]",
+        "payloadType": "json",
+        "x": 380,
+        "y": 1900,
+        "wires": [
+            [
+                "71902ffc.438e1"
+            ]
+        ]
+    },
+    {
+        "id": "d2fb0983.ed3628",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 1900,
+        "wires": []
+    },
+    {
+        "id": "71902ffc.438e1",
+        "type": "function",
+        "z": "20a66dc.5ecb392",
+        "name": "split",
+        "func": "const payload = msg.payload;\nfor (var i = 0; i < payload.length; i++) {\n    msg.payload = payload[i];\n    if(i==payload.length-1){\n        msg.complete = true;\n    }\n    node.send(msg);\n    node.done();\n}\n\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1900,
+        "wires": [
+            [
+                "994dcfdb.257bb"
+            ]
+        ]
+    },
+    {
+        "id": "994dcfdb.257bb",
+        "type": "join",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "mode": "custom",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 630,
+        "y": 1900,
+        "wires": [
+            [
+                "d2fb0983.ed3628"
+            ]
+        ]
+    },
+    {
+        "id": "f7840ebf.eea82",
+        "type": "comment",
+        "z": "6d6c8fc8.4b906",
+        "name": "Plotly example flows",
+        "info": "",
+        "x": 200,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "fc533d53.d136d",
+        "type": "inject",
+        "z": "6d6c8fc8.4b906",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 180,
+        "y": 240,
+        "wires": [
+            [
+                "5f0c8caa.586894"
+            ]
+        ]
+    },
+    {
+        "id": "5f0c8caa.586894",
+        "type": "change",
+        "z": "6d6c8fc8.4b906",
+        "name": "World temperatures - bar chart",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"x\":[\"London\",\"Canberra\",\"Paris\",\"Vienna\",\"Dhaka\",\"Brussels\",\"Sofia\",\"Ottawa\"],\"y\":[\"58.6\",\"65.7\",\"43\",\"48\",\"73.4\",\"53.5\",\"67.1\",\"38.9\"]}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 390,
+        "y": 240,
+        "wires": [
+            [
+                "cfb01eda.104d1"
+            ]
+        ]
+    },
+    {
+        "id": "cfb01eda.104d1",
+        "type": "ui_template",
+        "z": "6d6c8fc8.4b906",
+        "group": "ab0a1952.be8488",
+        "name": "Example 2",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "format": "<div id=\"example2\"></div>\n<script>\n\n// Initialize chart\nvar data = [{x:[0],y:[0]}];\nvar layout = {\n    title:'Awaiting data',\n    };\nPlotly.newPlot('example2', data, layout);\n\n// Update data & layout\n(function(scope) {\n  scope.$watch('msg', function(msg) {\n    if (msg) {\n       \n    var data = [{\n        x:msg.payload.x,\n        y:msg.payload.y,\n        type: 'bar',\n        connectgaps: true\n        }];\n        \n    var layout = {\n        title: \"World Temperatures (2)\",\n        titlefont: {\n            size: 22,\n            },\n        autosize: true,\n        plot_bgcolor: '#ffffff',\n        paper_bgcolor: '#ffffff',\n        'xaxis': {\n           title: 'Location',\n            fixedrange: true\n            },\n        'yaxis': {\n            title: 'Temperature °F',\n            fixedrange: true\n            }\n        };\n\n    Plotly.newPlot('example2', data, layout, { displayModeBar: false }, { staticPlot: true }, { displaylogo: false },)\n    }\n  });\n})(scope);\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "x": 650,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cba75ab6.6b59f8",
+        "type": "change",
+        "z": "6d6c8fc8.4b906",
+        "name": "wind/gusts twin axis line chart",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"wind\":[\"20.2\",\"19.1\",\"15.0\",\"12.9\",\"9.8\",\"7.6\",\"6.5\",\"6.4\",\"6.2\",\"6.1\",\"6.0\",\"5.8\",\"5.7\",\"8.6\",\"12.5\",\"18.5\",\"24.5\",\"27.5\",\"28.5\",\"28\"],\"gust\":[\"27.3\",\"24.4\",\"22.5\",\"18.4\",\"17.4\",\"15.3\",\"13.2\",\"11.2\",\"9.1\",\"8.0\",\"8.0\",\"11.9\",\"13.8\",\"15.8\",\"17.7\",\"20.6\",\"24.5\",\"28.4\",\"30.3\",\"31.2\"],\"time\":[\"2020-07-24 16:49:29\",\"2020-07-24 16:59:29\",\"2020-07-24 17:09:29\",\"2020-07-24 17:19:29\",\"2020-07-24 17:29:29\",\"2020-07-24 17:39:29\",\"2020-07-24 17:49:29\",\"2020-07-24 17:59:29\",\"2020-07-24 18:09:29\",\"2020-07-24 18:19:29\",\"2020-07-24 18:29:29\",\"2020-07-24 18:39:29\",\"2020-07-24 18:49:29\",\"2020-07-24 18:59:29\",\"2020-07-24 19:09:29\",\"2020-07-24 19:19:29\",\"2020-07-24 19:29:29\",\"2020-07-24 19:39:29\",\"2020-07-24 19:49:29\",\"2020-07-24 19:59:29\"]}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 390,
+        "y": 280,
+        "wires": [
+            [
+                "e28f6576.aef998"
+            ]
+        ]
+    },
+    {
+        "id": "48414699.63c048",
+        "type": "inject",
+        "z": "6d6c8fc8.4b906",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 180,
+        "y": 280,
+        "wires": [
+            [
+                "cba75ab6.6b59f8"
+            ]
+        ]
+    },
+    {
+        "id": "cbe0c690.4155e8",
+        "type": "inject",
+        "z": "6d6c8fc8.4b906",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 180,
+        "y": 200,
+        "wires": [
+            [
+                "8010f807.e262d8"
+            ]
+        ]
+    },
+    {
+        "id": "8010f807.e262d8",
+        "type": "change",
+        "z": "6d6c8fc8.4b906",
+        "name": "UK Temperature - line chart",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"x\":[\"January\",\"February\",\"March\",\"April\",\"May\",\"June\",\"July\",\"August\",\"September\",\"October\",\"November\",\"December\"],\"y\":[\"4.6\",\"4.9\",\"9.3\",\"14.2\",\"17.4\",\"19.3\",\"20.8\",\"21.6\",\"19.2\",\"14.3\",\"9.8\",\"6.3\"]}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 200,
+        "wires": [
+            [
+                "d9d77524.750558"
+            ]
+        ]
+    },
+    {
+        "id": "d9d77524.750558",
+        "type": "ui_template",
+        "z": "6d6c8fc8.4b906",
+        "group": "ab0a1952.be8488",
+        "name": "Example 1",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "format": "<div id=\"example1\"></div>\n<script>\n\n// Initialize chart\nvar data = [{x:[0],y:[0]}];\nvar layout = {\n    title:'Awaiting data',\n    };\nPlotly.newPlot('example1', data, layout);\n\n// Update data & layout\n(function(scope) {\n  scope.$watch('msg', function(msg) {\n    if (msg) {\n       \n    var data = [{\n        x:msg.payload.x,\n        y:msg.payload.y,\n        connectgaps: true\n        }];\n\n    var layout = {\n        title: \"Monthly UK Temperatures (1)\",\n        titlefont: {\n            size: 22,\n            },\n        autosize: true,\n        plot_bgcolor: '#ffffff',\n        paper_bgcolor: '#ffffff',\n        'xaxis': {\n            title: 'Month',\n            fixedrange: true\n            },\n        'yaxis': {\n            title: 'Average Temperature °C',\n            mode: 'lines',\n            fixedrange: true\n            }\n        };\n\n    Plotly.newPlot('example1', data, layout, { displayModeBar: false }, { staticPlot: true }, { displaylogo: false },)\n    }\n  });\n})(scope);\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "x": 650,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e28f6576.aef998",
+        "type": "ui_template",
+        "z": "6d6c8fc8.4b906",
+        "group": "ab0a1952.be8488",
+        "name": "Example 3",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "format": "<div id=\"example3\"></div>\n<script>\n\n// Initialize chart\nvar layout = {\n    title:'Awaiting data',\n    };\nvar data = [{x:[0],y:[0]}];\nPlotly.newPlot('example3', data, layout);\n\n// Update data & layout\n(function(scope) {\n  scope.$watch('msg', function(msg) {\n    if (msg) {\n        \n    var winddata = {\n        x:msg.payload.time,\n        y:msg.payload.wind,\n        name: 'wind-speed',\n        //type: 'bar',\n        marker: {\n            color: '#8080ff',\n            opacity: 0.7,\n            line:   {\n            color: '#0033cc',\n            width: 1.5\n                    }\n                },\n        connectgaps: true\n     };\n     \n    var gustdata = {\n        x:msg.payload.time,\n        y:msg.payload.gust,\n        name: 'wind-gust',\n        mode: 'lines',\n        line: {\n           dash: 'dashdot',\n           color: '#ff0000'\n            },\n        yaxis: 'y2',\n        connectgaps: true\n     };\n\nvar data = [gustdata,winddata];\n\n    var layout = {\n    title: 'Windspeed & Gust data (3)',\n    titlefont: {\n        size: 22,\n        },\n    showlegend: false,\n    plot_bgcolor: '#ffffff',\n    paper_bgcolor: '#ffffff',\n    'yaxis': {\n        title: 'Windspeed mph',\n        range: [0, 35],\n        color: '#0000ff'\n        },\n    'yaxis2': {\n        title: 'WindGusts mph',\n        range: [0, 35],\n        color: '#ff0000',\n        overlaying: 'y',\n        side: 'right'\n        },\n    'xaxis': {\n        title: 'Time recorded',\n       'tickformat': '%X'\n        }\n    };\n\n      //console.log(data,layout)\n      Plotly.newPlot('example3', data, layout, { modeBarButtonsToRemove: ['toImage','toggleSpikelines'], displaylogo: false})\n     };\n  });\n})(scope);\n\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "x": 650,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c1919ec2.69d62",
+        "type": "ui_template",
+        "z": "6d6c8fc8.4b906",
+        "group": "",
+        "name": "Load Plotly",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "format": "<script src=\"/plotly-latest.min.js\"></script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "global",
+        "x": 290,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e06cb50.b5ecf48",
+        "type": "ui_template",
+        "z": "6d6c8fc8.4b906",
+        "group": "ab0a1952.be8488",
+        "name": "Example 4",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "format": "<div id=\"example4\"></div>\n<script>\n\n\n\n//const _ = global.get('lodash')\n//var tabelaLinhaGroup = global.get('tabelaLinhaGroup')\n\n/*\nfor (const [key, value] of Object.entries(tabelaLinhaGroup)) {\n    const k = JSON.parse(key);\n    k.DIA\n    console.log('key', key);\n    console.log('value', value);\n}\n*/\n\n/*\n{\"{\\\"DIA\\\":\\\"2\\\",\\\"TABELA\\\":\\\"1\\\"}\":[{\"HORA\":\"05:50\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:30\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:10\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:50\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:30\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"3\\\",\\\"TABELA\\\":\\\"1\\\"}\":[{\"HORA\":\"06:00\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:40\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:20\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:00\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:40\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:20\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:00\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:40\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:20\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:00\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:40\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:20\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:00\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:40\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:20\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:00\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:40\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:20\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:00\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:40\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:24\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:03\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:43\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"21:22\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:00\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:40\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:20\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:55\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"1-1\\\"}\":[{\"HORA\":\"05:15\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"1-1\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"06:00\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"1-1\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"06:45\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"1-1\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"07:31\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"1-1\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"08:26\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"1-1\",\"ADAPT\":\"\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"1-2\\\"}\":[{\"HORA\":\"16:40\",\"PONTO\":\"AV.SAO JOSE SENT.CABRAL\",\"DIA\":\"1\",\"NUM\":\"130150\",\"TABELA\":\"1-2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"17:20\",\"PONTO\":\"AV.SAO JOSE SENT.CABRAL\",\"DIA\":\"1\",\"NUM\":\"130150\",\"TABELA\":\"1-2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"18:00\",\"PONTO\":\"AV.SAO JOSE SENT.CABRAL\",\"DIA\":\"1\",\"NUM\":\"130150\",\"TABELA\":\"1-2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"18:40\",\"PONTO\":\"AV.SAO JOSE SENT.CABRAL\",\"DIA\":\"1\",\"NUM\":\"130150\",\"TABELA\":\"1-2\",\"ADAPT\":\"\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"10\\\"}\":[{\"HORA\":\"06:23\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:03\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:54\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:47\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:43\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:35\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:27\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:19\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:11\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:03\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:55\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:47\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:39\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:34\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:26\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:20\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:02\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:47\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"21:32\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:20\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:04\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:44\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"10\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"11-1\\\"}\":[{\"HORA\":\"04:59\",\"PONTO\":\"BAIRRO POMPEIA\",\"DIA\":\"1\",\"NUM\":\"170907\",\"TABELA\":\"11-1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"05:34\",\"PONTO\":\"TERMINAL PINHEIRINHO\",\"DIA\":\"1\",\"NUM\":\"105721\",\"TABELA\":\"11-1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:11\",\"PONTO\":\"BAIRRO POMPEIA\",\"DIA\":\"1\",\"NUM\":\"170907\",\"TABELA\":\"11-1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:46\",\"PONTO\":\"TERMINAL PINHEIRINHO\",\"DIA\":\"1\",\"NUM\":\"105721\",\"TABELA\":\"11-1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:10\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"11-1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:02\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"11-1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:56\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"11-1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"11-2\\\"}\":[{\"HORA\":\"16:32\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"11-2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:23\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"11-2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:17\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"11-2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:10\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"11-2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"12\\\"}\":[{\"HORA\":\"00:05\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"05:50\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:32\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:17\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:10\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:05\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:56\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:48\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:40\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:32\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:24\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:16\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:08\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:00\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:52\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:43\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:35\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:30\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:17\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"21:02\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"21:47\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:36\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:20\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"12\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"13\\\"}\":[{\"HORA\":\"06:39\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:24\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:18\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:17\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:09\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:01\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:53\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:45\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:37\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:29\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:21\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:13\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:05\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:59\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:53\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:46\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"13\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"2\\\"}\":[{\"HORA\":\"06:07\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:52\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:39\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:34\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:28\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:22\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:14\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:06\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:58\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:50\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:42\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:34\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:24\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:14\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:08\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:02\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:52\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:32\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"21:17\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:02\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:53\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:36\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"2\\\",\\\"TABELA\\\":\\\"2\\\"}\":[{\"HORA\":\"06:17\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:57\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:37\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:17\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:04\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:44\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:25\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:05\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:48\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:28\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:11\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:51\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:34\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:14\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:57\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:37\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:17\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:57\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:37\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:17\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:04\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:50\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"21:40\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:20\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:00\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:35\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"3\\\",\\\"TABELA\\\":\\\"2\\\"}\":[{\"HORA\":\"05:47\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"06:27\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"07:07\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"07:47\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"08:27\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"09:07\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"09:47\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"10:27\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"11:07\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"11:47\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"12:27\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"13:07\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"13:47\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"14:27\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"15:07\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"15:47\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"16:27\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"17:07\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"17:47\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"18:27\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"19:07\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"19:54\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"20:33\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"21:10\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"21:47\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"22:27\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"23:15\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"23:50\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"2\",\"ADAPT\":\"\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"2\\\",\\\"TABELA\\\":\\\"3\\\"}\":[{\"HORA\":\"06:10\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:57\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:37\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:17\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:04\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:44\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:24\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:07\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:47\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:30\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:10\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:53\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:33\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:16\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:56\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:37\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:17\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:57\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:37\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:17\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:59\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:40\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"21:25\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:02\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:40\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:20\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"3\\\",\\\"TABELA\\\":\\\"3\\\"}\":[{\"HORA\":\"06:18\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:54\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:34\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:14\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:54\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:34\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:14\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:54\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:34\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:14\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:54\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:34\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:14\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:54\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:34\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:14\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:54\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:34\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:14\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:54\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:35\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:20\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:57\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"21:34\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:14\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"3\",\"NUM\":\"105806\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:54\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"3\",\"NUM\":\"104404\",\"TABELA\":\"3\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"3-1\\\"}\":[{\"HORA\":\"05:34\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"3-1\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"06:14\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"3-1\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"06:59\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"3-1\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"07:47\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"3-1\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"08:42\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"3-1\",\"ADAPT\":\"\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"3-2\\\"}\":[{\"HORA\":\"16:58\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"3-2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"17:50\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"3-2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"18:44\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"3-2\",\"ADAPT\":\"\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"4\\\"}\":[{\"HORA\":\"06:21\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:06\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:55\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:50\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:40\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:35\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:27\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:19\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:11\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:03\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:55\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:47\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:40\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:32\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:27\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:17\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:02\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:47\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"21:32\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:17\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"4\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"2\\\",\\\"TABELA\\\":\\\"4\\\"}\":[{\"HORA\":\"05:50\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"4\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"06:30\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"4\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"07:10\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"4\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"07:50\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"4\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"08:30\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"4\",\"ADAPT\":\"\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"5\\\"}\":[{\"HORA\":\"05:43\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:28\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:14\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:03\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:58\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:53\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:48\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:40\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:32\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:24\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:16\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:08\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:00\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:49\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:41\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:35\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:32\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:17\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"21:02\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"21:47\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:32\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:12\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:52\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"2\\\",\\\"TABELA\\\":\\\"5\\\"}\":[{\"HORA\":\"06:44\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:24\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:04\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:44\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:24\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:04\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:44\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:27\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:07\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:50\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:30\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:13\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:53\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:36\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:16\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:57\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:37\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:17\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:57\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:40\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:22\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"21:10\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:00\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:35\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:10\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:45\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"5\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"6\\\"}\":[{\"HORA\":\"05:51\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:35\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:22\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:11\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:10\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:08\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:01\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:53\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:45\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:37\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:29\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:21\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:13\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:07\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:59\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:54\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"2\\\",\\\"TABELA\\\":\\\"6\\\"}\":[{\"HORA\":\"06:44\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:24\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:04\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:44\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:24\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:04\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:46\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:26\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:09\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:49\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:32\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:12\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:55\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:35\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:17\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:57\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:37\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:17\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:57\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"2\",\"NUM\":\"105806\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:37\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"2\",\"NUM\":\"104404\",\"TABELA\":\"6\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"7-1\\\"}\":[{\"HORA\":\"05:59\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"7-1\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"06:42\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"7-1\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"07:30\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"7-1\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"08:19\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"7-1\",\"ADAPT\":\"\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"7-2\\\"}\":[{\"HORA\":\"17:25\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"7-2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"18:17\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"7-2\",\"ADAPT\":\"\",\"COD\":\"216\"},{\"HORA\":\"19:11\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"7-2\",\"ADAPT\":\"\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"8-1\\\"}\":[{\"HORA\":\"06:04\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"8-1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:49\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"8-1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:38\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"8-1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:27\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"8-1\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"8-2\\\"}\":[{\"HORA\":\"16:59\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"8-2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:51\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"8-2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:44\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"8-2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:38\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"8-2\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}],\"{\\\"DIA\\\":\\\"1\\\",\\\"TABELA\\\":\\\"9\\\"}\":[{\"HORA\":\"00:08\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"05:35\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:15\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"06:56\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"07:46\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"08:35\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"09:28\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"10:22\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"11:14\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:06\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"12:58\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"13:50\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"14:42\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"15:34\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"16:26\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"17:16\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"18:08\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:02\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"19:47\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"20:32\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"21:17\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:04\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"22:48\",\"PONTO\":\"TERMINAL CABRAL\",\"DIA\":\"1\",\"NUM\":\"104404\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"},{\"HORA\":\"23:28\",\"PONTO\":\"TERMINAL PORTAO\",\"DIA\":\"1\",\"NUM\":\"105806\",\"TABELA\":\"9\",\"ADAPT\":\"ELEVADOR\",\"COD\":\"216\"}]}\n*/\n\n//tl.filter(x => x.DIA === \"1\" && x.COD == \"216\" && )\nvar layout = {\n    title:'Awaiting data',\n    };\nvar data = [{x:[0],y:[0]}];\nPlotly.newPlot('example4', data, layout);\n\n// Update data & layout\n(function(scope) {\n    scope.$watch('msg', function(msg) {\n        if (msg) {\n            /*\n            for (const [key, value] of Object.entries(tabelaLinhas)) {\n                console.log('key', key);\n                console.log('value', value);\n            }\n            */\n            \n            var trace1 = {\n              x: [\"2020-01-01 04:30:00\", \"2020-01-01 05:00:00\"],\n              y: [1, 4],\n              mode: 'markers',\n              name: 'North America',\n              text: ['United States', 'Canada'],\n              marker: {\n                color: 'rgb(164, 194, 244)',\n                size: 12,\n                line: {\n                  color: 'white',\n                  width: 0.5\n                }\n              },\n              type: 'scatter'\n            };\n            \n            var trace2 = {\n              x: [\"2020-01-01 00:00:00\", \"2020-01-01 01:00:00\", \"2020-01-01 02:00:00\"],\n              y: [5, 6, 7],\n              mode: 'markers',\n              name: 'Europe',\n              text: ['Germany', 'Britain', 'France'],\n              marker: {\n                color: 'rgb(255, 217, 102)',\n                size: 12\n              },\n              type: 'scatter'\n            };\n            \n            //var data = [trace1, trace2];\n            var data = msg.payload;\n            \n            var layout = {\n              title: 'Horários de chegada programados da linha 216',\n              xaxis: {\n                title: 'Horário',\n                showgrid: false,\n                zeroline: false,\n                tickformat: '%H:%M:%S'\n              },\n              yaxis: {\n                title: 'Ônibus ou Tabela Horária',\n                type: 'category',\n                //showticklabels: true,\n                //ticks: 'outside',\n                tickmode: 'linear',\n                //showline: false\n              }\n            };\n            \n            Plotly.newPlot('example4', data, layout);\n     };\n  });\n})(scope);\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "x": 650,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cd8ae57b.1aa5c8",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "tabelaLinha",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1440,
+        "y": 800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7fd8a5b3.c290ec",
+        "type": "function",
+        "z": "6d6c8fc8.4b906",
+        "name": "setting up",
+        "func": "const _ = global.get('lodash');\nconst pontos = global.get('pontos')\nconst codigosPontos = pontos.map(x => x.NUM);\n\nconst a = msg.payload\n.filter(x => x.DIA === \"1\" && codigosPontos.includes(x.NUM));\n\nconst b = a.map(x => {\n    x.ts = \"2020-01-01 \"+x.HORA\n    return x\n})\n\nconst c = _.groupBy(b, x => x.NUM);\n\nmsg.payload = c;\n/*\n            var trace1 = {\n              x: [\"2020-01-01 04:30:00\", \"2020-01-01 05:00:00\"],\n              y: [1, 4],\n              mode: 'markers',\n              name: 'North America',\n              text: ['United States', 'Canada'],\n              marker: {\n                color: 'rgb(164, 194, 244)',\n                size: 12,\n                line: {\n                  color: 'white',\n                  width: 0.5\n                }\n              },\n              type: 'scatter'\n            };\n            \n            var trace2 = {\n              x: [\"2020-01-01 00:00:00\", \"2020-01-01 01:00:00\", \"2020-01-01 02:00:00\"],\n              y: [5, 6, 7],\n              mode: 'markers',\n              name: 'Europe',\n              text: ['Germany', 'Britain', 'France'],\n              marker: {\n                color: 'rgb(255, 217, 102)',\n                size: 12\n              },\n              type: 'scatter'\n            };\n*/\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 440,
+        "wires": [
+            [
+                "a7b6fe26.d0cb9",
+                "780e56d8.9630d8"
+            ]
+        ]
+    },
+    {
+        "id": "7af639d5.8f0218",
+        "type": "inject",
+        "z": "6d6c8fc8.4b906",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 440,
+        "wires": [
+            [
+                "1c54f0cb.1f058f"
+            ]
+        ]
+    },
+    {
+        "id": "a7b6fe26.d0cb9",
+        "type": "debug",
+        "z": "6d6c8fc8.4b906",
+        "name": "after",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "587302db.c21d0c",
+        "type": "function",
+        "z": "6d6c8fc8.4b906",
+        "name": "",
+        "func": "const tabelaLinhaGroup = global.get('tabelaLinhaGroup')\nfor (const [key, value] of Object.entries(tabelaLinhaGroup)) {\n    console.log('key', key);\n    console.log('value', value);\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5d450e72.cc374",
+        "type": "inject",
+        "z": "6d6c8fc8.4b906",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 390,
+        "y": 560,
+        "wires": [
+            [
+                "587302db.c21d0c"
+            ]
+        ]
+    },
+    {
+        "id": "1c54f0cb.1f058f",
+        "type": "change",
+        "z": "6d6c8fc8.4b906",
+        "name": "get tabelaLinha",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "tabelaLinha",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 440,
+        "wires": [
+            [
+                "7fd8a5b3.c290ec",
+                "468ee634.f58bb8"
+            ]
+        ]
+    },
+    {
+        "id": "468ee634.f58bb8",
+        "type": "debug",
+        "z": "6d6c8fc8.4b906",
+        "name": "before",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 470,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "7e9509c8.f4c848",
+        "type": "catch",
+        "z": "6d6c8fc8.4b906",
+        "name": "",
+        "scope": [
+            "e06cb50.b5ecf48"
+        ],
+        "uncaught": false,
+        "x": 620,
+        "y": 640,
+        "wires": [
+            [
+                "4cb06fb.81dad9"
+            ]
+        ]
+    },
+    {
+        "id": "4cb06fb.81dad9",
+        "type": "debug",
+        "z": "6d6c8fc8.4b906",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "98877671.9f4018",
+        "type": "change",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "pontos",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1170,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "98a31a61.bd0268",
+        "type": "inject",
+        "z": "6d6c8fc8.4b906",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 720,
+        "wires": [
+            [
+                "737c2d1c.9fbb54"
+            ]
+        ]
+    },
+    {
+        "id": "737c2d1c.9fbb54",
+        "type": "change",
+        "z": "6d6c8fc8.4b906",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "pontos",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 340,
+        "y": 720,
+        "wires": [
+            [
+                "861e5f0e.9ba8e"
+            ]
+        ]
+    },
+    {
+        "id": "861e5f0e.9ba8e",
+        "type": "debug",
+        "z": "6d6c8fc8.4b906",
+        "name": "pontos",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 490,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "780e56d8.9630d8",
+        "type": "function",
+        "z": "6d6c8fc8.4b906",
+        "name": "plotly transform",
+        "func": "const pontosProgramados = msg.payload;\nconst pp = Object.entries(pontosProgramados);\n// set this guy into data\nconst traces = pp.map(x => {\n    const [ponto, horarios] = x;\n    return {\n    x: horarios.map(y => y.ts),\n    y: horarios.map(y => y.TABELA),\n    mode: 'markers',\n    name: 'Ponto de ônibus n.' + ponto,\n    marker: {\n    size: 12,\n    },\n    type: 'scatter'\n    };\n});\n\n//const aaa = pp.map(x => x[1].ts)\nmsg.payload = traces;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 440,
+        "wires": [
+            [
+                "dad916e7.e7dcb8",
+                "e06cb50.b5ecf48"
+            ]
+        ]
+    },
+    {
+        "id": "dad916e7.e7dcb8",
+        "type": "debug",
+        "z": "6d6c8fc8.4b906",
+        "name": "plotly style",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "54a39d30.512034",
+        "type": "join",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "mode": "custom",
+        "build": "string",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 1020,
+        "y": 1700,
+        "wires": [
+            []
+        ]
+    }
+]

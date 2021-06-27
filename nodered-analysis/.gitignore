@@ -1,0 +1,9 @@
+/node_modules
+/data
+.config.nodes.json
+.config.nodes.json.backup
+.config.runtime.json
+.config.users.json
+.config.users.json.backup
+.flows_bus_analysis.json.backup
+.flows_bus_analysis_cred.json.backup
