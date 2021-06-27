@@ -100,7 +100,7 @@ module.exports = {
   // following property can be used to identify a directory of static content
   // that should be served at http://localhost:1880/.
   httpStatic:
-    "C:\\Users\\TiagoMartins\\Documents\\NodeProjects\\urbs-bus-analysis\\resources\\",
+    "C:\\Users\\TiagoMartins\\Projects\\masters-thesis-public-transportation\\nodered-analysis\\resources",
 
   // The maximum size of HTTP request that will be accepted by the runtime api.
   // Default: 5mb

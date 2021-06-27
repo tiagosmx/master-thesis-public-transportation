@@ -1,0 +1,11 @@
+{
+  "folders": [
+	{
+		"path": "nodered-analysis"
+	},
+	{
+		"path": "python-analysis"
+	}
+],
+  "settings": {}
+}
