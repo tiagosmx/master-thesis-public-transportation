@@ -825,12 +825,14 @@
         "id": "4572fcfc.0e7ef4",
         "type": "function",
         "z": "20a66dc.5ecb392",
+        "d": true,
         "name": "window based on windowCenter, publish on windowCenter and tendency analysis",
         "func": "let contextName = 'window'+msg.topic;\nlet windowCenter = flow.get('halfWindowSize');\nlet windowSize = windowCenter * 2 + 1;\nlet currentWindow = context.get(contextName);\nlet currentPosition = msg.payload;\n\nif (typeof currentWindow === 'undefined'){\n    currentWindow = new Array(windowSize);\n}\n\n// Cria uma cópia da Window para evitar problemas de concorrência\ncurrentWindow = currentWindow.map(x => x);\n\n// 0 is oldest and 5 is newest\nfor (let i = 0; i < currentWindow.length - 1; i++){\n    currentWindow[i] = currentWindow[i+1];\n}\ncurrentWindow[currentWindow.length - 1] = currentPosition;\ncontext.set(contextName, currentWindow);\nmsg.payload = currentWindow;\n\nif(typeof currentWindow[windowCenter] !== 'undefined'){\n    // Inserir função aqui!!!\n    // Começar vendo se tem algo a esquerda que indique a tendencia.\n    // Se a esquerda for tudo undefined, significa que é a primeira mensagem.\n    // Olha pra direita e tenta descobrir a tendencia nos caras da direita.\n    // Com isso seta o atual.\n    return msg;\n}\nreturn null;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
+        "libs": [],
         "x": 307,
         "y": 1604,
         "wires": [
@@ -1355,7 +1357,8 @@
         "y": 1060,
         "wires": [
             [
-                "8a34573d.15fd48"
+                "8a34573d.15fd48",
+                "457ea86c.1a0d38"
             ]
         ]
     },
@@ -2126,15 +2129,16 @@
         "id": "61485ba9.eac0a4",
         "type": "debug",
         "z": "20a66dc.5ecb392",
-        "name": "",
-        "active": true,
+        "name": "each vehicle message",
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 790,
+        "x": 820,
         "y": 1160,
         "wires": []
     },
@@ -2557,7 +2561,7 @@
                 "t": "set",
                 "p": "veiculo",
                 "pt": "flow",
-                "to": "BA125",
+                "to": "HR413",
                 "tot": "str"
             }
         ],
@@ -2579,7 +2583,7 @@
         "type": "debug",
         "z": "20a66dc.5ecb392",
         "name": "raw",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3631,29 +3635,36 @@
         "wires": []
     },
     {
-        "id": "54a39d30.512034",
-        "type": "join",
+        "id": "457ea86c.1a0d38",
+        "type": "debug",
         "z": "20a66dc.5ecb392",
         "name": "",
-        "mode": "custom",
-        "build": "string",
-        "property": "payload",
-        "propertyType": "msg",
-        "key": "topic",
-        "joiner": "\\n",
-        "joinerType": "str",
-        "accumulate": false,
-        "timeout": "",
-        "count": "",
-        "reduceRight": false,
-        "reduceExp": "",
-        "reduceInit": "",
-        "reduceInitType": "num",
-        "reduceFixup": "",
-        "x": 1020,
-        "y": 1700,
-        "wires": [
-            []
-        ]
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 190,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "be670e9e.549e6",
+        "type": "debug",
+        "z": "20a66dc.5ecb392",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1250,
+        "y": 1160,
+        "wires": []
     }
 ]
