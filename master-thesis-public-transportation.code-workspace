@@ -1,11 +1,14 @@
 {
   "folders": [
-	{
-		"path": "nodered-analysis"
-	},
-	{
-		"path": "python-analysis"
-	}
-],
+    {
+      "path": "nodered-analysis"
+    },
+    {
+      "path": "python-analysis"
+    },
+    {
+      "path": "nodejs-analysis"
+    }
+  ],
   "settings": {}
 }

@@ -1,0 +1,19 @@
+# Windows specific commands
+nvm install 14.17.3
+nvm use 14.17.3
+npm i -g pnpm
+pnpm init
+pnpm i --save-dev @types/node@^14
+pnpm i --save-dev typescript
+pnpm i --save-dev ts-node
+pnpm i --save-dev nodemon
+pnpx tsc --init
+
+Create .gitignore based on
+https://www.toptal.com/developers/gitignore/api/node
+
+Create src folder to store the code
+
+Create public
+
+Edit package.json:

@@ -994,7 +994,7 @@
                 "t": "set",
                 "p": "colors",
                 "pt": "flow",
-                "to": "[\"indigo\",\"bisque\",\"blueviolet\",\"coral\",\"cornflowerblue\",\"crimson\",\"darkgoldenrod\",\"darkseagreen\",\"tomato\",\"yellowgreen\",\"thistle\",\"teal\",\"snow\",\"sandybrown\",\"lightgreen\",\"lightgrey\",\"khaki\",\"darkseagreen\",\"aquamarine\"]",
+                "to": "[\"darkgreen\",\"bisque\",\"blueviolet\",\"coral\",\"cornflowerblue\",\"crimson\",\"darkgoldenrod\",\"darkseagreen\",\"tomato\",\"yellowgreen\",\"thistle\",\"teal\",\"snow\",\"sandybrown\",\"lightgreen\",\"lightgrey\",\"khaki\",\"darkseagreen\",\"aquamarine\"]",
                 "tot": "json"
             }
         ],
