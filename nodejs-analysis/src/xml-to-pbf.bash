@@ -1,0 +1,1 @@
+osmium cat curitiba-osm-2021-07-14.xml -o curitiba-osm-2021-07-14.pbf -f pbf

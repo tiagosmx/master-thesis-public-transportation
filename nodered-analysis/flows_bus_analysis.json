@@ -2229,7 +2229,7 @@
         "z": "20a66dc.5ecb392",
         "name": "Map",
         "info": "http://localhost:1880/busmap/",
-        "x": 870,
+        "x": 890,
         "y": 600,
         "wires": []
     },
