@@ -1,4 +1,4 @@
-import DatabaseDAO from "./../sevice/databaseDAO";
+import DatabaseDAO from "../service/databaseDAO";
 
 export interface PontosLinhaRaw {
   NOME: string;

@@ -1,20 +1,24 @@
 import axios from "axios";
 import * as fs from "fs";
+import * as readline from "readline";
 import * as path from "path";
 import * as lzma from "lzma-native";
 import { Stream } from "stream";
+import { DateTime } from "luxon";
 
 import { ShapeLinha, ShapeLinhaRaw } from "../models/shapeLinha";
-import DatabaseDAO from "./databaseDAO";
 import PontosLinha from "../models/pontosLinha";
-import { PontosLinhaRaw } from "./../models/pontosLinha";
+import { PontosLinhaRaw } from "../models/pontosLinha";
+import { Veiculos, veiculosRawToVeiculos } from "../models/veiculos";
+import { VeiculosRaw } from "./../models/veiculos";
 
 export default class DatasetDAO {
   protected static urlBegin = "http://dadosabertos.c3sl.ufpr.br/curitibaurbs/";
   // File names
-  protected static linhas = "linhas";
-  protected static shapeLinha = "shapeLinha";
-  protected static pontosLinha = "pontosLinha";
+  protected static fileNameLinhas = "linhas";
+  protected static fileNameShapeLinha = "shapeLinha";
+  protected static fileNamePontosLinha = "pontosLinha";
+  protected static fileNameVeiculos = "veiculos";
 
   private static getCompressedFileName(
     date: string,
@@ -51,11 +55,11 @@ export default class DatasetDAO {
   public static async getShapeLinha(date: string): Promise<ShapeLinha[]> {
     const decompressedFilePath = this.getDecompressedFilePath(
       date,
-      DatasetDAO.shapeLinha
+      DatasetDAO.fileNameShapeLinha
     );
     const compressedFilePath = this.getCompressedFilePath(
       date,
-      DatasetDAO.shapeLinha
+      DatasetDAO.fileNameShapeLinha
     );
 
     console.log("com", compressedFilePath);
@@ -68,7 +72,7 @@ export default class DatasetDAO {
       console.log("Trying to download compressed file.");
       const shapeLinhaResponse = await axios.get(
         DatasetDAO.urlBegin +
-          this.getCompressedFileName(date, DatasetDAO.shapeLinha),
+          this.getCompressedFileName(date, DatasetDAO.fileNameShapeLinha),
         { responseType: "stream" }
       );
 
@@ -77,7 +81,7 @@ export default class DatasetDAO {
         // Save downloaded compressed file to disk
         slrStream.pipe(
           fs.createWriteStream(
-            this.getCompressedFilePath(date, DatasetDAO.shapeLinha)
+            this.getCompressedFilePath(date, DatasetDAO.fileNameShapeLinha)
           )
         );
         // Save downloaded decompressed file to disk
@@ -85,7 +89,7 @@ export default class DatasetDAO {
           .pipe(lzma.createDecompressor())
           .pipe(
             fs.createWriteStream(
-              this.getDecompressedFilePath(date, DatasetDAO.shapeLinha)
+              this.getDecompressedFilePath(date, DatasetDAO.fileNameShapeLinha)
             )
           )
           .on("finish", resolve)
@@ -97,7 +101,9 @@ export default class DatasetDAO {
 
     const slr: ShapeLinhaRaw[] = JSON.parse(
       fs
-        .readFileSync(this.getDecompressedFilePath(date, DatasetDAO.shapeLinha))
+        .readFileSync(
+          this.getDecompressedFilePath(date, DatasetDAO.fileNameShapeLinha)
+        )
         .toString()
     );
     return slr.map((item, index) => {
@@ -112,14 +118,14 @@ export default class DatasetDAO {
   }
 
   public static async getPontosLinha(date: string): Promise<PontosLinha[]> {
-    const fileType = DatasetDAO.pontosLinha;
+    const fileType = DatasetDAO.fileNamePontosLinha;
     const decompressedFilePath = this.getDecompressedFilePath(
       date,
-      DatasetDAO.pontosLinha
+      DatasetDAO.fileNamePontosLinha
     );
     const compressedFilePath = this.getCompressedFilePath(
       date,
-      DatasetDAO.pontosLinha
+      DatasetDAO.fileNamePontosLinha
     );
     if (!fs.existsSync(decompressedFilePath)) {
       console.log(
@@ -169,5 +175,71 @@ export default class DatasetDAO {
         COD: item.COD,
       };
     });
+  }
+
+  // TODO check if this method is working
+  public static async getVeiculos(date: string): Promise<Array<Veiculos>> {
+    const fileType = DatasetDAO.fileNameVeiculos;
+    const decompressedFilePath = this.getDecompressedFilePath(date, fileType);
+    const compressedFilePath = this.getCompressedFilePath(date, fileType);
+    if (!fs.existsSync(decompressedFilePath)) {
+      console.log(
+        `File ${decompressedFilePath} is not present. Downloading...`
+      );
+      // Download compressed file and save it
+      console.log("Trying to download compressed file.");
+      const pontosLinhaResponse = await axios.get(
+        DatasetDAO.urlBegin + this.getCompressedFileName(date, fileType),
+        { responseType: "stream" }
+      );
+
+      await new Promise((resolve, reject) => {
+        const slrStream: Stream = pontosLinhaResponse.data;
+        // Save downloaded compressed file to disk
+        slrStream.pipe(
+          fs.createWriteStream(this.getCompressedFilePath(date, fileType))
+        );
+        // Save downloaded decompressed file to disk
+        slrStream
+          .pipe(lzma.createDecompressor())
+          .pipe(
+            fs.createWriteStream(this.getDecompressedFilePath(date, fileType))
+          )
+          .on("finish", resolve)
+          .on("error", reject);
+      });
+
+      console.log("Compressed and decompressed file saved!");
+    }
+
+    async function processLineByLine(filePath: string) {
+      const fileStream = fs.createReadStream(filePath);
+
+      const rl = readline.createInterface({
+        input: fileStream,
+        crlfDelay: Infinity,
+      });
+      // Note: we use the crlfDelay option to recognize all instances of CR LF
+      // ('\r\n') in input.txt as a single line break.
+
+      const veicBuffer: Veiculos[] = [];
+      let count = 0;
+      for await (const line of rl) {
+        count++;
+        console.log(count);
+        try {
+          // Each line in input.txt will be successively available here as `line`.
+          //console.log(`Line from file: ${line}`);
+          const vRaw: VeiculosRaw = JSON.parse(line);
+          const v = veiculosRawToVeiculos(vRaw);
+          //console.log(v);
+          veicBuffer.push(v);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      return veicBuffer;
+    }
+    return processLineByLine(this.getDecompressedFilePath(date, fileType));
   }
 }
