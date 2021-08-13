@@ -25,6 +25,7 @@ export const tableVeiculos = `
         dthr TIMESTAMPTZ,
         lat DOUBLE PRECISION,
         lon DOUBLE PRECISION,
+        geom GEOMETRY,
         PRIMARY KEY (cod_linha, veic, dthr)
     );
 `;
@@ -36,7 +37,8 @@ export function veiculosToSQL(veiculos: Veiculos[]): string {
     veic,
     dthr,
     lat,
-    lon
+    lon,
+    geom
     )
     VALUES
     ${veiculos
@@ -44,7 +46,9 @@ export function veiculosToSQL(veiculos: Veiculos[]): string {
         (vei) =>
           `(${si(vei.COD_LINHA)}, ${si(vei.VEIC)}, ${si(vei.DTHR)}, ${si(
             vei.LAT
-          )}, ${si(vei.LON)})`
+          )}, ${si(vei.LON)}, st_setsrid(st_makepoint(${si(
+            vei.LON
+          )}::float, ${si(vei.LAT)}::float),4326))`
       )
       .join("\n,")}
     ;`;

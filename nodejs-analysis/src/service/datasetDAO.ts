@@ -178,7 +178,17 @@ export default class DatasetDAO {
   }
 
   // TODO check if this method is working
-  public static async getVeiculos(date: string): Promise<Array<Veiculos>> {
+  public static async getVeiculos({
+    date,
+    cod,
+    vehicleNum,
+    countLimit,
+  }: {
+    date: string;
+    cod?: string;
+    vehicleNum?: string;
+    countLimit?: number;
+  }): Promise<Array<Veiculos>> {
     const fileType = DatasetDAO.fileNameVeiculos;
     const decompressedFilePath = this.getDecompressedFilePath(date, fileType);
     const compressedFilePath = this.getCompressedFilePath(date, fileType);
@@ -188,23 +198,19 @@ export default class DatasetDAO {
       );
       // Download compressed file and save it
       console.log("Trying to download compressed file.");
-      const pontosLinhaResponse = await axios.get(
+      const resp = await axios.get(
         DatasetDAO.urlBegin + this.getCompressedFileName(date, fileType),
         { responseType: "stream" }
       );
 
       await new Promise((resolve, reject) => {
-        const slrStream: Stream = pontosLinhaResponse.data;
+        const slrStream: Stream = resp.data;
         // Save downloaded compressed file to disk
-        slrStream.pipe(
-          fs.createWriteStream(this.getCompressedFilePath(date, fileType))
-        );
+        slrStream.pipe(fs.createWriteStream(compressedFilePath));
         // Save downloaded decompressed file to disk
         slrStream
           .pipe(lzma.createDecompressor())
-          .pipe(
-            fs.createWriteStream(this.getDecompressedFilePath(date, fileType))
-          )
+          .pipe(fs.createWriteStream(decompressedFilePath))
           .on("finish", resolve)
           .on("error", reject);
       });
@@ -212,34 +218,42 @@ export default class DatasetDAO {
       console.log("Compressed and decompressed file saved!");
     }
 
-    async function processLineByLine(filePath: string) {
+    async function processLineByLine(
+      filePath: string
+    ): Promise<Array<Veiculos>> {
       const fileStream = fs.createReadStream(filePath);
 
       const rl = readline.createInterface({
         input: fileStream,
         crlfDelay: Infinity,
       });
-      // Note: we use the crlfDelay option to recognize all instances of CR LF
-      // ('\r\n') in input.txt as a single line break.
-
-      const veicBuffer: Veiculos[] = [];
+      const veicBuffer: Array<Veiculos> = [];
       let count = 0;
       for await (const line of rl) {
+        if (countLimit != null && count >= countLimit) {
+          break;
+        }
         count++;
-        console.log(count);
         try {
           // Each line in input.txt will be successively available here as `line`.
-          //console.log(`Line from file: ${line}`);
           const vRaw: VeiculosRaw = JSON.parse(line);
           const v = veiculosRawToVeiculos(vRaw);
-          //console.log(v);
-          veicBuffer.push(v);
+          let toSave = true;
+          if (cod != null && cod !== v.COD_LINHA) {
+            toSave = false;
+          }
+          if (vehicleNum != null && vehicleNum !== v.VEIC) {
+            toSave = false;
+          }
+          if (toSave) {
+            veicBuffer.push(v);
+          }
         } catch (error) {
           console.log(error);
         }
       }
       return veicBuffer;
     }
-    return processLineByLine(this.getDecompressedFilePath(date, fileType));
+    return await processLineByLine(decompressedFilePath);
   }
 }
