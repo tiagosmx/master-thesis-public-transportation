@@ -1,40 +1,70 @@
 WITH veiculos_with_azimuth AS (
 SELECT
-*,
-LAG(geom) OVER w AS lag,
-st_makeline(LAG(geom) OVER w, geom) AS line,
-st_azimuth( LAG(geom) OVER w, geom) AS azimuth
+cod_linha, 
+veic, 
+LAG(dthr) OVER w AS prev_dthr,
+dthr,
+LAG(dthr) OVER w - dthr time_dif,
+st_makeline(LAG(geom) OVER w, geom) AS trajectory_line,
+st_azimuth(LAG(geom) OVER w, geom) AS trajectory_azimuth
 FROM veiculos
 WINDOW w AS (PARTITION BY cod_linha, veic ORDER BY dthr ASC)
 ORDER BY (cod_linha, veic, dthr)
 LIMIT 100
 ),
 va_pa AS (
-SELECT *,
-st_closestpoint(va.line, pa.geom),
-st_distance(va.line, pa.geom) distance_bus_to_stop
+SELECT
+va.*,
+index bus_stop_index,
+nome bus_stop_name,
+num bus_stop_id,
+seq,
+grupo,
+sentido,
+tipo,
+itinerary_id,
+cod,
+geom bus_stop_location,
+geom,
+id shape_sequence,
+shp shape_id,
+line shape_line,
+azimuth bus_stop_azimuth,
+st_distance distance_from_bus_stop_to_shape,
+st_closestpoint(va.trajectory_line, pa.geom) closest_point_vehicle_bus_stop,
+distance_bus_to_stop,
+MIN(distance_bus_to_stop) OVER w AS min_distance_bus_to_stop_others
 FROM veiculos_with_azimuth va
-JOIN pontos_linha_azimuth pa ON TRUE
 -- O onibus e o ponto de onibus precisam ser da mesma linha
-AND va.cod_linha = pa.cod
--- O onibus precisa estar direcionado aproximadamente na mesma direção (entre -45 e +45 graus de diferença) em que o ponto de ônibus está (comparação de azimutes)
-AND (va.azimuth - pa.azimuth + pi() + pi()*2)::NUMERIC % (pi()*2 - pi())::NUMERIC BETWEEN -pi()/4 AND pi()/4
--- A distância do ônibus até o ponto de ônibus precisa ser menor que 10m
-AND st_distance(va.line, pa.geom) <= 5
+JOIN pontos_linha_azimuth pa ON va.cod_linha = pa.cod,
+LATERAL (
+	SELECT 
+	-- Calcula a distância entre o ônibus e o ponto de ônibus
+	st_distance(st_closestpoint(va.trajectory_line, pa.geom)::geography, pa.geom::geography) distance_bus_to_stop,
+	-- Calcula a diferença entre o azimute da trajetória e o azimute do ponto de onibus
+	(va.trajectory_azimuth - pa.azimuth + pi() + pi()*2)::NUMERIC % (pi()*2)::NUMERIC - pi() angle_dif
+) l1
+WHERE TRUE
+	-- A distância do ônibus até o ponto de ônibus precisa ser menor que 20m
+	AND distance_bus_to_stop <= 15
+	-- A diferença em graus entre os azimutes precisa estar entre -45 e +45 
+	AND angle_dif BETWEEN -pi()/4 AND pi()/4
+WINDOW    
+w AS (
+	PARTITION BY cod_linha, veic, num --bus stop id 
+	ORDER BY dthr ASC 
+	RANGE BETWEEN 
+	'5 minutes' PRECEDING AND 
+	'5 minutes' FOLLOWING 
+	EXCLUDE CURRENT ROW
+	 )
+--ORDER BY cod_linha, veic, num, dthr
 )
-SELECT *,
-COUNT(*) OVER w window_count,
-COUNT(*) OVER w_preceding window_preceding_count,
-COUNT(*) OVER w_following window_following_count,
-ARRAY_AGG(distance_bus_to_stop) OVER w,
-ARRAY_AGG(distance_bus_to_stop) OVER w_preceding,
-ARRAY_AGG(distance_bus_to_stop) OVER w_following,
-ROW_NUMBER() OVER w,
-MIN(distance_bus_to_stop) OVER w
---ROW_NUMBER() OVER (PARTITION BY cod_linha, veic, num ORDER BY distance_bus_to_point ASC RANGE BETWEEN '1 minutes'::INTERVAL PRECEDING AND '1 minutes'::INTERVAL FOLLOWING)
+SELECT 
+--degrees(trajectory_azimuth) trajectory_azimuth_degrees,
+--degrees(bus_stop_azimuth) bus_stop_azimuth_degrees,
+*
 FROM va_pa
-WINDOW    w AS (PARTITION BY cod_linha, veic, num ORDER BY dthr ASC RANGE BETWEEN '1 minutes' PRECEDING AND '1 minutes'  FOLLOWING),
-w_preceding AS (PARTITION BY cod_linha, veic, num ORDER BY dthr ASC RANGE BETWEEN '1 minutes' PRECEDING AND '0'  PRECEDING),
-w_following AS (PARTITION BY cod_linha, veic, num ORDER BY dthr ASC RANGE BETWEEN '0' FOLLOWING AND '1 minutes'  FOLLOWING)
-ORDER BY cod_linha, veic, num, dthr
+WHERE distance_bus_to_stop < min_distance_bus_to_stop_others
+ORDER BY cod_linha, veic, dthr
 ;
