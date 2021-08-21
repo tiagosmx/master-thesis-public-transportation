@@ -11,6 +11,7 @@ import PontosLinha from "../models/pontosLinha";
 import { PontosLinhaRaw } from "../models/pontosLinha";
 import { Veiculos, veiculosRawToVeiculos } from "../models/veiculos";
 import { VeiculosRaw } from "./../models/veiculos";
+import { pontosLinhaRawToPontosLinha } from "./../models/pontosLinha";
 
 export default class DatasetDAO {
   protected static urlBegin = "http://dadosabertos.c3sl.ufpr.br/curitibaurbs/";
@@ -106,15 +107,18 @@ export default class DatasetDAO {
         )
         .toString()
     );
-    return slr.map((item, index) => {
+    //console.log(slr);
+    const sl = slr.map((item, index) => {
       return {
         ID: index,
         SHP: parseInt(item.SHP),
         COD: item.COD,
-        LAT: parseFloat(item.LAT),
-        LON: parseFloat(item.LON),
+        LAT: parseFloat(item.LAT.replace(",", ".")),
+        LON: parseFloat(item.LON.replace(",", ".")),
       };
     });
+    //console.log(sl);
+    return sl;
   }
 
   public static async getPontosLinha(date: string): Promise<PontosLinha[]> {
@@ -161,19 +165,7 @@ export default class DatasetDAO {
       fs.readFileSync(this.getDecompressedFilePath(date, fileType)).toString()
     );
     return slr.map((item, index) => {
-      return {
-        INDEX: index,
-        NOME: item.NOME,
-        NUM: parseInt(item.NUM),
-        LAT: parseFloat(item.LAT),
-        LON: parseFloat(item.LON),
-        SEQ: parseInt(item.SEQ),
-        GRUPO: parseInt(item.GRUPO),
-        SENTIDO: item.SENTIDO,
-        TIPO: item.TIPO,
-        ITINERARY_ID: item.ITINERARY_ID,
-        COD: item.COD,
-      };
+      return pontosLinhaRawToPontosLinha(index, item);
     });
   }
 

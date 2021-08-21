@@ -1,23 +1,18 @@
-import { Client, Pool, Query } from "pg";
+import { Client, Pool, Query, PoolConfig } from "pg";
 import pgPromise = require("pg-promise");
 const pgp = pgPromise();
-import PontosLinha, { pontosLinhaToSQL } from "../models/pontosLinha";
-import { ShapeLinha } from "../models/shapeLinha";
-import { ShapeLinhaRaw } from "../models/shapeLinha";
-import { tableVeiculos, Veiculos, veiculosToSQL } from "../models/veiculos";
+import PontosLinha, { insertIntoPontosLinhaSQL } from "../models/pontosLinha";
+import { ShapeLinha, insertIntoShapeLinha } from "../models/shapeLinha";
+import { Veiculos, veiculosToSQL } from "../models/veiculos";
+import { createTablePontosLinhaSQL } from "./../models/pontosLinha";
+import { createTableShapeLinha } from "./../models/shapeLinha";
+import { createTableVeiculos } from "./../models/veiculos";
 
 export default class DatabaseDAO {
   readonly pgPool: Pool;
 
-  constructor() {
-    this.pgPool = new Pool({
-      host: "localhost",
-      port: 49153,
-      database: "postgres",
-      user: "postgres",
-      password: "postgres",
-      max: 5,
-    });
+  constructor(poolConfig?: PoolConfig) {
+    this.pgPool = new Pool(poolConfig);
   }
 
   async init() {
@@ -36,7 +31,8 @@ export default class DatabaseDAO {
     }
   }
 
-  public static si(input?: any): string {
+  /** Sanitizes Literal (such as a number, constants.., etc) */
+  public static sl(input?: any): string {
     if (input === null || Number.isNaN(input) || input === undefined) {
       return "null";
     } else {
@@ -44,29 +40,31 @@ export default class DatabaseDAO {
     }
   }
 
-  async pgSavePontosLinha(pontosLinha: PontosLinha[]) {
+  /** Sanitizes Identifier (such as table names...) */
+  public static si(input?: any): string {
+    if (input === null || Number.isNaN(input) || input === undefined) {
+      return "null";
+    } else {
+      return `"` + `${input}`.replace(`"`, `""`) + `"`;
+    }
+  }
+
+  async pgSavePontosLinha(
+    data: PontosLinha[],
+    tableName: string = "pontosLinha"
+  ) {
     try {
       const client = await this.pgPool.connect();
       try {
         const createRs = await client.query(
-          `CREATE TABLE IF NOT EXISTS pontos_linha (
-          index INTEGER PRIMARY KEY,
-          nome TEXT,
-          num INTEGER,
-          lat DOUBLE PRECISION,
-          lon DOUBLE PRECISION,
-          seq INTEGER,
-          grupo INTEGER,
-          sentido TEXT,
-          tipo TEXT,
-          itinerary_id TEXT,
-          cod TEXT
-        );`
+          createTablePontosLinhaSQL(tableName)
         );
         console.log("Success on command", createRs.command);
 
-        const insertRs = await client.query(pontosLinhaToSQL(pontosLinha));
-        console.log(insertRs);
+        const insertRs = await client.query(
+          insertIntoPontosLinhaSQL(data, tableName)
+        );
+        //console.log(insertRs);
       } catch (e) {
         console.log(e);
       } finally {
@@ -77,66 +75,29 @@ export default class DatabaseDAO {
     }
   }
 
-  async pgSaveShapeLinha(shapeLinha: ShapeLinha[]) {
+  async pgSaveShapeLinha(
+    data: ShapeLinha[],
+    tableName: string = "shape_linha"
+  ) {
     try {
-      const xx = await this.pgPool.query(
-        `
-          CREATE TABLE IF NOT EXISTS shapes (
-            id INTEGER PRIMARY KEY,
-            shp INTEGER NOT NULL,
-            cod TEXT NOT NULL,
-            lat DOUBLE PRECISION NOT NULL,
-            lon DOUBLE PRECISION NOT NULL
-          );
-          `
+      console.log(`Creating table ${tableName}...`);
+      const createTableRs = await this.pgPool.query(
+        createTableShapeLinha(tableName)
+      );
+      console.log(`Table ${tableName} created!`);
+
+      //console.log(insertIntoShapeLinha(data, tableName));
+      const insertRs = await this.pgPool.query(
+        insertIntoShapeLinha(data, tableName)
       );
     } catch (e) {
       console.log(e);
     }
   }
 
-  async savePontosLinha(pontosLinha: PontosLinha[]): Promise<void> {
-    const x = await this.pgPool.query(
-      `CREATE TABLE IF NOT EXISTS pontos_linha (
-          index INTEGER PRIMARY KEY,
-          nome TEXT,
-          num INTEGER,
-          lat DOUBLE PRECISION,
-          lon DOUBLE PRECISION,
-          seq INTEGER,
-          grupo INTEGER,
-          sentido TEXT,
-          tipo TEXT,
-          itinerary_id TEXT,
-          cod TEXT
-        );`
-    );
-    console.log(x);
-
-    const pgp = pgPromise();
-    const cs = new pgp.helpers.ColumnSet(
-      [
-        { name: "index", prop: "INDEX" },
-        { name: "nome", prop: "NOME" },
-        { name: "num", prop: "NUM" },
-        { name: "lat", prop: "LAT" },
-        { name: "lon", prop: "LON" },
-        { name: "seq", prop: "SEQ" },
-        { name: "grupo", prop: "GRUPO" },
-        { name: "sentido", prop: "SENTIDO" },
-        { name: "tipo", prop: "TIPO" },
-        { name: "itinerary_id", prop: "ITINERARY_ID" },
-        { name: "cod", prop: "COD" },
-      ],
-      {
-        table: "pontos_linha",
-      }
-    );
-  }
-
   async saveVeiculos(veiculos: Veiculos[]): Promise<void> {
     try {
-      const createTableRes = await this.pgPool.query(tableVeiculos);
+      const createTableRes = await this.pgPool.query(createTableVeiculos());
       const insertRes = await this.pgPool.query(veiculosToSQL(veiculos));
       console.log("Save veiculos result", insertRes);
     } catch (error) {

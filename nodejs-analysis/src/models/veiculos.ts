@@ -18,20 +18,25 @@ export interface Veiculos {
   COD_LINHA: string;
 }
 
-export const tableVeiculos = `
-    CREATE TABLE IF NOT EXISTS veiculos (
-        cod_linha TEXT,
-        veic TEXT,
-        dthr TIMESTAMPTZ,
-        lat DOUBLE PRECISION,
-        lon DOUBLE PRECISION,
-        geom GEOMETRY,
-        PRIMARY KEY (cod_linha, veic, dthr)
-    );
+export function createTableVeiculos(tableName: string = "veiculos"): string {
+  return `
+CREATE TABLE IF NOT EXISTS ${tableName} (
+    cod_linha TEXT,
+    veic TEXT,
+    dthr TIMESTAMPTZ,
+    lat DOUBLE PRECISION,
+    lon DOUBLE PRECISION,
+    geom GEOMETRY,
+    PRIMARY KEY (cod_linha, veic, dthr)
+);
 `;
+}
 
-export function veiculosToSQL(veiculos: Veiculos[]): string {
-  const si = DatabaseDAO.si;
+export function veiculosToSQL(
+  data: Veiculos[],
+  tableName: string = "veiculos"
+): string {
+  const si = DatabaseDAO.sl;
   return `INSERT INTO veiculos (
     cod_linha,
     veic,
@@ -41,7 +46,7 @@ export function veiculosToSQL(veiculos: Veiculos[]): string {
     geom
     )
     VALUES
-    ${veiculos
+    ${data
       .map(
         (vei) =>
           `(${si(vei.COD_LINHA)}, ${si(vei.VEIC)}, ${si(vei.DTHR)}, ${si(
