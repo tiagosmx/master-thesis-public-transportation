@@ -104,7 +104,7 @@ POA, representa os mesmos dados de PO mas com o adicional:
 SH, representa um segmento de linha que compõe o trajeto do ônibus
 
 - SH_ID id do segmento de linha
-- SH_SEGMENTO_LINHA_COORDENADA coordenadas geográficas deste segmento de linha
+- SH_SEGMENTO_LINHA_COORD coordenadas geográficas deste segmento de linha
 - SH_ID_TRAJETO id do trajeto em que este segmento de linha está inserido
 
 MO, representa a movimentação espaço-temporal do ônibus, contendo:
@@ -122,19 +122,26 @@ MOL, representa um par de MO, formando um segmento de linha da movimentação es
 - MO_TEMPO_2
 - MO_COORD_1
 - MO_COORD_2
-- MO_SEGMENTO_LINHA_COORDENADA
+- MO_SEGMENTO_LINHA_COORD segmento de linha composto por MO_COORD_1 e MO_COORD_2
 - MOL_DIRECAO um ângulo de 0° a 360° que representa direção (ou azimute) em que o ônibus está se movendo
 
 ## Explicação do Algoritmo 2
 
-Dado um array de MOL ordenado de forma crescente em MO_TEMPO_1
-Para cada MOL i, insira-o em um novo array MOL_FILTRADO se
-A distância 
+Defina 3 parâmetros:
 
-Pegar cada movimentação e sua movimentação sucessora, transformando em um array de linhas de movimentação (MOL), e extraindo de cada deles um azimute, st_azimuth (direção em que o onibus está movimentando)
-Para cada linha de movimentação (MOL), calcular sua distância até cada PontosLinha (PL) (projeção cartesiana) obtendo-se uma menor distância (MD) para cada combinação de (PL) e (MOL)
-Para o cálculo de MD, usa-se ST_ClosestPoint para descobrir qual ponto em MOL está mais próximo de PL, então pega-se este ponto mais próximo e calcula-se o ST_Distance até o PL.
-Cria-se uma janela móvel no array ordenado de MOL 
-onde os elementos anteriores ao elemento central (MOL CE) são escolhidos se hora >= hora (MOL CE) - 2 minutos
-onde os elementos posteriores ao elemento central (MOL CE) são escolhidos se hora <= hora (MOL CE) +2 minutos
-Para esta janela, compara-se todos os MD do MOL CE com os seus anteriores e posteriores. Se o MOL CE tiver o MD menor de todos E também menor que 12m E também se o azimute de MOL CE não estiver em 45 graus de diferença (para esquerda ou para direita) do azimute de PL, assume-se que este MOL CE contém o momento em que o ônibus passou pelo respectivo PO (ocorre o match da passagem de ônibus).
+DISTANCIA_MÍNIMA, por padrão 20m
+JANELA_DE_TEMPO, por padrão 5 minutos
+DIFERENÇA_ANGULO, por padrão 45 graus
+
+Dado um array de MOL ordenado de forma crescente em MO_TEMPO_1
+Para cada MOL i
+  Para cada MOL j onde 
+  MOL j MO_TEMPO_1 estiver entre MOL i MO_TEMPO_1 - JANELA_DE_TEMPO e MOL_TEMPO_1 + JANELA_DE_TEMPO
+    Para cada POA k, onde 
+    PO_LINHA_ONIBUS = MOL i e j MO_LINHA_ONIBUS 
+    e distância em metros entre MOL i e j MO_SEGMENTO_LINHA_COORD e PO_COORD for menor que DISTANCIA_MÍNIMA 
+    e MOL i e j MOL_DIRECAO estiver entre DIFERENÇA_ANGULO - POA_DIRECAO e DIFERENCA_ANGULO + POA_DIRECAO
+    e se distância em metros entre MOL i MO_SEGMENTO_LINHA_COORD e PO_COORD for a menor distância entre todos MOL j MO_SEGMENTO_LINHA_COORD e PO_COORD
+    Adicione MOL i e seu PO em um novo array chamado PASSAGENS_DE_ONIBUS
+
+O array PASSAGENS_DE_ONIBUS conterá uma lista com os momentos em que algoritmo detectou uma passagem de ônibus em um determinado ponto de ônibus.
