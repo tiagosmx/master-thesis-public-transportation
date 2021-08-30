@@ -97,7 +97,15 @@ PO, representa todos os dados de um ponto de ônibus em uma linha de ônibus em 
 - PO_SEQ ordem de visitação deste ponto de ônibus dentro do trajeto, 
 - PO_LINHA_ONIBUS linha de ônibus referente a este ponto de ônibus. 
 
-SH, representa um segmento de linha 
+POA, representa os mesmos dados de PO mas com o adicional:
+
+- POA_DIRECAO um ângulo de 0° a 360° que representa a direção ou azimute que o ônibus têm quando passa por esse ponto de ônibus (útil para discriminar em que lado da rua este ônibus está)
+
+SH, representa um segmento de linha que compõe o trajeto do ônibus
+
+- SH_ID id do segmento de linha
+- SH_SEGMENTO_LINHA_COORDENADA coordenadas geográficas deste segmento de linha
+- SH_ID_TRAJETO id do trajeto em que este segmento de linha está inserido
 
 MO, representa a movimentação espaço-temporal do ônibus, contendo:
 
@@ -106,9 +114,23 @@ MO, representa a movimentação espaço-temporal do ônibus, contendo:
 - MO_TEMPO data e hora no tempo da medição
 - MO_COORD localização geográfica do ônibus
 
-##
+MOL, representa um par de MO, formando um segmento de linha da movimentação espaço-temporal consecutiva de um mesmo ônibus MO_ONIBUS operando uma mesma linha de ônibus MO_LINHA_ONIBUS, contendo:
 
-Dado um array de MovimentacaoOnibus (MO) ordenado por hora de forma crescente e um array de PontosLinha (PL) 
+- MO_LINHA_ONIBUS
+- MO_ONIBUS
+- MO_TEMPO_1
+- MO_TEMPO_2
+- MO_COORD_1
+- MO_COORD_2
+- MO_SEGMENTO_LINHA_COORDENADA
+- MOL_DIRECAO um ângulo de 0° a 360° que representa direção (ou azimute) em que o ônibus está se movendo
+
+## Explicação do Algoritmo 2
+
+Dado um array de MOL ordenado de forma crescente em MO_TEMPO_1
+Para cada MOL i, insira-o em um novo array MOL_FILTRADO se
+A distância 
+
 Pegar cada movimentação e sua movimentação sucessora, transformando em um array de linhas de movimentação (MOL), e extraindo de cada deles um azimute, st_azimuth (direção em que o onibus está movimentando)
 Para cada linha de movimentação (MOL), calcular sua distância até cada PontosLinha (PL) (projeção cartesiana) obtendo-se uma menor distância (MD) para cada combinação de (PL) e (MOL)
 Para o cálculo de MD, usa-se ST_ClosestPoint para descobrir qual ponto em MOL está mais próximo de PL, então pega-se este ponto mais próximo e calcula-se o ST_Distance até o PL.
