@@ -134,16 +134,16 @@ Defina 3 parâmetros:
 - DIFERENÇA_ANGULO, por padrão 45 graus
 
 ```
-Dado um array de MOL ordenado de forma crescente em MO_TEMPO_1
-Para cada MOL i
-  Para cada MOL j onde 
-  MOL j MO_TEMPO_1 estiver entre MOL i MO_TEMPO_1 - JANELA_DE_TEMPO e MOL_TEMPO_1 + JANELA_DE_TEMPO
-    Para cada POA k, onde 
-    PO_LINHA_ONIBUS = MOL i e j MO_LINHA_ONIBUS 
-    e distância em metros entre MOL i e j MO_SEGMENTO_LINHA_COORD e PO_COORD for menor que DISTANCIA_MÍNIMA 
-    e MOL i e j MOL_DIRECAO estiver entre DIFERENÇA_ANGULO - POA_DIRECAO e DIFERENCA_ANGULO + POA_DIRECAO
-    e se distância em metros entre MOL i MO_SEGMENTO_LINHA_COORD e PO_COORD for a menor distância entre todos MOL j MO_SEGMENTO_LINHA_COORD e PO_COORD
-    Adicione MOL i e seu PO em um novo array chamado PASSAGENS_DE_ONIBUS
+Dado um array de MOL (MOL[]) ordenado de forma crescente em MO_TEMPO_1
+PARA i DE 0 ATÉ tamanho de MOL[] PASSO 1 FAÇA:
+  PARA j DE 0 ATÉ tamanho de MOL[] PASSO 1 FAÇA:
+    SE MOL j MO_TEMPO_1 estiver entre MOL i MO_TEMPO_1 - JANELA_DE_TEMPO E MOL_TEMPO_1 + JANELA_DE_TEMPO ENTÃO
+    PARA k DE 0 ATÉ tamanho de POA[] PASSO 1 FAÇA: 
+      SE PO_LINHA_ONIBUS = MOL i e j MO_LINHA_ONIBUS 
+      E distância em metros entre MOL i e j MO_SEGMENTO_LINHA_COORD e PO_COORD for menor que DISTANCIA_MÍNIMA 
+      E MOL i e j MOL_DIRECAO estiver entre DIFERENÇA_ANGULO - POA_DIRECAO e DIFERENCA_ANGULO + POA_DIRECAO
+      E se distância em metros entre MOL i MO_SEGMENTO_LINHA_COORD e PO_COORD for a menor distância entre todos MOL j MO_SEGMENTO_LINHA_COORD e PO_COORD ENTÃO
+      Adicione MOL i e seu PO em um novo array chamado PASSAGENS_DE_ONIBUS
 
 O array PASSAGENS_DE_ONIBUS conterá uma lista com os momentos em que algoritmo detectou uma passagem de ônibus em um determinado ponto de ônibus.
 ```
