@@ -136,6 +136,8 @@ Defina 3 parâmetros:
 ```
 Dado um array de MOL (MOL[]) ordenado de forma crescente em MO_TEMPO_1
 PARA i DE 0 ATÉ tamanho de MOL[] PASSO 1 FAÇA:
+  E_MENOR <- VERDADEIRO
+  POA_ESCOLHIDO <- VAZIO
   PARA j DE 0 ATÉ tamanho de MOL[] PASSO 1 FAÇA:
     SE MOL[j] MO_TEMPO_1 estiver entre MOL[i] MO_TEMPO_1 - JANELA_DE_TEMPO E MOL[i] MO_TEMPO_1 + JANELA_DE_TEMPO ENTÃO
     PARA k DE 0 ATÉ tamanho de POA[] PASSO 1 FAÇA: 
@@ -144,7 +146,33 @@ PARA i DE 0 ATÉ tamanho de MOL[] PASSO 1 FAÇA:
       E distância em metros entre MOL[i] e MOL[j] MO_SEGMENTO_LINHA_COORD e POA[k] PO_COORD for menor que DISTANCIA_MÍNIMA 
       E MOL[i] e MOL[j] MOL_DIRECAO estiver entre DIFERENÇA_ANGULO - POA[k] POA_DIRECAO e DIFERENCA_ANGULO + POA[k] POA_DIRECAO
       E distância em metros entre MOL[i] MO_SEGMENTO_LINHA_COORD e POA[k] PO_COORD for a menor distância entre todos MOL[j] MO_SEGMENTO_LINHA_COORD e POA[k] PO_COORD ENTÃO
-      Adicione MOL[i] e seu POA[k] juntos em um novo array chamado PASSAGENS_DE_ONIBUS
-
+      NADA
+      SENÃO
+      E_MENOR <- FALSO
+      
+     SE E_MENOR = VERDADEIRO ENTAO Adicione MOL[i] e seu POA[k] juntos em um novo array chamado PASSAGENS_DE_ONIBUS
+     
+PARA i DE 0 ATÉ tamanho de MOL[] PASSO 1 FAÇA:
+  PARA j DE 0 ATÉ tamanho de POA[] PASSO 1 FAÇA:
+    E_MENOR <- VERDADEIRO
+    SE PO_LINHA_ONIBUS = MOL[i] MO_LINHA_ONIBUS
+    E MOL[i].MOL_DIRECAO >= (DIFERENÇA_ANGULO - POA[k] POA_DIRECAO) 
+    E MOL[i].MOL_DIRECAO <=  (DIFERENCA_ANGULO + POA[k] POA_DIRECAO)
+    E distância em metros entre MOL[i].MO_SEGMENTO_LINHA_COORD e POA[j].PO_COORD < DISTANCIA_MINIMA
+    ENTAO
+    PARA k DE 0 ATÉ tamanho de MOL[] PASSO 1 FAÇA:
+      SE PO_LINHA_ONIBUS = MOL[k] MO_LINHA_ONIBUS
+      E MOL[k].MO_TEMPO_1 >= MOL[i].MO_TEMPO_1 - JANELA_DE_TEMPO
+      E MOL[k].MO_TEMPO_1 <= MOL[i].MO_TEMPO_1 + JANELA DE TEMPO
+      E i != k
+      E distância em metros entre MOL[k].MO_SEGMENTO_LINHA_COORD e POA[j].PO_COORD < DISTANCIA_MINIMA
+      E MOL[k].MOL_DIRECAO >= (DIFERENÇA_ANGULO - POA[k] POA_DIRECAO) 
+      E MOL[k].MOL_DIRECAO <=  (DIFERENCA_ANGULO + POA[k] POA_DIRECAO)
+      ENTAO
+      SE distância em metros entre MOL[k].MO_SEGMENTO_LINHA_COORD e POA[j].PO_COORD < distância em metros entre MOL[i].MO_SEGMENTO_LINHA_COORD e POA[j].PO_COORD
+      ENTAO
+      E_MENOR <- FALSO
+    SE E_MENOR = VERDADEIRO ENTAO Adicione MOL[i] e seu POA[k] juntos em um novo array chamado PASSAGENS_DE_ONIBUS
+    
 O array PASSAGENS_DE_ONIBUS conterá uma lista com os momentos em que algoritmo detectou uma passagem de ônibus em um determinado ponto de ônibus.
 ```
