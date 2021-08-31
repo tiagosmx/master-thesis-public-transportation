@@ -129,10 +129,11 @@ MOL, representa um par de MO, formando um segmento de linha da movimentação es
 
 Defina 3 parâmetros:
 
-DISTANCIA_MÍNIMA, por padrão 20m
-JANELA_DE_TEMPO, por padrão 5 minutos
-DIFERENÇA_ANGULO, por padrão 45 graus
+- DISTANCIA_MÍNIMA, por padrão 20m
+- JANELA_DE_TEMPO, por padrão 5 minutos
+- DIFERENÇA_ANGULO, por padrão 45 graus
 
+```
 Dado um array de MOL ordenado de forma crescente em MO_TEMPO_1
 Para cada MOL i
   Para cada MOL j onde 
@@ -145,3 +146,4 @@ Para cada MOL i
     Adicione MOL i e seu PO em um novo array chamado PASSAGENS_DE_ONIBUS
 
 O array PASSAGENS_DE_ONIBUS conterá uma lista com os momentos em que algoritmo detectou uma passagem de ônibus em um determinado ponto de ônibus.
+```
