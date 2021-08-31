@@ -137,13 +137,14 @@ Defina 3 parâmetros:
 Dado um array de MOL (MOL[]) ordenado de forma crescente em MO_TEMPO_1
 PARA i DE 0 ATÉ tamanho de MOL[] PASSO 1 FAÇA:
   PARA j DE 0 ATÉ tamanho de MOL[] PASSO 1 FAÇA:
-    SE MOL j MO_TEMPO_1 estiver entre MOL i MO_TEMPO_1 - JANELA_DE_TEMPO E MOL_TEMPO_1 + JANELA_DE_TEMPO ENTÃO
+    SE MOL[j] MO_TEMPO_1 estiver entre MOL[i] MO_TEMPO_1 - JANELA_DE_TEMPO E MOL[i] MO_TEMPO_1 + JANELA_DE_TEMPO ENTÃO
     PARA k DE 0 ATÉ tamanho de POA[] PASSO 1 FAÇA: 
-      SE PO_LINHA_ONIBUS = MOL i e j MO_LINHA_ONIBUS 
-      E distância em metros entre MOL i e j MO_SEGMENTO_LINHA_COORD e PO_COORD for menor que DISTANCIA_MÍNIMA 
-      E MOL i e j MOL_DIRECAO estiver entre DIFERENÇA_ANGULO - POA_DIRECAO e DIFERENCA_ANGULO + POA_DIRECAO
-      E se distância em metros entre MOL i MO_SEGMENTO_LINHA_COORD e PO_COORD for a menor distância entre todos MOL j MO_SEGMENTO_LINHA_COORD e PO_COORD ENTÃO
-      Adicione MOL i e seu PO em um novo array chamado PASSAGENS_DE_ONIBUS
+      SE PO_LINHA_ONIBUS = MOL[i] MO_LINHA_ONIBUS
+      E PO_LINHA_ONIBUS = MOL[j] MO_LINHA_ONIBUS 
+      E distância em metros entre MOL[i] e MOL[j] MO_SEGMENTO_LINHA_COORD e POA[k] PO_COORD for menor que DISTANCIA_MÍNIMA 
+      E MOL[i] e MOL[j] MOL_DIRECAO estiver entre DIFERENÇA_ANGULO - POA[k] POA_DIRECAO e DIFERENCA_ANGULO + POA[k] POA_DIRECAO
+      E se distância em metros entre MOL[i] MO_SEGMENTO_LINHA_COORD e POA[k] PO_COORD for a menor distância entre todos MOL[j] MO_SEGMENTO_LINHA_COORD e POA[k] PO_COORD ENTÃO
+      Adicione MOL[i] e seu POA[k] juntos em um novo array chamado PASSAGENS_DE_ONIBUS
 
 O array PASSAGENS_DE_ONIBUS conterá uma lista com os momentos em que algoritmo detectou uma passagem de ônibus em um determinado ponto de ônibus.
 ```
