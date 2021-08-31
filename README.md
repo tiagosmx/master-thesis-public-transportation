@@ -143,7 +143,7 @@ PARA i DE 0 ATÉ tamanho de MOL[] PASSO 1 FAÇA:
       E PO_LINHA_ONIBUS = MOL[j] MO_LINHA_ONIBUS 
       E distância em metros entre MOL[i] e MOL[j] MO_SEGMENTO_LINHA_COORD e POA[k] PO_COORD for menor que DISTANCIA_MÍNIMA 
       E MOL[i] e MOL[j] MOL_DIRECAO estiver entre DIFERENÇA_ANGULO - POA[k] POA_DIRECAO e DIFERENCA_ANGULO + POA[k] POA_DIRECAO
-      E se distância em metros entre MOL[i] MO_SEGMENTO_LINHA_COORD e POA[k] PO_COORD for a menor distância entre todos MOL[j] MO_SEGMENTO_LINHA_COORD e POA[k] PO_COORD ENTÃO
+      E distância em metros entre MOL[i] MO_SEGMENTO_LINHA_COORD e POA[k] PO_COORD for a menor distância entre todos MOL[j] MO_SEGMENTO_LINHA_COORD e POA[k] PO_COORD ENTÃO
       Adicione MOL[i] e seu POA[k] juntos em um novo array chamado PASSAGENS_DE_ONIBUS
 
 O array PASSAGENS_DE_ONIBUS conterá uma lista com os momentos em que algoritmo detectou uma passagem de ônibus em um determinado ponto de ônibus.
