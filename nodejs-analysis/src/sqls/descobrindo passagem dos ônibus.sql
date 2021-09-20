@@ -170,7 +170,8 @@ va_pa AS (
         st_distance distance_from_bus_stop_to_shape,
         st_closestpoint(va.trajectory_line, pa.bus_stop_point_geom) closest_point_vehicle_bus_stop,
         distance_bus_to_stop,
-        MIN(distance_bus_to_stop) OVER w AS min_distance_bus_to_stop_others
+        MIN(distance_bus_to_stop) OVER w_preceding AS min_distance_bus_to_stop_preceding,
+        MIN(distance_bus_to_stop) OVER w_following AS min_distance_bus_to_stop_following
     FROM veiculos_with_azimuth va -- O onibus e o ponto de onibus precisam ser da mesma linha
         JOIN pontos_linha_and_azimuths pa ON va.cod_linha = pa.cod,
         LATERAL (
@@ -185,12 +186,23 @@ va_pa AS (
                 )::NUMERIC % (pi() * 2)::NUMERIC - pi() angle_dif
         ) l1
     WHERE TRUE -- A distância do ônibus até o ponto de ônibus precisa ser menor que 20m
-        AND distance_bus_to_stop <= 15 -- A diferença em graus entre os azimutes precisa estar entre -45 e +45
-        AND angle_dif BETWEEN - pi() / 4 AND pi() / 4 WINDOW w AS (
+        AND distance_bus_to_stop <= 40 -- A diferença em graus entre os azimutes precisa estar entre -45 e +45
+        AND angle_dif BETWEEN - pi() / 4 AND pi() / 4 WINDOW w_preceding AS (
             PARTITION BY cod_linha,
             veic,
-            num --bus stop id
-            ORDER BY dthr ASC RANGE BETWEEN '5 minutes' PRECEDING AND '5 minutes' FOLLOWING EXCLUDE CURRENT ROW
+            num,
+            --bus stop id
+            seq
+            ORDER BY dthr ASC RANGE BETWEEN '20 minutes' PRECEDING AND CURRENT ROW EXCLUDE CURRENT ROW
+        ),
+        w_following AS (
+            PARTITION BY cod_linha,
+            veic,
+            num,
+            --bus stop id
+            seq
+            ORDER BY dthr ASC RANGE BETWEEN CURRENT ROW
+                AND '20 minutes' FOLLOWING EXCLUDE CURRENT ROW
         )
 ),
 chegadas AS (
@@ -200,7 +212,9 @@ chegadas AS (
         prev_dthr horario_de_chegada,
         *
     FROM va_pa
-    WHERE distance_bus_to_stop < min_distance_bus_to_stop_others
+    WHERE TRUE
+        AND distance_bus_to_stop < COALESCE(min_distance_bus_to_stop_preceding, '+Infinity')
+        AND distance_bus_to_stop <= COALESCE(min_distance_bus_to_stop_following, '+Infinity')
     ORDER BY cod_linha,
         veic,
         dthr

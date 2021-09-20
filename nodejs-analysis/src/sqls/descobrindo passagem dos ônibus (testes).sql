@@ -8,11 +8,10 @@ WITH chosen_bus_lines AS (
 veiculos AS (
     SELECT *
     FROM veiculos
-    ORDER BY cod_linha,
-        veic,
-        dthr
-    LIMIT 55
-), pontos_linha AS (
+    WHERE TRUE -- AND dthr BETWEEN '2019-01-07 10:57:41+00' AND '2019-01-07 11:00:58+00'
+        -- AND veic = 'BA602'
+),
+pontos_linha AS (
     SELECT *
     FROM pontos_linha_2021_03_25
 ),
@@ -139,15 +138,11 @@ veiculos_with_azimuth AS (
     SELECT cod_linha,
         veic,
         LAG(dthr) OVER w AS prev_dthr,
-        --dthr anterior
         dthr,
-        --dthr atual
-        (LAG(dthr) OVER w) - dthr AS time_dif,
-        -- delta de tempo
+        LAG(dthr) OVER w - dthr time_dif,
         st_makeline(LAG(geom) OVER w, geom) AS trajectory_line,
         st_azimuth(LAG(geom) OVER w, geom) AS trajectory_azimuth
-    FROM veiculos
-    WHERE TRUE WINDOW w AS (
+    FROM veiculos WINDOW w AS (
             PARTITION BY cod_linha,
             veic
             ORDER BY dthr ASC
@@ -158,7 +153,6 @@ veiculos_with_azimuth AS (
             dthr
         ) --LIMIT 100
 ),
--- Faz JOIN de cada movimentação com cada ponto de ônibus 
 va_pa AS (
     SELECT va.*,
         index bus_stop_index,
@@ -178,9 +172,9 @@ va_pa AS (
         st_distance distance_from_bus_stop_to_shape,
         st_closestpoint(va.trajectory_line, pa.bus_stop_point_geom) closest_point_vehicle_bus_stop,
         distance_bus_to_stop,
-        MIN(distance_bus_to_stop) OVER w AS min_distance_bus_to_stop_others
-    FROM veiculos_with_azimuth va --
-        -- O onibus e o ponto de onibus precisam ser da mesma linha
+        MIN(distance_bus_to_stop) OVER w_preceding AS min_distance_bus_to_stop_preceding,
+        MIN(distance_bus_to_stop) OVER w_following AS min_distance_bus_to_stop_following
+    FROM veiculos_with_azimuth va -- O onibus e o ponto de onibus precisam ser da mesma linha
         JOIN pontos_linha_and_azimuths pa ON va.cod_linha = pa.cod,
         LATERAL (
             SELECT -- Calcula a distância entre o ônibus e o ponto de ônibus
@@ -193,15 +187,24 @@ va_pa AS (
                     va.trajectory_azimuth - pa.shape_line_azimuth + pi() + pi() * 2
                 )::NUMERIC % (pi() * 2)::NUMERIC - pi() angle_dif
         ) l1
-    WHERE TRUE --
-        -- A distância do ônibus até o ponto de ônibus precisa ser menor que 20m
-        AND distance_bus_to_stop <= 20 --
-        -- A diferença em graus entre os azimutes precisa estar entre -45 e +45
-        AND angle_dif BETWEEN - pi() / 4 AND pi() / 4 WINDOW w AS (
+    WHERE TRUE -- A distância do ônibus até o ponto de ônibus precisa ser menor que 20m
+        AND distance_bus_to_stop <= 40 -- A diferença em graus entre os azimutes precisa estar entre -45 e +45
+        AND angle_dif BETWEEN - pi() / 4 AND pi() / 4 WINDOW w_preceding AS (
             PARTITION BY cod_linha,
             veic,
-            num --bus stop id
-            ORDER BY dthr ASC RANGE BETWEEN '5 minutes' PRECEDING AND '5 minutes' FOLLOWING EXCLUDE CURRENT ROW
+            num,
+            --bus stop id
+            seq
+            ORDER BY dthr ASC RANGE BETWEEN '20 minutes' PRECEDING AND CURRENT ROW EXCLUDE CURRENT ROW
+        ),
+        w_following AS (
+            PARTITION BY cod_linha,
+            veic,
+            num,
+            --bus stop id
+            seq
+            ORDER BY dthr ASC RANGE BETWEEN CURRENT ROW
+                AND '20 minutes' FOLLOWING EXCLUDE CURRENT ROW
         )
 ),
 chegadas AS (
@@ -211,11 +214,30 @@ chegadas AS (
         prev_dthr horario_de_chegada,
         *
     FROM va_pa
-    WHERE distance_bus_to_stop < min_distance_bus_to_stop_others
+    WHERE TRUE
+        AND distance_bus_to_stop < COALESCE(min_distance_bus_to_stop_preceding, '+Infinity')
+        AND distance_bus_to_stop <= COALESCE(min_distance_bus_to_stop_following, '+Infinity')
     ORDER BY cod_linha,
         veic,
-        dthr
-) (
-    SELECT *
-    FROM chegadas
-);
+        dthr,
+        seq DESC
+),
+prova AS (
+    SELECT *,
+        LAG(seq) OVER w lag_seq,
+        seq,
+        seq - LAG(seq) OVER w seq_dif
+    FROM chegadas WINDOW w AS (
+            PARTITION BY cod_linha,
+            veic
+            ORDER BY horario_de_chegada
+        )
+)
+SELECT *
+FROM prova
+    /*
+     SELECT *
+     FROM prova
+     WHERE TRUE
+     */
+    --AND seq_dif NOT IN (1, -36, -32)
