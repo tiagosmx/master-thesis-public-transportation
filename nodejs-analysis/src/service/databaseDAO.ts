@@ -3,6 +3,11 @@ import pgPromise = require("pg-promise");
 const pgp = pgPromise();
 import PontosLinha, { insertIntoPontosLinhaSQL } from "../models/pontosLinha";
 import { ShapeLinha, insertIntoShapeLinha } from "../models/shapeLinha";
+import {
+  createTableTabelaLinhaSQL,
+  insertIntoTabelaLinhaSQL,
+  TabelaLinha,
+} from "../models/tabelaLinha";
 import { Veiculos, veiculosToSQL } from "../models/veiculos";
 import { createTablePontosLinhaSQL } from "./../models/pontosLinha";
 import { createTableShapeLinha } from "./../models/shapeLinha";
@@ -100,6 +105,21 @@ export default class DatabaseDAO {
       const createTableRes = await this.pgPool.query(createTableVeiculos());
       const insertRes = await this.pgPool.query(veiculosToSQL(veiculos));
       console.log("Save veiculos result", insertRes);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async saveTabelaLinha(tabelaLinha: TabelaLinha[], tableName: string) {
+    try {
+      const createTableRes = await this.pgPool.query(
+        createTableTabelaLinhaSQL(tableName)
+      );
+      //console.log(insertIntoTabelaLinhaSQL(tabelaLinha, tableName));
+      const insertRes = await this.pgPool.query(
+        insertIntoTabelaLinhaSQL(tabelaLinha, tableName)
+      );
+      console.log("Save tabela_linha result", insertRes);
     } catch (error) {
       console.log(error);
     }

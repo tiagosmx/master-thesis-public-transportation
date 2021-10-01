@@ -12,6 +12,7 @@ import { PontosLinhaRaw } from "../models/pontosLinha";
 import { Veiculos, veiculosRawToVeiculos } from "../models/veiculos";
 import { VeiculosRaw } from "./../models/veiculos";
 import { pontosLinhaRawToPontosLinha } from "./../models/pontosLinha";
+import { TabelaLinha, toTabelaLinha } from "./../models/tabelaLinha";
 
 export default class DatasetDAO {
   protected static urlBegin = "http://dadosabertos.c3sl.ufpr.br/curitibaurbs/";
@@ -19,6 +20,8 @@ export default class DatasetDAO {
   protected static fileNameLinhas = "linhas";
   protected static fileNameShapeLinha = "shapeLinha";
   protected static fileNamePontosLinha = "pontosLinha";
+  protected static fileNameTabelaVeiculo = "tabelaVeiculo";
+  protected static fileNameTabelaLinha = "tabelaLinha";
   protected static fileNameVeiculos = "veiculos";
 
   private static getCompressedFileName(
@@ -54,6 +57,7 @@ export default class DatasetDAO {
   }
 
   public static async getShapeLinha(date: string): Promise<ShapeLinha[]> {
+    const fileType = DatasetDAO.fileNameShapeLinha;
     const decompressedFilePath = this.getDecompressedFilePath(
       date,
       DatasetDAO.fileNameShapeLinha
@@ -97,7 +101,7 @@ export default class DatasetDAO {
           .on("error", reject);
       });
 
-      console.log("Compressed and decompressed file saved!");
+      console.log(`Compressed and decompressed file ${fileType} saved!`);
     }
 
     const slr: ShapeLinhaRaw[] = JSON.parse(
@@ -158,7 +162,7 @@ export default class DatasetDAO {
           .on("error", reject);
       });
 
-      console.log("Compressed and decompressed file saved!");
+      console.log(`Compressed and decompressed file ${fileType} saved!`);
     }
 
     const slr: PontosLinhaRaw[] = JSON.parse(
@@ -166,6 +170,94 @@ export default class DatasetDAO {
     );
     return slr.map((item, index) => {
       return pontosLinhaRawToPontosLinha(index, item);
+    });
+  }
+
+  public static async getTabelaVeiculo(date: string): Promise<any[]> {
+    const fileType = DatasetDAO.fileNameTabelaVeiculo;
+    const decompressedFilePath = this.getDecompressedFilePath(date, fileType);
+    const compressedFilePath = this.getCompressedFilePath(date, fileType);
+    if (!fs.existsSync(decompressedFilePath)) {
+      console.log(
+        `File ${decompressedFilePath} is not present. Downloading...`
+      );
+      // Download compressed file and save it
+      console.log("Trying to download compressed file.");
+      const response = await axios.get(
+        DatasetDAO.urlBegin + this.getCompressedFileName(date, fileType),
+        { responseType: "stream" }
+      );
+
+      await new Promise((resolve, reject) => {
+        const slrStream: Stream = response.data;
+        // Save downloaded compressed file to disk
+        slrStream.pipe(
+          fs.createWriteStream(this.getCompressedFilePath(date, fileType))
+        );
+        // Save downloaded decompressed file to disk
+        slrStream
+          .pipe(lzma.createDecompressor())
+          .pipe(
+            fs.createWriteStream(this.getDecompressedFilePath(date, fileType))
+          )
+          .on("finish", resolve)
+          .on("error", reject);
+      });
+
+      console.log(`Compressed and decompressed file ${fileType} saved!`);
+    }
+
+    const raw: any[] = JSON.parse(
+      fs.readFileSync(this.getDecompressedFilePath(date, fileType)).toString()
+    );
+    /*
+    return raw.map((item, index) => {
+      return pontosLinhaRawToPontosLinha(index, item);
+    });
+    */
+    return raw;
+  }
+
+  public static async getTabelaLinha(date: string): Promise<TabelaLinha[]> {
+    const fileType = DatasetDAO.fileNameTabelaLinha;
+    const decompressedFilePath = this.getDecompressedFilePath(date, fileType);
+    const compressedFilePath = this.getCompressedFilePath(date, fileType);
+    if (!fs.existsSync(decompressedFilePath)) {
+      console.log(
+        `File ${decompressedFilePath} is not present. Downloading...`
+      );
+      // Download compressed file and save it
+      console.log("Trying to download compressed file.");
+      const response = await axios.get(
+        DatasetDAO.urlBegin + this.getCompressedFileName(date, fileType),
+        { responseType: "stream" }
+      );
+
+      await new Promise((resolve, reject) => {
+        const slrStream: Stream = response.data;
+        // Save downloaded compressed file to disk
+        slrStream.pipe(
+          fs.createWriteStream(this.getCompressedFilePath(date, fileType))
+        );
+        // Save downloaded decompressed file to disk
+        slrStream
+          .pipe(lzma.createDecompressor())
+          .pipe(
+            fs.createWriteStream(this.getDecompressedFilePath(date, fileType))
+          )
+          .on("finish", resolve)
+          .on("error", reject);
+      });
+
+      console.log(`Compressed and decompressed file ${fileType} saved!`);
+    }
+
+    const raw: any[] = JSON.parse(
+      fs.readFileSync(this.getDecompressedFilePath(date, fileType)).toString()
+    );
+
+    return raw.map((item, index) => {
+      return toTabelaLinha(item, date);
     });
   }
 
@@ -207,7 +299,7 @@ export default class DatasetDAO {
           .on("error", reject);
       });
 
-      console.log("Compressed and decompressed file saved!");
+      console.log(`Compressed and decompressed file ${fileType} saved!`);
     }
 
     async function processLineByLine(
