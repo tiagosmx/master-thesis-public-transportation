@@ -25,14 +25,16 @@ export function createTableShapeLinha(
     lat DOUBLE PRECISION NOT NULL,
     lon DOUBLE PRECISION NOT NULL,
     shape_point_geom GEOMETRY,
-    cod VARCHAR(3),
+    bus_line_id VARCHAR(3) NOT NULL,
+    file_date DATE NOT NULL,
     PRIMARY KEY (shp, id)
   );`;
 }
 
 export function insertIntoShapeLinha(
   data: ShapeLinha[],
-  tableName: string = "shape_linha"
+  tableName: string = "shape_linha",
+  date: string
 ): string {
   const sl = DatabaseDAO.sl;
   const si = DatabaseDAO.si;
@@ -42,7 +44,8 @@ export function insertIntoShapeLinha(
     lat,
     lon,
     shape_point_geom,
-    cod
+    bus_line_id,
+    file_date
     )
   VALUES
   ${data
@@ -56,7 +59,8 @@ export function insertIntoShapeLinha(
           st_setsrid(st_makepoint(
             ${sl(row.LON)}::DOUBLE PRECISION, 
             ${sl(row.LAT)}::DOUBLE PRECISION),4326),
-          ${sl(row.COD)}
+          ${sl(row.COD)},
+          ${sl(date)}
         )`
     )
     .join("\n,")}

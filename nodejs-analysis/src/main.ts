@@ -48,8 +48,8 @@ async function downloadAndSaveShapeLinha(
 ): Promise<void> {
   const sl = await DatasetDAO.getShapeLinha(date);
   const fs = require("fs");
-  await fs.writeFile("aaaaeee.json", insertIntoShapeLinha(sl), () => {});
-  await db.pgSaveShapeLinha(sl, tableName);
+  const isoDate = date.replace(/_/g, "-");
+  await db.pgSaveShapeLinha(sl, tableName, isoDate);
 }
 
 async function main() {
@@ -93,11 +93,12 @@ async function main() {
 
     await downloadAndSavePontosLinha(db, date, pontosLinhaTableName);
 
-    //await downloadAndSaveShapeLinha(db, date, shapeLinhaTableName);
+    await downloadAndSaveShapeLinha(db, date, shapeLinhaTableName);
 
     //const tabelaLinha = await DatasetDAO.getTabelaLinha(date);
     //db.saveTabelaLinha(tabelaLinha, tabelaLinhaTableName, isoDate);
     await downloadAndSaveTabelaLinha(db, date, tabelaLinhaTableName);
+
     //db.saveTabelaLinha(tabelaLinha, tabelaLinhaTableName);
     //console.log(await DatasetDAO.getTabelaLinha(date));
   } catch (error) {

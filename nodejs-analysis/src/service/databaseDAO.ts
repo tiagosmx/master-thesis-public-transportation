@@ -81,7 +81,8 @@ export default class DatabaseDAO {
 
   async pgSaveShapeLinha(
     data: ShapeLinha[],
-    tableName: string = "shape_linha"
+    tableName: string = "shape_linha",
+    date: string
   ) {
     try {
       console.log(`Creating table ${tableName}...`);
@@ -92,7 +93,7 @@ export default class DatabaseDAO {
 
       //console.log(insertIntoShapeLinha(data, tableName));
       const insertRs = await this.pgPool.query(
-        insertIntoShapeLinha(data, tableName)
+        insertIntoShapeLinha(data, tableName, date)
       );
     } catch (e) {
       console.log(e);
