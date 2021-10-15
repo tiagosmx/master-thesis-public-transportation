@@ -6,7 +6,7 @@ import { ShapeLinha, insertIntoShapeLinha } from "../models/shapeLinha";
 import {
   createTableTabelaLinhaSQL,
   insertIntoTabelaLinhaSQL,
-  TabelaLinha,
+  TabelaLinhaRaw,
 } from "../models/tabelaLinha";
 import { Veiculos, veiculosToSQL } from "../models/veiculos";
 import { createTablePontosLinhaSQL } from "./../models/pontosLinha";
@@ -38,7 +38,7 @@ export default class DatabaseDAO {
 
   /** Sanitizes Literal (such as a number, constants.., etc) */
   public static sl(input?: any): string {
-    if (input === null || Number.isNaN(input) || input === undefined) {
+    if (input === null || Number.isNaN(input) || typeof input == "undefined") {
       return "null";
     } else {
       return "'" + `${input}`.replace("'", "''") + "'";
@@ -54,7 +54,7 @@ export default class DatabaseDAO {
     }
   }
 
-  async pgSavePontosLinha(
+  async savePontosLinha(
     data: PontosLinha[],
     tableName: string = "pontosLinha"
   ) {
@@ -64,12 +64,11 @@ export default class DatabaseDAO {
         const createRs = await client.query(
           createTablePontosLinhaSQL(tableName)
         );
-        console.log("Success on command", createRs.command);
-
-        const insertRs = await client.query(
-          insertIntoPontosLinhaSQL(data, tableName)
-        );
-        //console.log(insertRs);
+        console.log("Success on CREATE TABLE", createRs.command);
+        const insert = insertIntoPontosLinhaSQL(data, tableName);
+        //console.log("INSERT query:\n", insert);
+        const insertRs = await client.query(insert);
+        console.log(insertRs);
       } catch (e) {
         console.log(e);
       } finally {
@@ -110,14 +109,18 @@ export default class DatabaseDAO {
     }
   }
 
-  async saveTabelaLinha(tabelaLinha: TabelaLinha[], tableName: string) {
+  async saveTabelaLinha(
+    tabelaLinha: TabelaLinhaRaw[],
+    tableName: string,
+    sampleDay: string
+  ) {
     try {
       const createTableRes = await this.pgPool.query(
         createTableTabelaLinhaSQL(tableName)
       );
       //console.log(insertIntoTabelaLinhaSQL(tabelaLinha, tableName));
       const insertRes = await this.pgPool.query(
-        insertIntoTabelaLinhaSQL(tabelaLinha, tableName)
+        insertIntoTabelaLinhaSQL(tabelaLinha, tableName, sampleDay)
       );
       console.log("Save tabela_linha result", insertRes);
     } catch (error) {

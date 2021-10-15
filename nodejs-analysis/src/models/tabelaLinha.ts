@@ -1,108 +1,72 @@
 import DatabaseDAO from "../service/databaseDAO";
+import ColumnDefinition from "./ColumnDefinition";
 
 export interface TabelaLinhaRaw {
-  HORA: string;
-  PONTO: string;
-  DIA: string;
-  NUM: string;
-  TABELA: string;
-  ADAPT: string;
-  COD: string;
+  HORA?: string;
+  PONTO?: string;
+  DIA?: string;
+  NUM?: string;
+  TABELA?: string;
+  ADAPT?: string;
+  COD?: string;
 }
 
-export interface TabelaLinha {
-  HORA: string;
-  PONTO: string;
-  DIA: string;
-  NUM: number;
-  TABELA: string;
-  ADAPT: string;
-  COD: string;
-  DIA_AMOSTRA: string;
-}
-
-export function toTabelaLinha(raw: TabelaLinhaRaw, dia: string): TabelaLinha {
-  return {
-    HORA: raw.HORA,
-    PONTO: raw.PONTO,
-    DIA: raw.DIA,
-    NUM: parseInt(raw.NUM),
-    TABELA: raw.TABELA,
-    ADAPT: raw.ADAPT,
-    COD: raw.COD,
-    DIA_AMOSTRA: dia,
-  };
-}
-
-export const TABELA_LINHA_COLUMNS = {
-  HORA: { name: "time", type: "TIME" },
-  PONTO: { name: "bus_stop_name", type: "TEXT" },
-  DIA: { name: "day_category", type: "TEXT" },
-  NUM: { name: "bus_stop_id", type: "INTEGER" },
-  TABELA: { name: "schedule_id", type: "TEXT" },
-  ADAPT: { name: "wheelchair_accessibility_type", type: "TEXT" },
-  COD: { name: "bus_line_id", type: "TEXT" },
-  DIA_AMOSTRA: { name: "dia", type: "DATE" },
-};
+export const TABELA_LINHA_MAPPING: Map<String, ColumnDefinition> = new Map()
+  .set("HORA", { cName: "time", cType: "TIME(0)", pName: "HORA" })
+  .set("PONTO", { cName: "bus_stop_name", cType: "TEXT", pName: "PONTO" })
+  .set("DIA", { cName: "day_category", cType: "TEXT", pName: "DIA" })
+  .set("NUM", { cName: "bus_stop_id", cType: "INTEGER", pName: "NUM" })
+  .set("TABELA", { cName: "schedule_id", cType: "TEXT", pName: "TABELA" })
+  .set("ADAPT", {
+    cName: "wheelchair_accessibility_type",
+    cType: "TEXT",
+    pName: "ADAPT",
+  })
+  .set("COD", { cName: "bus_line_id", cType: "TEXT", pName: "COD" })
+  .set("DIA_AMOSTRA", {
+    cName: "file_date",
+    cType: "DATE",
+    pName: "DIA_AMOSTRA",
+  });
 
 export function createTableTabelaLinhaSQL(
   tableName: string = "tabela_linha"
 ): string {
-  const C = TABELA_LINHA_COLUMNS;
+  const tlm = TABELA_LINHA_MAPPING;
   return `CREATE TABLE IF NOT EXISTS ${tableName} (
-    ${C.HORA.name} ${C.HORA.type},
-    ${C.PONTO.name} ${C.PONTO.type},
-    ${C.DIA.name} ${C.DIA.type},
-    ${C.NUM.name} ${C.NUM.type},
-    ${C.TABELA.name} ${C.TABELA.type},
-    ${C.ADAPT.name} ${C.ADAPT.type},
-    ${C.COD.name} ${C.COD.type},
-    ${C.DIA_AMOSTRA.name} ${C.DIA_AMOSTRA.type},
-    PRIMARY KEY (${C.DIA_AMOSTRA.name},${C.COD.name}, ${C.DIA.name}, ${C.TABELA.name}, ${C.NUM.name}, ${C.HORA.name})
+    ${Array.from(TABELA_LINHA_MAPPING.values())
+      .map((x) => `${x.cName} ${x.cType}`)
+      .join(",\n")}
   );`;
-  //
 }
-//
 
 export function insertIntoTabelaLinhaSQL(
-  tabelaLinha: TabelaLinha[],
-  tableName: string = "tabela_linha"
+  tabelaLinha: TabelaLinhaRaw[],
+  tableName: string = "tabela_linha",
+  diaAmostra: string
 ): string {
   const sl = DatabaseDAO.sl;
   const si = DatabaseDAO.si;
-  const C = TABELA_LINHA_COLUMNS;
   return `INSERT INTO ${si(tableName)} (
-    ${C.DIA_AMOSTRA.name},
-    ${C.HORA.name},
-    ${C.PONTO.name},
-    ${C.DIA.name},
-    ${C.NUM.name},
-    ${C.TABELA.name},
-    ${C.ADAPT.name},
-    ${C.COD.name}
+    ${Array.from(TABELA_LINHA_MAPPING.values())
+      .map((x) => `${x.cName}`)
+      .join(", ")}
     )
   VALUES
   ${tabelaLinha
-    .filter((x) => {
-      return x.NUM !== null && x.NUM !== NaN;
-    })
     .map(
       (c) =>
         `(
-        ${sl(c.DIA_AMOSTRA)}, 
         ${sl(c.HORA)}, 
         ${sl(c.PONTO)}, 
         ${sl(c.DIA)}, 
-        ${sl(c.NUM)},
+        nullif(${sl(c.NUM)},'')::INTEGER,
         ${sl(c.TABELA)}, 
         ${sl(c.ADAPT)}, 
-        ${sl(c.COD)}
+        ${sl(c.COD)},
+        ${sl(diaAmostra)}
         )`
     )
     .join("\n,")}
-    ON CONFLICT (${C.DIA_AMOSTRA.name},${C.COD.name}, ${C.DIA.name}, ${
-    C.TABELA.name
-  }, ${C.NUM.name}, ${C.HORA.name})
-    DO NOTHING
   ;`;
 }

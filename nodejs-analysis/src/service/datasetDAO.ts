@@ -12,7 +12,7 @@ import { PontosLinhaRaw } from "../models/pontosLinha";
 import { Veiculos, veiculosRawToVeiculos } from "../models/veiculos";
 import { VeiculosRaw } from "./../models/veiculos";
 import { pontosLinhaRawToPontosLinha } from "./../models/pontosLinha";
-import { TabelaLinha, toTabelaLinha } from "./../models/tabelaLinha";
+import { TabelaLinhaRaw } from "./../models/tabelaLinha";
 
 export default class DatasetDAO {
   protected static urlBegin = "http://dadosabertos.c3sl.ufpr.br/curitibaurbs/";
@@ -168,8 +168,9 @@ export default class DatasetDAO {
     const slr: PontosLinhaRaw[] = JSON.parse(
       fs.readFileSync(this.getDecompressedFilePath(date, fileType)).toString()
     );
+    const isoDate = date.replace(/_/g, "-");
     return slr.map((item, index) => {
-      return pontosLinhaRawToPontosLinha(index, item);
+      return pontosLinhaRawToPontosLinha(index, item, isoDate);
     });
   }
 
@@ -218,7 +219,7 @@ export default class DatasetDAO {
     return raw;
   }
 
-  public static async getTabelaLinha(date: string): Promise<TabelaLinha[]> {
+  public static async getTabelaLinha(date: string): Promise<TabelaLinhaRaw[]> {
     const fileType = DatasetDAO.fileNameTabelaLinha;
     const decompressedFilePath = this.getDecompressedFilePath(date, fileType);
     const compressedFilePath = this.getCompressedFilePath(date, fileType);
@@ -252,13 +253,11 @@ export default class DatasetDAO {
       console.log(`Compressed and decompressed file ${fileType} saved!`);
     }
 
-    const raw: any[] = JSON.parse(
+    const raw: TabelaLinhaRaw[] = JSON.parse(
       fs.readFileSync(this.getDecompressedFilePath(date, fileType)).toString()
     );
 
-    return raw.map((item, index) => {
-      return toTabelaLinha(item, date);
-    });
+    return raw;
   }
 
   // TODO check if this method is working

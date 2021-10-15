@@ -12,10 +12,9 @@
     "delay": "2"
   },
   "scripts": {
-    "start": "ts-node ./src/app.ts",
+    "start": "ts-node ./src/main.ts",
     "build": "tsc --build --clean && tsc --build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "main": "ts-node ./src/main.ts"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Tiago Stapenhorst Martins",
   "license": "ISC",

@@ -1,4 +1,5 @@
 import DatabaseDAO from "../service/databaseDAO";
+import ColumnDefinition from "./ColumnDefinition";
 
 export interface PontosLinhaRaw {
   NOME: string;
@@ -25,11 +26,13 @@ export default interface PontosLinha {
   TIPO: string;
   ITINERARY_ID: string;
   COD: string;
+  DATA_AMOSTRA: string;
 }
 
 export function pontosLinhaRawToPontosLinha(
   index: number,
-  plr: PontosLinhaRaw
+  plr: PontosLinhaRaw,
+  dataAmostra: string
 ): PontosLinha {
   return {
     INDEX: index,
@@ -43,6 +46,7 @@ export function pontosLinhaRawToPontosLinha(
     TIPO: plr.TIPO,
     ITINERARY_ID: plr.ITINERARY_ID,
     COD: plr.COD,
+    DATA_AMOSTRA: dataAmostra,
   };
 }
 
@@ -50,18 +54,19 @@ export function createTablePontosLinhaSQL(
   tableName: string = "pontos_linha"
 ): string {
   return `CREATE TABLE IF NOT EXISTS ${tableName} (
-    index INTEGER PRIMARY KEY,
-    nome TEXT,
-    num INTEGER,
+    file_index INTEGER PRIMARY KEY,
+    bus_stop_name TEXT,
+    bus_stop_id INTEGER,
     lat DOUBLE PRECISION,
     lon DOUBLE PRECISION,
     bus_stop_point_geom GEOMETRY,
     seq INTEGER,
-    grupo INTEGER,
-    sentido TEXT,
-    tipo TEXT,
+    bus_stop_group INTEGER,
+    way TEXT,
+    bus_stop_type TEXT,
     itinerary_id TEXT,
-    cod TEXT
+    bus_line_id TEXT,
+    file_date DATE
   );`;
 }
 
@@ -72,18 +77,19 @@ export function insertIntoPontosLinhaSQL(
   const sl = DatabaseDAO.sl;
   const si = DatabaseDAO.si;
   return `INSERT INTO ${si(tableName)} (
-    index, 
-    nome, 
-    num, 
+    file_index, 
+    bus_stop_name, 
+    bus_stop_id, 
     lat, 
     lon,
     bus_stop_point_geom,
     seq, 
-    grupo, 
-    sentido, 
-    tipo, 
+    bus_stop_group, 
+    way, 
+    bus_stop_type, 
     itinerary_id, 
-    cod
+    bus_line_id,
+    file_date
     )
   VALUES
   ${pontosLinha
@@ -102,7 +108,9 @@ export function insertIntoPontosLinhaSQL(
         ${sl(pl.SENTIDO)}, 
         ${sl(pl.TIPO)}, 
         ${sl(pl.ITINERARY_ID)}, 
-        ${sl(pl.COD)})`
+        ${sl(pl.COD)},
+        ${sl(pl.DATA_AMOSTRA)}
+        )`
     )
     .join("\n,")}
   ;`;

@@ -23,22 +23,25 @@ veiculos AS (
 ),
 pontos_linha AS (
     SELECT
-        -- índice do ponto
+        -- (index) índice do ponto 
         INDEX,
-        -- nome do ponto
-        nome,
-        -- código do ponto
-        num,
-        -- índice do ponto no percurso
+        -- (nome) nome do ponto
+        bus_stop_name,
+        -- (num) código do ponto
+        bus_stop_id,
+        -- (seq) índice do ponto no percurso
         seq,
+        -- (grupo) grupo a qual este ponto de ônibus faz parte, onde pessoas podem pegar outros ônibus com uma mesma passagem
         grupo,
-        -- nome do último ponto de ônibus no final do percurso
+        -- (sentido) nome do último ponto de ônibus no final do percurso
         sentido,
-        -- tipo do ponto de ônibus
-        ipo,
+        -- (tipo) tipo do ponto de ônibus
+        tipo,
+        -- (itinerary_id) id do itinerário
         itinerary_id,
-        -- código da linha
+        -- (cod) código da linha
         cod,
+        -- (geom) coordenada geográfica do ponto de ônibus
         geom
     FROM
         pontos_linha_2021_03_25
@@ -229,8 +232,8 @@ va_pa AS (
     SELECT
         va.*,
         INDEX bus_stop_index,
-        nome bus_stop_name,
-        num bus_stop_id,
+        bus_stop_name,
+        bus_stop_id,
         seq,
         grupo,
         sentido,
@@ -269,8 +272,7 @@ va_pa AS (
         AND pi () / 4 WINDOW w_preceding AS (
             PARTITION BY cod_linha,
             veic,
-            num,
-            --bus stop id
+            bus_stop_id,
             seq
             ORDER BY
                 dthr ASC RANGE BETWEEN '20 minutes' PRECEDING
@@ -279,8 +281,7 @@ va_pa AS (
         w_following AS (
             PARTITION BY cod_linha,
             veic,
-            num,
-            --bus stop id
+            bus_stop_id,
             seq
             ORDER BY
                 dthr ASC RANGE BETWEEN CURRENT ROW
