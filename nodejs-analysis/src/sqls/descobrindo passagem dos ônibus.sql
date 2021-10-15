@@ -24,7 +24,7 @@ veiculos AS (
 pontos_linha AS (
     SELECT
         -- (index) índice do ponto 
-        INDEX,
+        file_index,
         -- (nome) nome do ponto
         bus_stop_name,
         -- (num) código do ponto
@@ -32,29 +32,34 @@ pontos_linha AS (
         -- (seq) índice do ponto no percurso
         seq,
         -- (grupo) grupo a qual este ponto de ônibus faz parte, onde pessoas podem pegar outros ônibus com uma mesma passagem
-        grupo,
+        bus_stop_group,
         -- (sentido) nome do último ponto de ônibus no final do percurso
-        sentido,
+        way,
         -- (tipo) tipo do ponto de ônibus
-        tipo,
+        bus_stop_type,
         -- (itinerary_id) id do itinerário
         itinerary_id,
         -- (cod) código da linha
-        cod,
+        bus_line_id,
         -- (geom) coordenada geográfica do ponto de ônibus
-        geom
+        bus_stop_point_geom
     FROM
         pontos_linha_2021_03_25
 ),
 shape_linha AS (
     SELECT
-        *
+        id,
+        shp,
+        lat,
+        lon,
+        shape_point_geom,
+        cod bus_line_id
     FROM
         shape_linha_2021_03_25
 ),
 shapes_as_polylines AS (
     SELECT
-        cod,
+        bus_line_id,
         shp,
         st_makeline (
             shape_point_geom
@@ -64,35 +69,35 @@ shapes_as_polylines AS (
     FROM
         shape_linha
     GROUP BY
-        cod,
+        bus_line_id,
         shp
 ),
 shapes_and_sentidos AS (
     SELECT
         --*
-        cod,
+        bus_line_id,
         shp,
-        sentido
+        way
     FROM
         (
             SELECT
                 ROW_NUMBER() OVER (
-                    PARTITION BY (cod)
+                    PARTITION BY (bus_line_id)
                     ORDER BY
                         COUNT(*) DESC
                 ) rank,
-                COUNT(*) OVER (PARTITION BY (cod)) rank_max,
-                COUNT(*) OVER (PARTITION BY (cod)) / 2 top_ranks,
+                COUNT(*) OVER (PARTITION BY (bus_line_id)) rank_max,
+                COUNT(*) OVER (PARTITION BY (bus_line_id)) / 2 top_ranks,
                 COUNT(*),
-                cod,
+                bus_line_id,
                 shp,
-                sentido
+                way
             FROM
                 (
                     SELECT
                         st_distance,
                         ROW_NUMBER() OVER (
-                            PARTITION BY "index"
+                            PARTITION BY file_index
                             ORDER BY
                                 st_distance ASC
                         ) rank,
@@ -100,30 +105,30 @@ shapes_and_sentidos AS (
                         sap.shp
                     FROM
                         pontos_linha pl
-                        JOIN shapes_as_polylines sap ON pl.cod = sap.cod,
+                        JOIN shapes_as_polylines sap ON pl.bus_line_id = sap.bus_line_id,
                         LATERAL (
                             SELECT
                                 st_distance (pl.bus_stop_point_geom, sap.shape_polyline_geom) AS st_distance
                         ) x1
                     WHERE
-                        pl.cod IN (
+                        pl.bus_line_id IN (
                             SELECT
                                 bus_line
                             FROM
                                 chosen_bus_lines
                         )
                     ORDER BY
-                        cod,
-                        sentido,
+                        bus_line_id,
+                        way,
                         seq
                 ) q1
             WHERE
                 rank = 1
             GROUP BY
                 (
-                    cod,
+                    bus_line_id,
                     shp,
-                    sentido
+                    way
                 )
         ) q2
     WHERE
@@ -138,7 +143,7 @@ shapes_and_azimuths AS (
                 *,
                 LAG(shape_point_geom) OVER (
                     PARTITION BY (
-                        cod,
+                        bus_line_id,
                         shp
                     )
                     ORDER BY
@@ -146,7 +151,7 @@ shapes_and_azimuths AS (
                 ),
                 st_makeline (
                     LAG(shape_point_geom) OVER (
-                        PARTITION BY (cod, shp)
+                        PARTITION BY (bus_line_id, shp)
                         ORDER BY
                             id
                     ),
@@ -154,7 +159,7 @@ shapes_and_azimuths AS (
                 ) shape_line_geom,
                 st_azimuth (
                     LAG (shape_point_geom) OVER (
-                        PARTITION BY (cod, shp)
+                        PARTITION BY (bus_line_id, shp)
                         ORDER BY
                             id
                     ),
@@ -179,18 +184,18 @@ pontos_linha_and_azimuths AS (
                 shape_line_azimuth,
                 st_distance (bus_stop_point_geom, shape_line_geom),
                 ROW_NUMBER() OVER (
-                    PARTITION BY INDEX
+                    PARTITION BY file_index
                     ORDER BY
                         st_distance (bus_stop_point_geom, shape_line_geom) ASC
                 )
             FROM
                 pontos_linha pl
-                JOIN shapes_and_sentidos ss ON ss.cod = pl.cod
-                AND ss.sentido = pl.sentido
-                JOIN shapes_and_azimuths sa ON sa.cod = ss.cod
+                JOIN shapes_and_sentidos ss ON ss.bus_line_id = pl.bus_line_id
+                AND ss.way = pl.way
+                JOIN shapes_and_azimuths sa ON sa.bus_line_id = ss.bus_line_id
                 AND sa.shp = ss.shp
             WHERE
-                pl.cod IN (
+                pl.bus_line_id IN (
                     SELECT
                         bus_line
                     FROM
@@ -200,8 +205,8 @@ pontos_linha_and_azimuths AS (
     WHERE
         row_number = 1
     ORDER BY
-        cod ASC,
-        sentido ASC,
+        bus_line_id ASC,
+        way ASC,
         seq ASC
 ),
 -- **************** VEICULOS WITH AZIMUTHS ****************
@@ -231,15 +236,15 @@ veiculos_with_azimuth AS (
 va_pa AS (
     SELECT
         va.*,
-        INDEX bus_stop_index,
+        file_index bus_stop_index,
         bus_stop_name,
         bus_stop_id,
         seq,
-        grupo,
-        sentido,
-        tipo,
+        bus_stop_group,
+        way,
+        bus_stop_type,
         itinerary_id,
-        cod,
+        bus_line_id,
         bus_stop_point_geom,
         id shape_sequence,
         shp shape_id,
@@ -252,7 +257,7 @@ va_pa AS (
         MIN (distance_bus_to_stop) OVER w_following min_distance_bus_to_stop_following
     FROM
         veiculos_with_azimuth va -- O onibus e o ponto de onibus precisam ser da mesma linha
-        JOIN pontos_linha_and_azimuths pa ON va.cod_linha = pa.cod,
+        JOIN pontos_linha_and_azimuths pa ON va.cod_linha = pa.bus_line_id,
         LATERAL (
             SELECT
                 -- Calcula a distância entre o ônibus e o ponto de ônibus
