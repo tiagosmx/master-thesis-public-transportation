@@ -8,7 +8,11 @@ import {
   insertIntoTabelaLinhaSQL,
   TabelaLinhaRaw,
 } from "../models/tabelaLinha";
-import { Veiculos, veiculosToSQL } from "../models/veiculos";
+import {
+  createPrimaryKeyVeiculos,
+  Veiculos,
+  veiculosToSQL,
+} from "../models/veiculos";
 import { createTablePontosLinhaSQL } from "./../models/pontosLinha";
 import { createTableShapeLinha } from "./../models/shapeLinha";
 import { createTableVeiculos } from "./../models/veiculos";
@@ -100,11 +104,24 @@ export default class DatabaseDAO {
     }
   }
 
-  async saveVeiculos(veiculos: Veiculos[]): Promise<void> {
+  async saveVeiculos(
+    veiculos: Veiculos[],
+    tableName: string,
+    date: string
+  ): Promise<void> {
     try {
-      const createTableRes = await this.pgPool.query(createTableVeiculos());
-      const insertRes = await this.pgPool.query(veiculosToSQL(veiculos));
+      console.log(`Creating and inserting stuff on ${tableName}`);
+      const createTableRes = await this.pgPool.query(
+        createTableVeiculos(tableName)
+      );
+      const insertSQL = veiculosToSQL(veiculos, tableName, date);
+      const insertRes = await this.pgPool.query(insertSQL);
       console.log("Save veiculos result", insertRes);
+      console.log(`Creating PRIMARY KEY on ${tableName}...`);
+      const pkRes = await this.pgPool.query(
+        createPrimaryKeyVeiculos(tableName)
+      );
+      console.log(`pkRes`, pkRes);
     } catch (error) {
       console.log(error);
     }

@@ -320,7 +320,9 @@ export default class DatasetDAO {
         try {
           // Each line in input.txt will be successively available here as `line`.
           const vRaw: VeiculosRaw = JSON.parse(line);
+          //console.log("vRaw", vRaw);
           const v = veiculosRawToVeiculos(vRaw);
+          //console.log("vVeiculos", v);
           let toSave = true;
           if (cod != null && cod !== v.COD_LINHA) {
             toSave = false;
@@ -332,9 +334,10 @@ export default class DatasetDAO {
             veicBuffer.push(v);
           }
         } catch (error) {
-          console.log(error);
+          //console.log(error);
         }
       }
+      //console.log("Veic Buffer\n", veicBuffer);
       return veicBuffer;
     }
     return await processLineByLine(decompressedFilePath);

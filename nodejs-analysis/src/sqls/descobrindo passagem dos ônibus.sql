@@ -11,15 +11,17 @@ WITH chosen_bus_lines AS (
 veiculos AS (
     SELECT
         -- codigo da linha de ônibus
-        cod_linha,
+        bus_line_id,
         -- codigo do veiculo
-        veic,
+        vehicle_id,
         -- data hora da mensuração
-        dthr,
+        timestamp,
         -- localização
-        geom
+        bus_location_point_geom geom,
+        -- data do arquivo
+        file_date
     FROM
-        veiculos
+        veiculos_2021_03_25_bus_line_216
 ),
 pontos_linha AS (
     SELECT
@@ -42,7 +44,9 @@ pontos_linha AS (
         -- (cod) código da linha
         bus_line_id,
         -- (geom) coordenada geográfica do ponto de ônibus
-        bus_stop_point_geom
+        bus_stop_point_geom,
+        -- a data do arquivo que originou o dado
+        file_date
     FROM
         pontos_linha_2021_03_25
 ),
@@ -53,12 +57,14 @@ shape_linha AS (
         lat,
         lon,
         shape_point_geom,
-        cod bus_line_id
+        bus_line_id,
+        file_date
     FROM
         shape_linha_2021_03_25
 ),
 shapes_as_polylines AS (
     SELECT
+        file_date,
         bus_line_id,
         shp,
         st_makeline (
@@ -69,12 +75,13 @@ shapes_as_polylines AS (
     FROM
         shape_linha
     GROUP BY
+        file_date,
         bus_line_id,
         shp
 ),
 shapes_and_sentidos AS (
     SELECT
-        --*
+    	file_date,
         bus_line_id,
         shp,
         way
@@ -82,30 +89,33 @@ shapes_and_sentidos AS (
         (
             SELECT
                 ROW_NUMBER() OVER (
-                    PARTITION BY (bus_line_id)
+                    PARTITION BY (file_date, bus_line_id)
                     ORDER BY
                         COUNT(*) DESC
                 ) rank,
-                COUNT(*) OVER (PARTITION BY (bus_line_id)) rank_max,
-                COUNT(*) OVER (PARTITION BY (bus_line_id)) / 2 top_ranks,
+                COUNT(*) OVER (PARTITION BY (file_date, bus_line_id)) rank_max,
+                COUNT(*) OVER (PARTITION BY (file_date, bus_line_id)) / 2 top_ranks,
                 COUNT(*),
+                file_date,
                 bus_line_id,
                 shp,
                 way
             FROM
                 (
                     SELECT
-                        st_distance,
+                        x1.st_distance,
                         ROW_NUMBER() OVER (
-                            PARTITION BY file_index
+                            PARTITION BY pl.file_date, pl.file_index
                             ORDER BY
-                                st_distance ASC
+                                x1.st_distance ASC
                         ) rank,
-                        pl.*,
+                        pl.file_date,
+                        pl.bus_line_id,
+                        pl.way,
                         sap.shp
                     FROM
                         pontos_linha pl
-                        JOIN shapes_as_polylines sap ON pl.bus_line_id = sap.bus_line_id,
+                        JOIN shapes_as_polylines sap ON pl.file_date = sap.file_date and pl.bus_line_id = sap.bus_line_id,
                         LATERAL (
                             SELECT
                                 st_distance (pl.bus_stop_point_geom, sap.shape_polyline_geom) AS st_distance
@@ -118,14 +128,16 @@ shapes_and_sentidos AS (
                                 chosen_bus_lines
                         )
                     ORDER BY
-                        bus_line_id,
-                        way,
-                        seq
+                        pl.file_date,
+                        pl.bus_line_id,
+                        pl.way,
+                        pl.seq
                 ) q1
             WHERE
                 rank = 1
             GROUP BY
                 (
+                	file_date,
                     bus_line_id,
                     shp,
                     way
@@ -141,32 +153,18 @@ shapes_and_azimuths AS (
         (
             SELECT
                 *,
-                LAG(shape_point_geom) OVER (
-                    PARTITION BY (
-                        bus_line_id,
-                        shp
-                    )
-                    ORDER BY
-                        id
-                ),
+                LAG(shape_point_geom) OVER w,
                 st_makeline (
-                    LAG(shape_point_geom) OVER (
-                        PARTITION BY (bus_line_id, shp)
-                        ORDER BY
-                            id
-                    ),
+                    LAG(shape_point_geom) OVER w,
                     shape_point_geom
                 ) shape_line_geom,
                 st_azimuth (
-                    LAG (shape_point_geom) OVER (
-                        PARTITION BY (bus_line_id, shp)
-                        ORDER BY
-                            id
-                    ),
+                    LAG (shape_point_geom) OVER w,
                     shape_point_geom
                 ) shape_line_azimuth
             FROM
                 shape_linha
+            WINDOW w AS (PARTITION BY (file_date, bus_line_id, shp) ORDER BY id)
         ) AS q1
     WHERE
         shape_line_azimuth IS NOT NULL
@@ -184,7 +182,7 @@ pontos_linha_and_azimuths AS (
                 shape_line_azimuth,
                 st_distance (bus_stop_point_geom, shape_line_geom),
                 ROW_NUMBER() OVER (
-                    PARTITION BY file_index
+                    PARTITION BY pl.file_date, pl.file_index
                     ORDER BY
                         st_distance (bus_stop_point_geom, shape_line_geom) ASC
                 )
@@ -211,94 +209,116 @@ pontos_linha_and_azimuths AS (
 ),
 -- **************** VEICULOS WITH AZIMUTHS ****************
 veiculos_with_azimuth AS (
-    SELECT
-        cod_linha,
-        veic,
-        LAG(dthr) OVER w AS prev_dthr,
-        dthr,
-        LAG (dthr) OVER w - dthr time_dif,
+    select
+    	file_date,
+        bus_line_id,
+        vehicle_id,
+        LAG(timestamp) OVER w AS prev_dthr,
+        timestamp,
+        timestamp - LAG (timestamp) OVER w time_dif,
         st_makeline (LAG (geom) OVER w, geom) AS trajectory_line,
         st_azimuth (LAG (geom) OVER w, geom) AS trajectory_azimuth
     FROM
         veiculos WINDOW w AS (
-            PARTITION BY cod_linha,
-            veic
+            PARTITION BY 
+            file_date,
+            bus_line_id,
+            vehicle_id
             ORDER BY
-                dthr ASC
+                timestamp ASC
         )
     ORDER BY
         (
-            cod_linha,
-            veic,
-            dthr
+        	file_date,
+            bus_line_id,
+            vehicle_id,
+            timestamp
         ) --LIMIT 100
 ),
 va_pa AS (
-    SELECT
-        va.*,
+    select
+    	va.file_date,
+        va.bus_line_id,
+        va.vehicle_id,
+        va.prev_dthr,
+        l1.bus_arrival_time,
+        va.timestamp,
+        va.time_dif,
+        va.trajectory_line ,
+        va.trajectory_azimuth,
         file_index bus_stop_index,
-        bus_stop_name,
-        bus_stop_id,
-        seq,
-        bus_stop_group,
-        way,
-        bus_stop_type,
-        itinerary_id,
-        bus_line_id,
+        pa.bus_stop_name,
+        pa.bus_stop_id,
+        pa.seq,
+        pa.bus_stop_group,
+        pa.way,
+        pa.bus_stop_type,
+        pa.itinerary_id,
         bus_stop_point_geom,
-        id shape_sequence,
-        shp shape_id,
-        shape_line_geom,
-        shape_line_azimuth bus_stop_azimuth,
+        pa.id shape_sequence,
+        pa.shp shape_id,
+        pa.shape_line_geom,
+        pa.shape_line_azimuth bus_stop_azimuth,
         st_distance distance_from_bus_stop_to_shape,
-        distance_bus_to_stop,
-        st_closestpoint (va.trajectory_line, pa.bus_stop_point_geom) closest_point_vehicle_bus_stop,
-        MIN(distance_bus_to_stop) OVER w_preceding min_distance_bus_to_stop_preceding,
-        MIN (distance_bus_to_stop) OVER w_following min_distance_bus_to_stop_following
+        l1.distance_bus_to_stop,
+        closest_point_vehicle_bus_stop,
+        ratio_closest_point_vehicle_bus_stop,
+        MIN (l1.distance_bus_to_stop) OVER w_preceding min_distance_bus_to_stop_preceding,
+        MIN (l1.distance_bus_to_stop) OVER w_following min_distance_bus_to_stop_following
     FROM
         veiculos_with_azimuth va -- O onibus e o ponto de onibus precisam ser da mesma linha
-        JOIN pontos_linha_and_azimuths pa ON va.cod_linha = pa.bus_line_id,
+        JOIN pontos_linha_and_azimuths pa ON va.bus_line_id = pa.bus_line_id and va.file_date = pa.file_date,
+        lateral (
+        	select
+        	-- Calcula o ponto geográfico onde o ônibus mais perto ficou do ponto de ônibus
+        	st_closestpoint (va.trajectory_line, pa.bus_stop_point_geom) closest_point_vehicle_bus_stop,
+        	-- Calcula a proporção sobre a linha de trajetória do ponto geográfico onde o ônibus mais perto ficou do ponto de ônibus
+        	st_linelocatepoint (va.trajectory_line, pa.bus_stop_point_geom) ratio_closest_point_vehicle_bus_stop
+        ) l0,
         LATERAL (
             SELECT
                 -- Calcula a distância entre o ônibus e o ponto de ônibus
                 st_distance (
-                    st_closestpoint (va.trajectory_line, pa.bus_stop_point_geom) :: geography,
+                    l0.closest_point_vehicle_bus_stop :: geography,
                     pa.bus_stop_point_geom :: geography
                 ) distance_bus_to_stop,
                 -- Calcula a diferença entre o azimute da trajetória e o azimute do ponto de onibus
                 (
                     va.trajectory_azimuth - pa.shape_line_azimuth + pi () + pi () * 2
-                ) :: numeric % (pi () * 2) :: numeric - pi () angle_dif
+                ) :: numeric % (pi () * 2) :: numeric - pi () angle_dif,
+                -- Calcula a estimativa do momento passado pelo onibus
+                va.prev_dthr + (va.time_dif * l0.ratio_closest_point_vehicle_bus_stop) bus_arrival_time
         ) l1
     WHERE
         TRUE -- A distância do ônibus até o ponto de ônibus precisa ser menor que 20m
         AND distance_bus_to_stop <= 40 -- A diferença em graus entre os azimutes precisa estar entre -45 e +45
         AND angle_dif BETWEEN - pi () / 4
-        AND pi () / 4 WINDOW w_preceding AS (
-            PARTITION BY cod_linha,
-            veic,
-            bus_stop_id,
-            seq
+        AND pi () / 4 
+        WINDOW w_preceding AS (
+            PARTITION BY 
+            va.file_date,
+            va.bus_line_id,
+            va.vehicle_id,
+            pa.bus_stop_id,
+            pa.seq
             ORDER BY
-                dthr ASC RANGE BETWEEN '20 minutes' PRECEDING
+                timestamp ASC RANGE BETWEEN '20 minutes' PRECEDING
                 AND CURRENT ROW EXCLUDE CURRENT ROW
         ),
         w_following AS (
-            PARTITION BY cod_linha,
-            veic,
-            bus_stop_id,
-            seq
+            PARTITION BY 
+            va.file_date,
+            va.bus_line_id,
+            va.vehicle_id,
+            pa.bus_stop_id,
+            pa.seq
             ORDER BY
-                dthr ASC RANGE BETWEEN CURRENT ROW
+                timestamp ASC RANGE BETWEEN CURRENT ROW
                 AND '20 minutes' FOLLOWING EXCLUDE CURRENT ROW
         )
 ),
 chegadas AS (
     SELECT
-        --degrees(trajectory_azimuth) trajectory_azimuth_degrees,
-        --degrees(bus_stop_azimuth) bus_stop_azimuth_degrees,
-        --ST_Line_Locate_Point(trajectory_line, bus_stop_point_geom) * time_dif,
-        prev_dthr horario_de_chegada,
         *
     FROM
         va_pa
@@ -306,13 +326,14 @@ chegadas AS (
         TRUE
         AND distance_bus_to_stop < COALESCE(min_distance_bus_to_stop_preceding, '+Infinity')
         AND distance_bus_to_stop <= COALESCE(min_distance_bus_to_stop_following, '+Infinity')
-    ORDER BY
-        cod_linha,
-        veic,
-        dthr
-) (
+    ORDER by
+    	file_date,
+        bus_line_id,
+        vehicle_id,
+        timestamp
+)
     SELECT
         *
     FROM
         chegadas
-);
+;

@@ -2,6 +2,7 @@ import { insertIntoShapeLinha } from "./models/shapeLinha";
 import { insertIntoTabelaLinhaSQL } from "./models/tabelaLinha";
 import DatabaseDAO from "./service/databaseDAO";
 import DatasetDAO from "./service/datasetDAO";
+import { createTableVeiculos } from "./models/veiculos";
 
 async function downloadAndSavePontosLinha(
   db: DatabaseDAO,
@@ -26,6 +27,7 @@ async function downloadAndSaveTabelaLinha(
 async function downloadAndSaveVeiculos(
   db: DatabaseDAO,
   date: string,
+  tableName: string,
   busLine?: string
 ): Promise<void> {
   /* Getting Veiculos file*/
@@ -34,9 +36,11 @@ async function downloadAndSaveVeiculos(
     cod: busLine,
     //countLimit: 20,
   });
-  //console.log(v);
+  //console.log("V:\n", v);
   //console.log(veiculosToSQL(v));
-  //db.saveVeiculos(v);
+  const isoDate = date.replace(/_/g, "-");
+  tableName = tableName + (busLine ? "_bus_line_" + busLine : "");
+  await db.saveVeiculos(v, tableName, isoDate);
   //const veicRes = await db.saveVeiculos(dd);
   //console.log(veicRes);
 }
@@ -90,17 +94,16 @@ async function main() {
     const shapeLinhaTableName = "shape_linha_" + date;
     const pontosLinhaTableName = "pontos_linha_" + date;
     const tabelaLinhaTableName = "tabela_linha_" + date;
+    const busLineId = "216";
+    const veiculosTableName = "veiculos_" + date;
 
-    await downloadAndSavePontosLinha(db, date, pontosLinhaTableName);
+    //await downloadAndSavePontosLinha(db, date, pontosLinhaTableName);
 
-    await downloadAndSaveShapeLinha(db, date, shapeLinhaTableName);
+    //await downloadAndSaveShapeLinha(db, date, shapeLinhaTableName);
 
-    //const tabelaLinha = await DatasetDAO.getTabelaLinha(date);
-    //db.saveTabelaLinha(tabelaLinha, tabelaLinhaTableName, isoDate);
-    await downloadAndSaveTabelaLinha(db, date, tabelaLinhaTableName);
+    //await downloadAndSaveTabelaLinha(db, date, tabelaLinhaTableName);
 
-    //db.saveTabelaLinha(tabelaLinha, tabelaLinhaTableName);
-    //console.log(await DatasetDAO.getTabelaLinha(date));
+    await downloadAndSaveVeiculos(db, date, veiculosTableName, busLineId);
   } catch (error) {
     console.log(error);
   }
