@@ -69,41 +69,36 @@ async function main() {
     await db.init();
 
     const dates = [
+      "2019_03_18",
+      "2019_03_19",
+      "2019_03_20",
+      "2019_03_21",
+      "2019_03_22",
+      "2019_03_23",
+      "2019_03_24",
+      "2019_03_25",
+      "2019_03_26",
       "2019_03_27",
+      "2019_03_28",
       "2019_03_29",
       "2019_03_30",
       "2019_03_31",
-      "2020_03_25",
-      "2020_03_26",
-      "2020_03_27",
-      "2020_03_28",
-      "2020_03_29",
-      "2020_03_30",
-      "2020_03_31",
-      "2021_03_25",
-      "2021_03_26",
-      "2021_03_27",
-      "2021_03_28",
-      "2021_03_29",
-      "2021_03_30",
-      "2021_03_31",
     ];
 
-    const date = "2021_03_25";
-    const isoDate = date.replace(/_/g, "-");
-    const shapeLinhaTableName = "shape_linha_" + date;
-    const pontosLinhaTableName = "pontos_linha_" + date;
-    const tabelaLinhaTableName = "tabela_linha_" + date;
-    const busLineId = "216";
-    const veiculosTableName = "veiculos_" + date;
+    dates.forEach(async (date) => {
+      console.log("CURRENT DATE ", date);
+      const isoDate = date.replace(/_/g, "-");
+      const shapeLinhaTableName = "shape_linha_" + date;
+      const pontosLinhaTableName = "pontos_linha_" + date;
+      const tabelaLinhaTableName = "tabela_linha_" + date;
+      const busLineId = "216";
+      const veiculosTableName = "veiculos_" + date;
 
-    //await downloadAndSavePontosLinha(db, date, pontosLinhaTableName);
-
-    //await downloadAndSaveShapeLinha(db, date, shapeLinhaTableName);
-
-    //await downloadAndSaveTabelaLinha(db, date, tabelaLinhaTableName);
-
-    await downloadAndSaveVeiculos(db, date, veiculosTableName, busLineId);
+      await downloadAndSavePontosLinha(db, date, pontosLinhaTableName);
+      await downloadAndSaveShapeLinha(db, date, shapeLinhaTableName);
+      await downloadAndSaveTabelaLinha(db, date, tabelaLinhaTableName);
+      await downloadAndSaveVeiculos(db, date, veiculosTableName, busLineId);
+    });
   } catch (error) {
     console.log(error);
   }

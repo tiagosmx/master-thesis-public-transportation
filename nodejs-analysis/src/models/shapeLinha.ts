@@ -19,7 +19,8 @@ export function createTableShapeLinha(
   tableName: string = "shape_linha"
 ): string {
   const si = DatabaseDAO.si;
-  return `CREATE TABLE IF NOT EXISTS ${si(tableName)} (
+  return `DROP TABLE IF EXISTS ${tableName};
+  CREATE TABLE IF NOT EXISTS ${tableName} (
     id INTEGER NOT NULL,
     shp SMALLINT NOT NULL,
     lat DOUBLE PRECISION NOT NULL,

@@ -322,7 +322,6 @@ export default class DatasetDAO {
           const vRaw: VeiculosRaw = JSON.parse(line);
           //console.log("vRaw", vRaw);
           const v = veiculosRawToVeiculos(vRaw);
-          //console.log("vVeiculos", v);
           let toSave = true;
           if (cod != null && cod !== v.COD_LINHA) {
             toSave = false;

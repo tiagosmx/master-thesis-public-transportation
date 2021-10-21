@@ -53,7 +53,8 @@ export function pontosLinhaRawToPontosLinha(
 export function createTablePontosLinhaSQL(
   tableName: string = "pontos_linha"
 ): string {
-  return `CREATE TABLE IF NOT EXISTS ${tableName} (
+  return `DROP TABLE IF EXISTS ${tableName};
+  CREATE TABLE IF NOT EXISTS ${tableName} (
     file_index INTEGER PRIMARY KEY,
     bus_stop_name TEXT,
     bus_stop_id INTEGER,

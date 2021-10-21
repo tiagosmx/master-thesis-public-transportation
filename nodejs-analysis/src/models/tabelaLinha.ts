@@ -33,7 +33,8 @@ export function createTableTabelaLinhaSQL(
   tableName: string = "tabela_linha"
 ): string {
   const tlm = TABELA_LINHA_MAPPING;
-  return `CREATE TABLE IF NOT EXISTS ${tableName} (
+  return `DROP TABLE IF EXISTS ${tableName};
+  CREATE TABLE IF NOT EXISTS ${tableName} (
     ${Array.from(TABELA_LINHA_MAPPING.values())
       .map((x) => `${x.cName} ${x.cType}`)
       .join(",\n")}

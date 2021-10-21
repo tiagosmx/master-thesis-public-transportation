@@ -110,11 +110,12 @@ export default class DatabaseDAO {
     date: string
   ): Promise<void> {
     try {
-      console.log(`Creating and inserting stuff on ${tableName}`);
+      console.log(`Creating table ${tableName}`);
       const createTableRes = await this.pgPool.query(
         createTableVeiculos(tableName)
       );
       const insertSQL = veiculosToSQL(veiculos, tableName, date);
+      console.log(`Inserting into table ${tableName}`);
       const insertRes = await this.pgPool.query(insertSQL);
       console.log("Save veiculos result", insertRes);
       console.log(`Creating PRIMARY KEY on ${tableName}...`);

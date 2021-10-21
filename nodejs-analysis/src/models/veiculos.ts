@@ -19,7 +19,7 @@ export interface Veiculos {
 }
 
 export function createTableVeiculos(tableName: string = "veiculos"): string {
-  return `
+  return `DROP TABLE IF EXISTS ${tableName};
 CREATE TABLE IF NOT EXISTS ${tableName} (
     bus_line_id TEXT,
     vehicle_id TEXT,
@@ -47,26 +47,33 @@ export function veiculosToSQL(
   date: string
 ): string {
   const si = DatabaseDAO.sl;
-  return `INSERT INTO ${tableName} (
-    bus_line_id,
-    vehicle_id,
-    timestamp,
-    lat,
-    lon,
-    bus_location_point_geom,
-    file_date
-    )
-    VALUES\n${data
-      .map(
-        (vei) =>
-          `(${si(vei.COD_LINHA)}, ${si(vei.VEIC)}, ${si(vei.DTHR)}, ${si(
-            vei.LAT
-          )}, ${si(vei.LON)}, st_setsrid(st_makepoint(${si(
-            vei.LON
-          )}::float, ${si(vei.LAT)}::float),4326), ${si(date)}::DATE)`
+  if (data.length == 0) {
+    console.log("Vehicles array is empty!!");
+    return "";
+  } else {
+    const insert = `INSERT INTO ${tableName} (
+      bus_line_id,
+      vehicle_id,
+      timestamp,
+      lat,
+      lon,
+      bus_location_point_geom,
+      file_date
       )
-      .join("\n,")}
-    ;`;
+      VALUES\n${data
+        .map(
+          (vei) =>
+            `(${si(vei.COD_LINHA)}, ${si(vei.VEIC)}, ${si(vei.DTHR)}, ${si(
+              vei.LAT
+            )}, ${si(vei.LON)}, st_setsrid(st_makepoint(${si(
+              vei.LON
+            )}::float, ${si(vei.LAT)}::float),4326), ${si(date)}::DATE)`
+        )
+        .join("\n,")}
+      ;`;
+    console.log(insert);
+    return insert;
+  }
 }
 
 export function veiculosRawToVeiculos(raw: VeiculosRaw): Veiculos {

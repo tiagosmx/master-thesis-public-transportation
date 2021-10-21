@@ -1,5 +1,6 @@
 -- CREATE TABLE nome_da_sua_tabela AS
 WITH 
+--------------------- STATIC CONFIGS ---------------------
 chosen_bus_lines AS (
     SELECT
         *
@@ -16,6 +17,7 @@ chosen_dates AS (
 	    ('2021-03-25'::DATE)
     ) AS d(file_date)
 ),
+--------------------- REAL TABLES ---------------------
 veiculos AS (
     SELECT
         -- codigo da linha de ônibus
@@ -58,6 +60,43 @@ pontos_linha AS (
     FROM
         pontos_linha_2021_03_25
 ),
+tabela_linha as (
+select 
+time, 
+bus_stop_name, 
+day_category,
+bus_stop_id, 
+schedule_id, 
+bus_line_id, 
+file_date
+from tabela_linha_2021_03_25
+),
+--------------------- CLEANING PONTOS LINHA ---------------------
+bus_stops_with_schedules as (
+    SELECT *
+    FROM tabela_linha tl
+    WHERE TRUE
+    AND bus_line_id IN (SELECT bus_line_id FROM chosen_bus_lines)
+    AND file_date IN (SELECT file_date FROM chosen_dates)
+    and case 
+    when date_part('dow',tl.file_date) = 6 then tl.day_category = '2' 
+    when date_part('dow',tl.file_date) = 0 then tl.day_category = '3' 
+    else tl.day_category = '1'
+    end
+),
+bus_stops_ids_with_schedules as (
+select distinct file_date, bus_line_id, bus_stop_id
+from bus_stops_with_schedules
+),
+pontos_linha_cleaned as (
+select pl.*
+from pontos_linha pl
+join bus_stops_ids_with_schedules bsids on true
+and pl.file_date = bsids.file_date 
+and pl.bus_line_id = bsids.bus_line_id 
+and pl.bus_stop_id = bsids.bus_stop_id
+),
+------------------ FINDING AZIMUTHS FOR EACH BUS STOP -------------
 shape_linha AS (
     SELECT
         id,
@@ -122,7 +161,7 @@ shapes_and_sentidos AS (
                         pl.way,
                         sap.shp
                     FROM
-                        pontos_linha pl
+                        pontos_linha_cleaned pl
                         JOIN shapes_as_polylines sap ON pl.file_date = sap.file_date and pl.bus_line_id = sap.bus_line_id,
                         LATERAL (
                             SELECT
@@ -195,7 +234,7 @@ pontos_linha_and_azimuths AS (
                         st_distance (bus_stop_point_geom, shape_line_geom) ASC
                 )
             FROM
-                pontos_linha pl
+                pontos_linha_cleaned pl
                 JOIN shapes_and_sentidos ss ON ss.bus_line_id = pl.bus_line_id
                 AND ss.way = pl.way
                 JOIN shapes_and_azimuths sa ON sa.bus_line_id = ss.bus_line_id
@@ -338,7 +377,8 @@ chegadas AS (
     	file_date,
         bus_line_id,
         vehicle_id,
-        timestamp
+        timestamp,
+        seq DESC
 )
     SELECT
         *
