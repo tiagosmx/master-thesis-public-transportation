@@ -71,7 +71,7 @@ export function veiculosToSQL(
         )
         .join("\n,")}
       ;`;
-    console.log(insert);
+    //console.log(insert);
     return insert;
   }
 }

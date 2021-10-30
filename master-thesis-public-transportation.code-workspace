@@ -8,6 +8,9 @@
     },
     {
       "path": "nodejs-analysis"
+    },
+    {
+      "path": "python-pandas-data-import"
     }
   ],
   "settings": {}
