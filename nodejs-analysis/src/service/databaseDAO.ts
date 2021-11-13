@@ -68,7 +68,7 @@ export default class DatabaseDAO {
         const createRs = await client.query(
           createTablePontosLinhaSQL(tableName)
         );
-        console.log("Success on CREATE TABLE", createRs.command);
+        console.log("Success on CREATE TABLE", tableName);
         const insert = insertIntoPontosLinhaSQL(data, tableName);
         //console.log("INSERT query:\n", insert);
         const insertRs = await client.query(insert);

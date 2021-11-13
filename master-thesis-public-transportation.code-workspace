@@ -11,6 +11,9 @@
     },
     {
       "path": "python-pandas-data-import"
+    },
+    {
+      "path": "import-urbs-dataset"
     }
   ],
   "settings": {}
