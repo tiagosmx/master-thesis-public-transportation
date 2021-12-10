@@ -1,8 +1,15 @@
 import { Client, Pool, Query, PoolConfig } from "pg";
 import pgPromise = require("pg-promise");
 const pgp = pgPromise();
-import PontosLinha, { insertIntoPontosLinhaSQL } from "../models/pontosLinha";
-import { ShapeLinha, insertIntoShapeLinha } from "../models/shapeLinha";
+import PontosLinha, {
+  insertIntoPontosLinhaSQL,
+  createTablePontosLinhaSQL,
+} from "../models/pontosLinha";
+import {
+  ShapeLinha,
+  insertIntoShapeLinha,
+  createTableShapeLinha,
+} from "../models/shapeLinha";
 import {
   createTableTabelaLinhaSQL,
   insertIntoTabelaLinhaSQL,
@@ -12,10 +19,13 @@ import {
   createPrimaryKeyVeiculos,
   Veiculos,
   veiculosToSQL,
+  createTableVeiculos,
 } from "../models/veiculos";
-import { createTablePontosLinhaSQL } from "./../models/pontosLinha";
-import { createTableShapeLinha } from "./../models/shapeLinha";
-import { createTableVeiculos } from "./../models/veiculos";
+import {
+  LinhasRaw,
+  createTableLinhaSQL,
+  insertIntoLinhaSQL,
+} from "./../models/linhas";
 
 export default class DatabaseDAO {
   readonly pgPool: Pool;
@@ -140,6 +150,25 @@ export default class DatabaseDAO {
       //console.log(insertIntoTabelaLinhaSQL(tabelaLinha, tableName));
       const insertRes = await this.pgPool.query(
         insertIntoTabelaLinhaSQL(tabelaLinha, tableName, sampleDay)
+      );
+      console.log("Save tabela_linha result", insertRes);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async saveLinha(
+    tabelaLinha: LinhasRaw[],
+    tableName: string,
+    sampleDay: string
+  ) {
+    try {
+      const createTableRes = await this.pgPool.query(
+        createTableLinhaSQL(tableName)
+      );
+      //console.log(insertIntoTabelaLinhaSQL(tabelaLinha, tableName));
+      const insertRes = await this.pgPool.query(
+        insertIntoLinhaSQL(tabelaLinha, sampleDay, tableName)
       );
       console.log("Save tabela_linha result", insertRes);
     } catch (error) {

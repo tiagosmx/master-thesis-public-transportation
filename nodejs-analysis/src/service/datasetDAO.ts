@@ -13,6 +13,7 @@ import { Veiculos, veiculosRawToVeiculos } from "../models/veiculos";
 import { VeiculosRaw } from "./../models/veiculos";
 import { pontosLinhaRawToPontosLinha } from "./../models/pontosLinha";
 import { TabelaLinhaRaw } from "./../models/tabelaLinha";
+import { LinhasRaw } from "./../models/linhas";
 
 export default class DatasetDAO {
   protected static urlBegin = "http://dadosabertos.c3sl.ufpr.br/curitibaurbs/";
@@ -257,6 +258,46 @@ export default class DatasetDAO {
       fs.readFileSync(this.getDecompressedFilePath(date, fileType)).toString()
     );
 
+    return raw;
+  }
+
+  public static async getLinha(date: string): Promise<LinhasRaw[]> {
+    const fileType = DatasetDAO.fileNameLinhas;
+    const decompressedFilePath = this.getDecompressedFilePath(date, fileType);
+    const compressedFilePath = this.getCompressedFilePath(date, fileType);
+    if (!fs.existsSync(decompressedFilePath)) {
+      console.log(
+        `File ${decompressedFilePath} is not present. Downloading...`
+      );
+      // Download compressed file and save it
+      console.log("Trying to download compressed file.");
+      const response = await axios.get(
+        DatasetDAO.urlBegin + this.getCompressedFileName(date, fileType),
+        { responseType: "stream" }
+      );
+
+      await new Promise((resolve, reject) => {
+        const slrStream: Stream = response.data;
+        // Save downloaded compressed file to disk
+        slrStream.pipe(
+          fs.createWriteStream(this.getCompressedFilePath(date, fileType))
+        );
+        // Save downloaded decompressed file to disk
+        slrStream
+          .pipe(lzma.createDecompressor())
+          .pipe(
+            fs.createWriteStream(this.getDecompressedFilePath(date, fileType))
+          )
+          .on("finish", resolve)
+          .on("error", reject);
+      });
+
+      console.log(`Compressed and decompressed file ${fileType} saved!`);
+    }
+
+    const raw: LinhasRaw[] = JSON.parse(
+      fs.readFileSync(this.getDecompressedFilePath(date, fileType)).toString()
+    );
     return raw;
   }
 

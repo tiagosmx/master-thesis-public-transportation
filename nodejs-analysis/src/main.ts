@@ -24,6 +24,15 @@ async function downloadAndSaveTabelaLinha(
   await db.saveTabelaLinha(dados, tableName, date);
 }
 
+async function downloadAndSaveLinha(
+  db: DatabaseDAO,
+  date: string,
+  tableName: string
+) {
+  const dados = await DatasetDAO.getLinha(date);
+  await db.saveLinha(dados, tableName, date);
+}
+
 async function downloadAndSaveVeiculos(
   db: DatabaseDAO,
   date: string,
@@ -68,43 +77,12 @@ async function main() {
     });
     await db.init();
 
-    const dates = [
-      "2019_05_01",
-      "2019_05_02",
-      "2019_05_03",
-      "2019_05_04",
-      "2019_05_05",
-      "2019_05_06",
-      "2019_05_07",
-      "2019_05_08",
-      "2019_05_09",
-      "2019_05_10",
-      "2019_05_11",
-      "2019_05_12",
-      "2019_05_13",
-      "2019_05_14",
-      "2019_05_15",
-      "2019_05_16",
-      "2019_05_17",
-      "2019_05_18",
-      "2019_05_19",
-      "2019_05_20",
-      "2019_05_21",
-      "2019_05_22",
-      "2019_05_23",
-      "2019_05_24",
-      "2019_05_25",
-      "2019_05_26",
-      "2019_05_27",
-      "2019_05_28",
-      "2019_05_29",
-      "2019_05_30",
-      "2019_05_31",
-    ];
+    const dates = ["2019_05_14"];
 
     dates.forEach(async (date) => {
       console.log("CURRENT DATE ", date);
       const isoDate = date.replace(/_/g, "-");
+      const linhaTableName = "linha_" + date;
       const shapeLinhaTableName = "shape_linha_" + date;
       const pontosLinhaTableName = "pontos_linha_" + date;
       const tabelaLinhaTableName = "tabela_linha_" + date;
@@ -115,6 +93,8 @@ async function main() {
       await downloadAndSaveShapeLinha(db, date, shapeLinhaTableName);
       await downloadAndSaveTabelaLinha(db, date, tabelaLinhaTableName);
       await downloadAndSaveVeiculos(db, date, veiculosTableName, busLineId);
+
+      //await downloadAndSaveLinha(db, isoDate, linhaTableName);
     });
   } catch (error) {
     console.log(error);

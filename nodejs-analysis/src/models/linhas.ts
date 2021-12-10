@@ -9,20 +9,11 @@ export interface LinhasRaw {
   NOME_COR?: string;
 }
 
-export const LINHAS_COLUMNS = {
-  COD: { name: "time", type: "TIME" },
-  NOME: { name: "bus_stop_name", type: "TEXT" },
-  SOMENTE_CARTAO: { name: "somente_cartao", type: "CHAR(1)" },
-  CATEGORIA_SERVICO: { name: "categoria", type: "TEXT" },
-  NOME_COR: { name: "cor", type: "TEXT" },
-  DIA_AMOSTRA: { name: "dia", type: "DATE" },
-};
-
-export const LINHAS_MAPPING: Map<String, ColumnDefinition> = new Map()
+export const LINHAS_MAPPING: Map<string, ColumnDefinition> = new Map()
   .set("COD", { cName: "bus_line_id", cType: "TEXT", pName: "COD" })
   .set("NOME", { cName: "bus_line_name", cType: "TEXT", pName: "NOME" })
   .set("SOMENTE_CARTAO", {
-    cName: "only_card",
+    cName: "card_only",
     cType: "CHAR(1)",
     pName: "SOMENTE_CARTAO",
   })
@@ -33,47 +24,42 @@ export const LINHAS_MAPPING: Map<String, ColumnDefinition> = new Map()
   })
   .set("NOME_COR", { cName: "color", cType: "TEXT", pName: "NOME_COR" })
   .set("DIA_AMOSTRA", {
-    cName: "day_reference",
+    cName: "file_date",
     cType: "DATE",
     pName: "DIA_AMOSTRA",
   });
 
-export function createTableTabelaLinhaSQL(
-  tableName: string = "linhas"
-): string {
-  const C = LINHAS_COLUMNS;
-  const tlm = LINHAS_MAPPING;
+export function createTableLinhaSQL(tableName: string = "linhas"): string {
   return `DROP TABLE IF EXISTS ${tableName};
   CREATE TABLE IF NOT EXISTS ${tableName} (
     ${Array.from(LINHAS_MAPPING.values())
-      .map((x) => `${x.cName} ${x.cType}`)
+      .map((lm) => lm.cName + " " + lm.cType)
       .join(",\n")}
   );`;
 }
 
-export function insertIntoTabelaLinhaSQL(
+export function insertIntoLinhaSQL(
   tabelaLinha: LinhasRaw[],
-  tableName: string = "linhas",
-  diaAmostra: string
+  diaAmostra: string,
+  tableName: string = "linhas"
 ): string {
   const sl = DatabaseDAO.sl;
   const si = DatabaseDAO.si;
-  const C = LINHAS_COLUMNS;
   return `INSERT INTO ${si(tableName)} (
     ${Array.from(LINHAS_MAPPING.values())
-      .map((x) => `${x.cName}`)
+      .map((lm) => lm.cName)
       .join(", ")}
     )
   VALUES
   ${tabelaLinha
     .map(
-      (c) =>
+      (tl) =>
         `(
-        ${sl(c.COD)}, 
-        ${sl(c.NOME)}, 
-        ${sl(c.SOMENTE_CARTAO)}, 
-        ${sl(c.CATEGORIA_SERVICO)},
-        ${sl(c.NOME_COR)}, 
+        ${sl(tl.COD)}, 
+        ${sl(tl.NOME)}, 
+        ${sl(tl.SOMENTE_CARTAO)}, 
+        ${sl(tl.CATEGORIA_SERVICO)},
+        ${sl(tl.NOME_COR)}, 
         ${sl(diaAmostra)}
         )`
     )
