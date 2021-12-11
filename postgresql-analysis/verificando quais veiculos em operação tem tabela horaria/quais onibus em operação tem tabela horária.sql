@@ -1,8 +1,3 @@
-select distinct 
-(timestamp::DATE) sample_date, 
-file_date
-from veiculos_2019_05_06_bus_line_216 vbl 
-
 with veiculos as (
 	select distinct bus_line_id, vehicle_id
 	from veiculos_2019_05_06_bus_line_216 vbl 
