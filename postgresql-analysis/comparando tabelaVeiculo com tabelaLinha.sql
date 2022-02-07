@@ -26,6 +26,7 @@ BEGIN
 			FROM %I 
             WHERE bus_line_id = ''216'' AND
             CASE 
+				WHEN file_date = ''2019-01-05'' THEN day_category = ''4''
                 WHEN date_part(''dow'',file_date) = 6 THEN day_category = ''2''
                 WHEN date_part(''dow'',file_date) = 0 THEN day_category = ''3''
                 ELSE day_category = ''1''

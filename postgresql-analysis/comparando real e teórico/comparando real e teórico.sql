@@ -5,10 +5,11 @@
 with real_and_theorical as (
 	select 
 	*,
-	coalesce(date_part(
-		'epoch', bus_arrival_time - lag(bus_arrival_time) 
-		over (partition by "type", bus_line_id, vehicle_id order by bus_arrival_time asc)
-	)/60,0) dif_minutes
+	coalesce(
+		date_part('epoch', bus_arrival_time - 
+		lag(bus_arrival_time) over (partition by "type", bus_line_id, vehicle_id order by bus_arrival_time asc)
+		)/60,0
+	) dif_minutes
 	from (
 	
 		select distinct

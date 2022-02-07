@@ -1,7 +1,11 @@
--- CREATE TABLE nome_da_sua_tabela AS
+--------------- SETTING CURITIBA'S TIMEZONE ---------------
+SET timezone = 'America/Sao_Paulo';
+
+--CREATE TABLE chegadas_filtradas AS
 --------------- PARAMETERS ---------------
--- Operando sobre as tabelas de dia _2021_03_25
+-- Operando sobre as tabelas de dia _2019_05_13
 -- Operando sobre o id 216
+--INSERT INTO chegadas_filtradas
 --------------- BUS LINE ID ---------------
 WITH 
 chosen_bus_lines AS (
@@ -13,14 +17,7 @@ chosen_bus_lines AS (
                 ('216')
         ) bus_lines (bus_line_id)
 ),
---------------- FILE DATE ---------------
-chosen_dates AS (
-    SELECT *
-    FROM (
-	VALUES 
-	    ('2021-03-25'::DATE)
-    ) AS d(file_date)
-),
+--------------- PURE TABLES ---------------
 veiculos AS (
     SELECT
         -- codigo da linha de ônibus
@@ -34,7 +31,7 @@ veiculos AS (
         -- data do arquivo
         file_date
     FROM
-        veiculos_2021_03_25_bus_line_216
+        veiculos_2019_05_14_bus_line_216
 ),
 pontos_linha AS (
     SELECT
@@ -61,7 +58,7 @@ pontos_linha AS (
         -- a data do arquivo que originou o dado
         file_date
     FROM
-        pontos_linha_2021_03_25
+        pontos_linha_2019_05_13
 ),
 shape_linha AS (
     SELECT
@@ -73,8 +70,23 @@ shape_linha AS (
         bus_line_id,
         file_date
     FROM
-        shape_linha_2021_03_25
+        shape_linha_2019_05_13
 ),
+tabela_veiculo AS (
+    SELECT 
+    bus_line_id, 
+    bus_line_name, 
+    vehicle_id, 
+    "time",
+    ("time" + file_date)::TIMESTAMPTZ programmed_timestamp,
+    schedule_id, 
+    bus_stop_id, 
+    file_date
+    FROM tabela_veiculo_2019_05_13
+    WHERE bus_line_id IN (SELECT bus_line_id FROM chosen_bus_lines)
+),
+--------------- TABLE JOINS ---------------
+--------------- SHAPES WITH AZIMUTHS ALGORITHMS ---------------
 shapes_as_polylines AS (
     SELECT
         file_date,
@@ -281,9 +293,11 @@ va_pa AS (
         MIN (l1.distance_bus_to_stop) OVER w_following min_distance_bus_to_stop_following
     FROM
         veiculos_with_azimuth va -- O onibus e o ponto de onibus precisam ser da mesma linha
-        JOIN pontos_linha_and_azimuths pa ON va.bus_line_id = pa.bus_line_id and va.file_date = pa.file_date,
-        lateral (
-        	select
+        JOIN pontos_linha_and_azimuths pa ON TRUE
+        AND va.bus_line_id = pa.bus_line_id,
+        --AND va.file_date = pa.file_date,
+        LATERAL (
+        	SELECT
         	-- Calcula o ponto geográfico onde o ônibus mais perto ficou do ponto de ônibus
         	st_closestpoint (va.trajectory_line, pa.bus_stop_point_geom) closest_point_vehicle_bus_stop,
         	-- Calcula a proporção sobre a linha de trajetória do ponto geográfico onde o ônibus mais perto ficou do ponto de ônibus
@@ -344,10 +358,81 @@ chegadas AS (
     	file_date,
         bus_line_id,
         vehicle_id,
-        timestamp
-)
+        "timestamp"
+),
+chegadas_bus_stop_distinct AS (
+	SELECT DISTINCT bus_line_id, vehicle_id, bus_stop_id, bus_arrival_time
+	FROM chegadas
+),
+tabela_veiculo_window AS (
     SELECT
-        *
+        *,
+        LAG("time") OVER w,
+        "time" - LAG("time") OVER w dif_lag,
+        LEAD("time") OVER w,
+        LEAD("time") OVER w - "time" dif_lead
     FROM
-        chegadas
-;
+        tabela_veiculo
+    WINDOW w AS (PARTITION BY bus_line_id, vehicle_id, bus_stop_id ORDER BY "time" ASC)
+    ORDER BY bus_line_id, vehicle_id, "time"
+),
+tabela_veiculo_bounds AS (
+SELECT *
+FROM tabela_veiculo_window,
+LATERAL (
+	SELECT 
+	GREATEST("time" - LEAST(dif_lag  / 2, "time"::INTERVAL             ), '00:00:00'::TIME WITH TIME ZONE)+ file_date left_bound,
+	LEAST   ("time" + LEAST(dif_lead / 2, '23:59:59'::INTERVAL - "time"), '23:59:59'::TIME WITH TIME ZONE)+ file_date right_bound
+) l1
+),
+chegadas_com_teoricos AS (
+SELECT 
+tvb.*, 
+c.bus_arrival_time,
+c.bus_arrival_time - tvb.programmed_timestamp AS bus_delay
+FROM tabela_veiculo_bounds tvb
+LEFT JOIN chegadas_bus_stop_distinct c ON TRUE
+AND c.bus_line_id      = tvb.bus_line_id 
+AND c.vehicle_id       = tvb.vehicle_id 
+AND c.bus_stop_id      = tvb.bus_stop_id 
+--AND c.bus_arrival_time BETWEEN tvb.left_bound AND tvb.right_bound 
+AND c.bus_arrival_time >= tvb.left_bound 
+AND c.bus_arrival_time < tvb.right_bound
+),
+match_report AS (
+SELECT bus_line_id, vehicle_id, "time", bus_arrival_time, schedule_id, bus_stop_id, left_bound, right_bound
+FROM chegadas_com_teoricos
+ORDER BY bus_line_id, vehicle_id, "time"
+),
+matches_theorical_report AS (
+SELECT 
+bus_line_id, 
+vehicle_id, 
+programmed_timestamp, 
+SUM(CASE WHEN bus_arrival_time IS NULL THEN 0 ELSE 1 END)
+FROM chegadas_com_teoricos 
+GROUP BY bus_line_id, vehicle_id, programmed_timestamp 
+),
+matches_theorical_report_count AS (
+	SELECT 
+	bus_line_id, 
+	vehicle_id,
+	COUNT(*) FILTER (WHERE "sum" = 1) eq_1,
+	COUNT(*) FILTER (WHERE "sum" <> 1) dif_1,
+	COUNT(*) total,
+	(COUNT(*) FILTER (WHERE "sum" = 1))::REAL / COUNT(*)::REAL ratio
+	FROM matches_theorical_report
+	GROUP BY bus_line_id, vehicle_id
+),
+chegadas_com_teoricos_filtrados AS (
+SELECT *,
+date_part('epoch', bus_delay) / 60 bus_delay_minutes
+FROM chegadas_com_teoricos
+WHERE vehicle_id IN (
+	SELECT vehicle_id
+	FROM matches_theorical_report_count
+	WHERE ratio > 0.75
+)
+)
+SELECT *
+FROM chegadas_com_teoricos_filtrados
