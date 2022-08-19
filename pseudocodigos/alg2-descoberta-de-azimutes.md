@@ -146,22 +146,31 @@ para i de 1 até calcularTamanhoDaTabela(shapePolilinha) passo 1 faça
     fim para
 fim para
 shapePolilinhaPontosSoma ← agregarPorGrupo(shapePolilinhaPontos, [agregarSoma(distance, sum_distance)],[bus_line_id])
-
-
-para i de 1 até calcularTamanhoDaTabela(shapeLinha) - 1 passo 1 faça
-    proximaLinha ← shapeLinha[i+1][bus_line_id]
-    proximoTrajeto ← shapeLinha[i+1][path_id]
-    se proximaLinha = shapeLinha[i][bus_line_id] então:
-        se proximoTrajeto = shapeLinha[i][path_id] então:
-            geo_point1 ← criarPontoGeográfico(shapeLinha[i][lat], shapeLinha[i][lon])
-            geo_point2 ← criarPontoGeográfico(shapeLinha[i+1][lat], shapeLinha[i+1][lon])
-            shapeLinha[i][geo_line] ← criarLinhaGeográfica(geo_point1, geo_point2)
-            shapeLinha[i][azimuth] ← calcularAzimute(geo_point1, geo_point2)
-        fim se
-    fim se
+para i de 1 até calcularTamanhoDaTabela(shapePolilinhaPontosSoma) passo 1 faça:
+    minDistanceShapePolilinhaPontos[bus_line_id][] ←
 
 ```
 
-com a tabela `shapeLinha'', transforme todos os pontos de um mesmo identificador de shape (SHP, shape id) em uma polilinha, que representará todo o segmento de trajeto de uma linha (o caminho completo do terminal X até terminal Y), representado pelas polilinhas de cores distintas da Figura \ref{fig:shape-linha-216}; a partir da tabela `pontosLinha'', meça a menor distância de cada ponto de ônibus para cada polilinha em `shapeLinha'' identificadas por seu SHP; com o dado anterior, realize uma agregação e some as distâncias agrupadas em cada shape id (SHP) e cada sentido (SENTIDO); para cada sentido (SENTIDO), escolha o shape id (SHP) em que a soma das distâncias seja a menor entre os outros shape ids, neste ponto já é possível saber qual SHP em `shapeLinha'' equivale a cada sentido (SENTIDO) em `pontosLinha''; crie uma tabela `sentidos + shape id'' com o resultado anterior;
-utilizando a tabela `shapeLinha'' calcule o azimute de cada segmento de trajeto, semelhante às setas da Figura \ref{fig:shape-linha-216} e armazene-o crie uma nova tabela chamada `shapeLinha + azimutes'' com os dados da etapa anterior;
-correlacione a tabela `pontosLinha'' com a `shapeLinha + azimutes'' usando a `sentidos + shape id''. Neste momento cada ponto de ônibus já contém um azimute. salve os dados da etapa anterior em uma nova tabela chamada `pontosLinha + azimutes''
+1 - com a tabela `shapeLinha'', transforme todos os pontos de um mesmo identificador de shape (SHP, shape id) em uma polilinha, que representará todo o segmento de trajeto de uma linha (o caminho completo do terminal X até terminal Y), representado pelas polilinhas de cores distintas da Figura \ref{fig:shape-linha-216};
+
+2 - a partir da tabela `pontosLinha'', meça a menor distância de cada ponto de ônibus para cada polilinha em `shapeLinha'' identificadas por seu SHP; com o dado anterior, realize uma agregação e some as distâncias agrupadas em cada shape id (SHP) e cada sentido (SENTIDO);
+
+3 - para cada sentido (SENTIDO), escolha o shape id (SHP) em que a soma das distâncias seja a menor entre os outros shape ids, neste ponto já é possível saber qual SHP em `shapeLinha'' equivale a cada sentido (SENTIDO) em `pontosLinha''; crie uma tabela `sentidos + shape id'' com o resultado anterior;
+
+4- utilizando a tabela `shapeLinha'' calcule o azimute de cada segmento de trajeto, semelhante às setas da Figura \ref{fig:shape-linha-216} e armazene-o crie uma nova tabela chamada `shapeLinha + azimutes'' com os dados da etapa anterior; correlacione a tabela `pontosLinha'' com a `shapeLinha + azimutes'' usando a `sentidos + shape id''. Neste momento cada ponto de ônibus já contém um azimute. salve os dados da etapa anterior em uma nova tabela chamada `pontosLinha + azimutes''
+
+1 - A entrada do algoritmo são as tabelas shapeLinha e pontosLinha
+2 - Com a tabela shapeLinha, crie uma coluna 'point' formada pelas coordenadas geográficas em 'lat' e 'lon'
+
+-- legado::::
+para i de 1 até calcularTamanhoDaTabela(shapeLinha) - 1 passo 1 faça
+proximaLinha ← shapeLinha[i+1][bus_line_id]
+proximoTrajeto ← shapeLinha[i+1][path_id]
+se proximaLinha = shapeLinha[i][bus_line_id] então:
+se proximoTrajeto = shapeLinha[i][path_id] então:
+geo_point1 ← criarPontoGeográfico(shapeLinha[i][lat], shapeLinha[i][lon])
+geo_point2 ← criarPontoGeográfico(shapeLinha[i+1][lat], shapeLinha[i+1][lon])
+shapeLinha[i][geo_line] ← criarLinhaGeográfica(geo_point1, geo_point2)
+shapeLinha[i][azimuth] ← calcularAzimute(geo_point1, geo_point2)
+fim se
+fim se
